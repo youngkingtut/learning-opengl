@@ -13,7 +13,7 @@ set(EXTERNAL_LIBRARIES ext)
 ##############################################################
 # Build ext
 ##############################################################
-add_subdirectory("${EXTERNAL_LIBRARIES}/glfw-3.3")
+add_subdirectory("${EXTERNAL_LIBRARIES}/glfw")
 add_subdirectory("${EXTERNAL_LIBRARIES}/glad")
 
 ##############################################################
