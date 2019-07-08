@@ -1,4 +1,4 @@
-[submodule "glfw"]
+[submodule "ext/glfw"]
 	path = ext/glfw
-	url = git@github.com:glfw/glfw.git
-    branch = 3.3-stable
+	url = https://github.com/glfw/glfw
+	branch = 3.3-stable
