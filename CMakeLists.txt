@@ -26,7 +26,7 @@ include_directories("${EXTERNAL_LIBRARIES}/glad/include")
 ##############################################################
 # Shaders
 ##############################################################
-add_library(ShaderCompilation ${PROJECT_SOURCE_DIR}/Shaders/ShaderCompiler.cpp)
+add_library(ShaderCompilation ${PROJECT_SOURCE_DIR}/ShaderCompiler/ShaderCompiler.cpp)
 target_include_directories(ShaderCompilation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 ##############################################################
@@ -43,6 +43,6 @@ target_link_libraries(${PROJECT_NAME} ShaderCompilation ${SHADERCOMPILATION_LIBR
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E create_symlink
-        ${CMAKE_SOURCE_DIR}/src/Shaders/
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Shaders/
+        ${CMAKE_SOURCE_DIR}/src/Shaders
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Shaders
 )
