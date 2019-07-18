@@ -1,6 +1,9 @@
 #include <iostream>
+#include <ctime>
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vmath.h>
 
 #include "src/ShaderCompiler/ShaderCompiler.hpp"
 
@@ -17,8 +20,8 @@ void processInput(GLFWwindow *window) {
 
 int main() {
     glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
@@ -40,57 +43,115 @@ int main() {
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-
     // triangle 1
-    float vertices[] = {
-             0.4, -0.2,  1.0,
-             0.2, -0.2,  1.0,
-             0.3,  0.2,  1.0
+    static const GLfloat vertices[] = {
+            -0.25f,  0.25f, -0.25f,
+            -0.25f, -0.25f, -0.25f,
+            0.25f, -0.25f, -0.25f,
+
+            0.25f, -0.25f, -0.25f,
+            0.25f,  0.25f, -0.25f,
+            -0.25f,  0.25f, -0.25f,
+
+            0.25f, -0.25f, -0.25f,
+            0.25f, -0.25f,  0.25f,
+            0.25f,  0.25f, -0.25f,
+
+            0.25f, -0.25f,  0.25f,
+            0.25f,  0.25f,  0.25f,
+            0.25f,  0.25f, -0.25f,
+
+            0.25f, -0.25f,  0.25f,
+            -0.25f, -0.25f,  0.25f,
+            0.25f,  0.25f,  0.25f,
+
+            -0.25f, -0.25f,  0.25f,
+            -0.25f,  0.25f,  0.25f,
+            0.25f,  0.25f,  0.25f,
+
+            -0.25f, -0.25f,  0.25f,
+            -0.25f, -0.25f, -0.25f,
+            -0.25f,  0.25f,  0.25f,
+
+            -0.25f, -0.25f, -0.25f,
+            -0.25f,  0.25f, -0.25f,
+            -0.25f,  0.25f,  0.25f,
+
+            -0.25f, -0.25f,  0.25f,
+            0.25f, -0.25f,  0.25f,
+            0.25f, -0.25f, -0.25f,
+
+            0.25f, -0.25f, -0.25f,
+            -0.25f, -0.25f, -0.25f,
+            -0.25f, -0.25f,  0.25f,
+
+            -0.25f,  0.25f, -0.25f,
+            0.25f,  0.25f, -0.25f,
+            0.25f,  0.25f,  0.25f,
+
+            0.25f,  0.25f,  0.25f,
+            -0.25f,  0.25f,  0.25f,
+            -0.25f,  0.25f, -0.25f
     };
-    unsigned int indicies[] = {
-            0, 1, 2
-    };
 
-    unsigned int VAO;
-    unsigned int VBO;
-    unsigned int EBO;
+    GLuint vao;
+    GLuint vbo;
 
-    glGenVertexArrays(1, &VAO);
-    glGenBuffers(1, &VBO);
-    glGenBuffers(1, &EBO);
+    glCreateVertexArrays(1, &vao);
+    glBindVertexArray(vao);
 
-    glBindVertexArray(VAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glGenBuffers(1, &vbo);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
-
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(1);
 
     glBindVertexArray(0);
 
     GLuint shaderProgram = LoadShaders("Shaders/shader.vert", "Shaders/shader.frag");
+    GLint mv_location = glGetUniformLocation(shaderProgram, "mv_matrix");
+    GLint proj_location = glGetUniformLocation(shaderProgram, "proj_matrix");
+
+    glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CW);
+
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LEQUAL);
 
     while (!glfwWindowShouldClose(window)) {
+        float currentTime = 2 * (float)std::clock() / CLOCKS_PER_SEC;
         processInput(window);
+        static const GLfloat one = 1.0f;
 
-        glClearColor(0.24f, 0.38f, 0.0f, 1.0f);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+        glClearBufferfv(GL_DEPTH, 0, &one);
+
+
+        float f = (float)currentTime * (float)M_PI * 0.1f;
+        vmath::mat4 proj_matrix = vmath::perspective(50.0f, (float)8/6, 0.1f, 1000.0f);
+        vmath::mat4 mv_matrix =
+                vmath::translate(0.0f, 0.0f, -4.0f) *
+                vmath::translate(sinf(2.1f * f) * 0.5f,
+                                 cosf(1.7f * f) * 0.5f,
+                                 sinf(1.3f * f) * cosf(1.5f * f) * 2.0f) *
+                vmath::rotate((float)currentTime * 45.0f, 0.0f, 1.0f, 0.0f) *
+                vmath::rotate((float)currentTime * 81.0f, 1.0f, 0.0f, 0.0f);
+
+
 
         glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+        glUniformMatrix4fv(proj_location, 1, GL_FALSE, proj_matrix);
+        glUniformMatrix4fv(mv_location, 1, GL_FALSE, mv_matrix);
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-    glDeleteBuffers(1, &EBO);
+    glDeleteVertexArrays(1, &vao);
+    glDeleteBuffers(1, &vbo);
 
     glfwTerminate();
     return 0;

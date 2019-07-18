@@ -21,7 +21,7 @@ add_subdirectory("${EXTERNAL_LIBRARIES}/glad")
 ##############################################################
 include_directories("${EXTERNAL_LIBRARIES}/glfw/include")
 include_directories("${EXTERNAL_LIBRARIES}/glad/include")
-
+include_directories("${EXTERNAL_LIBRARIES}/sb7/include")
 
 ##############################################################
 # Shaders
