@@ -15,6 +15,14 @@ std::string ReadShaderFile(const char* file_path) {
 
     std::string file_string;
     std::ifstream stream(file_path, std::ios::in);
+
+
+#if __APPLE__
+    file_string += "#version 410 core\n";
+#else
+    file_string += "#version 450 core\n";
+#endif
+
     if(stream.is_open()){
         std::string line;
         while(getline(stream, line)){
