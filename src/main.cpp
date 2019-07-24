@@ -26,10 +26,15 @@ int main() {
     float default_x = 0.0f;
     float default_y = 0.0f;
     glfwInit();
+#if __APPLE__
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#else
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+#endif
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
     GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "LearningOpenGL", nullptr, nullptr);
 
@@ -61,61 +66,50 @@ int main() {
             -0.25f,  0.25f, -0.25f,
             -0.25f, -0.25f, -0.25f,
             0.25f, -0.25f, -0.25f,
-
-            0.25f, -0.25f, -0.25f,
             0.25f,  0.25f, -0.25f,
-            -0.25f,  0.25f, -0.25f,
-
-            0.25f, -0.25f, -0.25f,
-            0.25f, -0.25f,  0.25f,
-            0.25f,  0.25f, -0.25f,
-
             0.25f, -0.25f,  0.25f,
             0.25f,  0.25f,  0.25f,
-            0.25f,  0.25f, -0.25f,
-
-            0.25f, -0.25f,  0.25f,
-            -0.25f, -0.25f,  0.25f,
-            0.25f,  0.25f,  0.25f,
-
             -0.25f, -0.25f,  0.25f,
             -0.25f,  0.25f,  0.25f,
-            0.25f,  0.25f,  0.25f,
+    };
 
-            -0.25f, -0.25f,  0.25f,
-            -0.25f, -0.25f, -0.25f,
-            -0.25f,  0.25f,  0.25f,
+    static const GLuint indicies[] = {
+            0, 1, 2,
+            2, 3, 0,
 
-            -0.25f, -0.25f, -0.25f,
-            -0.25f,  0.25f, -0.25f,
-            -0.25f,  0.25f,  0.25f,
+            2, 4, 3,
+            4, 5, 3,
 
-            -0.25f, -0.25f,  0.25f,
-            0.25f, -0.25f,  0.25f,
-            0.25f, -0.25f, -0.25f,
+            4, 6, 5,
+            6, 7, 5,
 
-            0.25f, -0.25f, -0.25f,
-            -0.25f, -0.25f, -0.25f,
-            -0.25f, -0.25f,  0.25f,
+            6, 1, 7,
+            1, 0, 7,
 
-            -0.25f,  0.25f, -0.25f,
-            0.25f,  0.25f, -0.25f,
-            0.25f,  0.25f,  0.25f,
+            6, 4, 2,
+            2, 1, 6,
 
-            0.25f,  0.25f,  0.25f,
-            -0.25f,  0.25f,  0.25f,
-            -0.25f,  0.25f, -0.25f
+            0, 3, 5,
+            5, 7, 0,
     };
 
     GLuint vao;
     GLuint vbo;
+    GLuint ebo;
 
-    glCreateVertexArrays(1, &vao);
+    glGenVertexArrays(1, &vao);
     glBindVertexArray(vao);
 
     glGenBuffers(1, &vbo);
+    glGenBuffers(1, &ebo);
+
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indicies), indicies, GL_STATIC_DRAW);
+
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     glEnableVertexAttribArray(1);
 
@@ -159,7 +153,7 @@ int main() {
         glUniformMatrix4fv(proj_location, 1, GL_FALSE, proj_matrix);
         glUniformMatrix4fv(mv_location, 1, GL_FALSE, mv_matrix);
         glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
@@ -167,6 +161,7 @@ int main() {
 
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
+    glDeleteBuffers(1, &ebo);
 
     glfwTerminate();
     return 0;

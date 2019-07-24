@@ -1,4 +1,3 @@
-#version 450 core
 layout (location = 1) in vec4 position;
 out vec4 color;
 
