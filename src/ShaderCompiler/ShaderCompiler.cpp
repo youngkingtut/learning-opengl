@@ -10,6 +10,11 @@
 
 #include "ShaderCompiler.hpp"
 
+
+#define GLSL_VERSION_410 "#version 410 core\n"
+#define GLSL_VERSION_450 "#version 450 core\n"
+
+
 std::string ReadShaderFile(const char* file_path) {
     std::cout << "Reading: " << file_path << std::endl;
 
@@ -18,9 +23,9 @@ std::string ReadShaderFile(const char* file_path) {
 
 
 #if __APPLE__
-    file_string += "#version 410 core\n";
+    file_string += GLSL_VERSION_410;
 #else
-    file_string += "#version 450 core\n";
+    file_string += GLSL_VERSION_450;
 #endif
 
     if(stream.is_open()){
