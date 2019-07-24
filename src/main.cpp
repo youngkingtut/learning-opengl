@@ -7,8 +7,12 @@
 
 #include "src/ShaderCompiler/ShaderCompiler.hpp"
 
+int WINDOW_WIDTH = 800;
+int WINDOW_HEIGHT = 600;
+float WINDOW_ASPECT_RATIO = (float)WINDOW_WIDTH / WINDOW_HEIGHT;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    WINDOW_ASPECT_RATIO = (float)width / height;
     glViewport(0, 0, width, height);
 }
 
@@ -19,13 +23,15 @@ void processInput(GLFWwindow *window) {
 }
 
 int main() {
+    float default_x = 0.0f;
+    float default_y = 0.0f;
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-    GLFWwindow* window = glfwCreateWindow(800, 600, "LeraningOpenGL", nullptr, nullptr);
+    GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, "LearningOpenGL", nullptr, nullptr);
 
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -40,10 +46,17 @@ int main() {
         return -1;
     }
 
+    if(glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+        int count;
+        const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+        default_x = axes[0];
+        default_y = axes[1];
+    }
+
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-    // triangle 1
+    // cube
     static const GLfloat vertices[] = {
             -0.25f,  0.25f, -0.25f,
             -0.25f, -0.25f, -0.25f,
@@ -119,26 +132,28 @@ int main() {
     glDepthFunc(GL_LEQUAL);
 
     while (!glfwWindowShouldClose(window)) {
-        float currentTime = 2 * (float)std::clock() / CLOCKS_PER_SEC;
+        float currentTime = (float)std::clock() / CLOCKS_PER_SEC;
         processInput(window);
         static const GLfloat one = 1.0f;
+        float x_translate = 0.0f;
+        float y_translate = 0.0f;
 
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
         glClearBufferfv(GL_DEPTH, 0, &one);
 
+        if(glfwJoystickPresent(GLFW_JOYSTICK_1)) {
+            int count;
+            const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+            x_translate = axes[0] - default_x;
+            y_translate = -(axes[1] - default_y);
+        }
 
-        float f = (float)currentTime * (float)M_PI * 0.1f;
-        vmath::mat4 proj_matrix = vmath::perspective(50.0f, (float)8/6, 0.1f, 1000.0f);
+        vmath::mat4 proj_matrix = vmath::perspective(50.0f, WINDOW_ASPECT_RATIO, 0.1f, 1000.0f);
         vmath::mat4 mv_matrix =
-                vmath::translate(0.0f, 0.0f, -4.0f) *
-                vmath::translate(sinf(2.1f * f) * 0.5f,
-                                 cosf(1.7f * f) * 0.5f,
-                                 sinf(1.3f * f) * cosf(1.5f * f) * 2.0f) *
+                vmath::translate(x_translate, y_translate, -4.0f) *
                 vmath::rotate((float)currentTime * 45.0f, 0.0f, 1.0f, 0.0f) *
                 vmath::rotate((float)currentTime * 81.0f, 1.0f, 0.0f, 0.0f);
-
-
 
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(proj_location, 1, GL_FALSE, proj_matrix);
