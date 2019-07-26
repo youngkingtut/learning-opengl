@@ -32,7 +32,7 @@ target_include_directories(ShaderCompilation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 ##############################################################
 # Build
 ##############################################################
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp src/Game.cpp src/Game.h src/ConfigStore.cpp src/ConfigStore.h)
+add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp src/Game.cpp src/Game.h src/ConfigStore.cpp src/ConfigStore.h src/Window.cpp src/Window.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} ShaderCompilation ${SHADERCOMPILATION_LIBRARIES})

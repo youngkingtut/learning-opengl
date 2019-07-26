@@ -1,9 +1,9 @@
 #pragma once
 
 
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include "ConfigStore.h"
+#include "Window.h"
 
 
 class Game {
@@ -14,13 +14,9 @@ public:
     void run();
 
 private:
-    GLFWwindow* window;
+    Window window;
     ConfigStore config;
-    float aspectRatio;
     GLuint vao;
     GLuint vbo;
     GLuint ebo;
-
-
-    void processInput();
 };

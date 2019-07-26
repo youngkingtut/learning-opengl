@@ -3,59 +3,26 @@
 #include <vmath.h>
 #include <iostream>
 #include <ctime>
+#include <glad/glad.h>
 
 #include "ShaderCompiler/ShaderCompiler.hpp"
 
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    glViewport(0, 0, width, height);
-}
-
-void Game::processInput() {
-    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-        glfwSetWindowShouldClose(window, true);
-    }
-}
-
 Game::Game(ConfigStore config) {
     this->config = config;
-    aspectRatio = (float)config.getScreenWidth() / config.getScreenHeight();
-    window = nullptr;
     vao = 0;
     vbo = 0;
     ebo = 0;
 }
 
 void Game::initialize() {
-    glfwInit();
-#if __APPLE__
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#else
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-#endif
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow(config.getScreenWidth(), config.getScreenHeight(), "LearningOpenGL", nullptr, nullptr);
-
-    if (window == nullptr) {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-    }
-
-    glfwMakeContextCurrent(window);
+    window.initialize(config);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         // todo create exceptions
         throw std::exception();
     }
-
-
-    glViewport(0, 0, config.getScreenWidth(), config.getScreenHeight());
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     // cube
     static const GLfloat vertices[] = {
@@ -122,9 +89,10 @@ void Game::run() {
     GLint mv_location = glGetUniformLocation(shaderProgram, "mv_matrix");
     GLint proj_location = glGetUniformLocation(shaderProgram, "proj_matrix");
 
-    while (!glfwWindowShouldClose(window)) {
+    while (window.ShouldExit()) {
+        window.ProcessInput();
+
         float currentTime = (float)std::clock() / CLOCKS_PER_SEC;
-        processInput();
         static const GLfloat one = 1.0f;
         float x_translate = 0.0f;
         float y_translate = 0.0f;
@@ -133,7 +101,7 @@ void Game::run() {
         glClear(GL_COLOR_BUFFER_BIT);
         glClearBufferfv(GL_DEPTH, 0, &one);
 
-        vmath::mat4 proj_matrix = vmath::perspective(50.0f, this->aspectRatio, 0.1f, 1000.0f);
+        vmath::mat4 proj_matrix = vmath::perspective(50.0f, 4/3.0f, 0.1f, 1000.0f);
         vmath::mat4 mv_matrix =
                 vmath::translate(x_translate, y_translate, -4.0f) *
                 vmath::rotate((float)currentTime * 45.0f, 0.0f, 1.0f, 0.0f) *
@@ -145,8 +113,7 @@ void Game::run() {
         glBindVertexArray(vao);
         glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
 
-        glfwSwapBuffers(window);
-        glfwPollEvents();
+        window.SwapBuffersAndPollEvents();
     }
 }
 
@@ -154,8 +121,6 @@ Game::~Game() {
     glDeleteVertexArrays(1, &vao);
     glDeleteBuffers(1, &vbo);
     glDeleteBuffers(1, &ebo);
-
-    glfwTerminate();
 }
 
 
