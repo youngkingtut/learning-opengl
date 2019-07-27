@@ -78,7 +78,7 @@ void Renderer::initialize() {
     proj_location = glGetUniformLocation(shaderProgram, "proj_matrix");
 }
 
-void Renderer::render(float aspectRatio) {
+void Renderer::render(const World& world, float aspectRatio) {
     float currentTime = (float)std::clock() / CLOCKS_PER_SEC;
     static const GLfloat one = 1.0f;
     float x_translate = 0.0f;

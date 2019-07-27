@@ -13,10 +13,16 @@ void Game::initialize(ConfigStore config) {
 }
 
 void Game::run() {
+    double time = glfwGetTime();
+
     while (window.ShouldExit()) {
+        double time_now = glfwGetTime();
+        double delta = time_now - time;
+        time = time_now;
+
         window.ProcessInput(controlState);
-        world.updateFromInput(controlState);
-        renderer.render(window.GetAspectRatio());
+        world.updateFromInput(controlState, delta);
+        renderer.render(world, window.GetAspectRatio());
         window.SwapBuffersAndPollEvents();
     }
 }

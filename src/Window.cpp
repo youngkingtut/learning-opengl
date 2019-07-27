@@ -70,27 +70,27 @@ void Window::ProcessInput(ControlState& controlState) {
     int s_state = glfwGetKey(window, GLFW_KEY_S);
     int d_state = glfwGetKey(window, GLFW_KEY_D);
 
-    if(w_state == GLFW_RELEASE) {
+    if(w_state == GLFW_PRESS) {
         controlState.setUp(1.0f);
-    } else if(w_state == GLFW_PRESS) {
+    } else if(w_state == GLFW_RELEASE) {
         controlState.setUp(0.0f);
     }
 
-    if(a_state == GLFW_RELEASE) {
+    if(a_state == GLFW_PRESS) {
         controlState.setLeft(1.0f);
-    } else if(a_state == GLFW_PRESS) {
+    } else if(a_state == GLFW_RELEASE) {
         controlState.setLeft(0.0f);
     }
 
-    if(s_state == GLFW_RELEASE) {
+    if(s_state == GLFW_PRESS) {
         controlState.setDown(1.0f);
-    } else if(s_state == GLFW_PRESS) {
+    } else if(s_state == GLFW_RELEASE) {
         controlState.setDown(0.0f);
     }
 
-    if(d_state == GLFW_RELEASE) {
+    if(d_state == GLFW_PRESS) {
         controlState.setRight(1.0f);
-    } else if(d_state == GLFW_PRESS) {
+    } else if(d_state == GLFW_RELEASE) {
         controlState.setRight(0.0f);
     }
 }

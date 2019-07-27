@@ -1,13 +1,14 @@
 #pragma once
 
 #include <glad/glad.h>
+#include "World.h"
 
 class Renderer {
 public:
     ~Renderer();
 
     void initialize();
-    void render(float aspectRatio);
+    void render(const World& world, float aspectRatio);
 
 private:
     GLuint shaderProgram;
