@@ -1,18 +1,36 @@
 #include "ConfigStore.h"
 
-
-void ConfigStore::setScreenWidth(int width) {
-    this->screenWidth = width;
+void ConfigStore::setScreenWidth(unsigned int width) {
+    screenWidth = width;
 }
 
-int ConfigStore::getScreenWidth() {
-    return this->screenWidth;
+void ConfigStore::setScreenHeight(unsigned int height) {
+    screenHeight = height;
 }
 
-void ConfigStore::setScreenHeight(int height) {
-    this->screenHeight = height;
+void ConfigStore::setWorldWidth(float width) {
+    worldWidth = width;
 }
 
-int ConfigStore::getScreenHeight() {
-    return this->screenHeight;
+void ConfigStore::setWorldHeight(float height) {
+    worldHeight = height;
 }
+
+
+unsigned int ConfigStore::getScreenWidth() {
+    return screenWidth;
+}
+
+unsigned int ConfigStore::getScreenHeight() {
+    return screenHeight;
+}
+
+float ConfigStore::getWorldWidth() {
+    return worldWidth;
+}
+
+float ConfigStore::getWorldHeight() {
+    return worldWidth;
+}
+
+

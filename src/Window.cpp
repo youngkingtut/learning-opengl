@@ -4,6 +4,10 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#include "Constants.h"
+
+
+float ASPECT_RATIO;
 
 Window::~Window() {
     glfwTerminate();
@@ -13,6 +17,7 @@ Window::~Window() {
  * Callbacks
  */
 void Window::FrameBufferSizeCallback(GLFWwindow *window, int width, int height) {
+    ASPECT_RATIO = (float)width / height;
     glViewport(0, 0, width, height);
 }
 
@@ -29,7 +34,8 @@ void Window::initialize(ConfigStore config) {
 #endif
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-    window = glfwCreateWindow(config.getScreenWidth(), config.getScreenHeight(), "LearningOpenGL", nullptr, nullptr);
+    ASPECT_RATIO = (float)config.getScreenWidth() / config.getScreenHeight();
+    window = glfwCreateWindow(config.getScreenWidth(), config.getScreenHeight(), GAME_TITLE, nullptr, nullptr);
 
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -39,20 +45,53 @@ void Window::initialize(ConfigStore config) {
 
     glfwMakeContextCurrent(window);
 
+    // Must initialize Glad after
+    // https://www.glfw.org/docs/latest/quick.html#quick_context_current
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         // todo create exceptions
         throw std::exception();
     }
 
+    // Trying sticky keys for event based processing with the keyboard
+    // https://www.glfw.org/docs/latest/input_guide.html#input_key
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
     glfwSetFramebufferSizeCallback(window, Window::FrameBufferSizeCallback);
 }
 
-
-
-void Window::ProcessInput() {
+void Window::ProcessInput(ControlState& controlState) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
+        return;
+    }
+
+    int w_state = glfwGetKey(window, GLFW_KEY_W);
+    int a_state = glfwGetKey(window, GLFW_KEY_A);
+    int s_state = glfwGetKey(window, GLFW_KEY_S);
+    int d_state = glfwGetKey(window, GLFW_KEY_D);
+
+    if(w_state == GLFW_RELEASE) {
+        controlState.setUp(1.0f);
+    } else if(w_state == GLFW_PRESS) {
+        controlState.setUp(0.0f);
+    }
+
+    if(a_state == GLFW_RELEASE) {
+        controlState.setLeft(1.0f);
+    } else if(a_state == GLFW_PRESS) {
+        controlState.setLeft(0.0f);
+    }
+
+    if(s_state == GLFW_RELEASE) {
+        controlState.setDown(1.0f);
+    } else if(s_state == GLFW_PRESS) {
+        controlState.setDown(0.0f);
+    }
+
+    if(d_state == GLFW_RELEASE) {
+        controlState.setRight(1.0f);
+    } else if(d_state == GLFW_PRESS) {
+        controlState.setRight(0.0f);
     }
 }
 
@@ -63,4 +102,8 @@ bool Window::ShouldExit() {
 void Window::SwapBuffersAndPollEvents() {
     glfwSwapBuffers(window);
     glfwPollEvents();
+}
+
+float Window::GetAspectRatio() {
+    return ASPECT_RATIO;
 }

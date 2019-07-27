@@ -7,7 +7,7 @@ public:
     ~Renderer();
 
     void initialize();
-    void render();
+    void render(float aspectRatio);
 
 private:
     GLuint shaderProgram;

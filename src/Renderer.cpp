@@ -78,7 +78,7 @@ void Renderer::initialize() {
     proj_location = glGetUniformLocation(shaderProgram, "proj_matrix");
 }
 
-void Renderer::render() {
+void Renderer::render(float aspectRatio) {
     float currentTime = (float)std::clock() / CLOCKS_PER_SEC;
     static const GLfloat one = 1.0f;
     float x_translate = 0.0f;
@@ -88,7 +88,7 @@ void Renderer::render() {
     glClear(GL_COLOR_BUFFER_BIT);
     glClearBufferfv(GL_DEPTH, 0, &one);
 
-    vmath::mat4 proj_matrix = vmath::perspective(50.0f, 4/3.0f, 0.1f, 1000.0f);
+    vmath::mat4 proj_matrix = vmath::perspective(50.0f, aspectRatio, 0.1f, 1000.0f);
     vmath::mat4 mv_matrix =
             vmath::translate(x_translate, y_translate, -4.0f) *
             vmath::rotate((float)currentTime * 45.0f, 0.0f, 1.0f, 0.0f) *
