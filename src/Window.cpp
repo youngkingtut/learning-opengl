@@ -1,6 +1,8 @@
 #include "Window.h"
 
 #include <iostream>
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 
 Window::~Window() {
@@ -32,9 +34,16 @@ void Window::initialize(ConfigStore config) {
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
+        throw std::exception();
     }
 
     glfwMakeContextCurrent(window);
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
+        std::cout << "Failed to initialize GLAD" << std::endl;
+        // todo create exceptions
+        throw std::exception();
+    }
 
     glfwSetFramebufferSizeCallback(window, Window::FrameBufferSizeCallback);
 }

@@ -1,22 +1,16 @@
 #pragma once
 
-
-#include <GLFW/glfw3.h>
 #include "ConfigStore.h"
 #include "Window.h"
+#include "Renderer.h"
 
 
 class Game {
 public:
-    explicit Game(ConfigStore config);
-    ~Game();
-    void initialize();
+    void initialize(ConfigStore config);
     void run();
 
 private:
     Window window;
-    ConfigStore config;
-    GLuint vao;
-    GLuint vbo;
-    GLuint ebo;
+    Renderer renderer;
 };

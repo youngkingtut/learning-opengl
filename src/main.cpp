@@ -1,15 +1,17 @@
+
 #include "ConfigStore.h"
 #include "Game.h"
 
+
 int main() {
     // todo read from file
-    ConfigStore configStore = ConfigStore();
-    configStore.setScreenWidth(800);
-    configStore.setScreenHeight(600);
+    ConfigStore config = ConfigStore();
+    config.setScreenWidth(800);
+    config.setScreenHeight(600);
 
-    Game game = Game(configStore);
+    Game game{};
 
-    game.initialize();
+    game.initialize(config);
     game.run();
 
     return 0;
