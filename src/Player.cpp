@@ -1,14 +1,12 @@
 #include "Player.h"
 
 
-#define VELOCITY_STEP 0.05f
-#define VELOCITY_MAX 1.0f
-#define DECELERATION_FACTOR 0.1f
+#define DECELERATION 10.0f
+#define ACCELERATION 10.0f
+#define MAX_VELOCITY 3.0f
 
 
-void Player::initialize(float x, float y, float v_x, float v_y, const vmath::vec3& dir) {
-    position.x = x;
-    position.y = y;
+Player::Player(float x, float y, float v_x, float v_y, const vmath::vec3 &dir): position(x, y) {
     x_velocity = v_x;
     y_velocity = v_y;
     direction = vmath::normalize(dir);
@@ -22,30 +20,30 @@ void Player::updateYVelocity(VelocityUpdate vUpdate, double factor) {
     y_velocity = UpdateVelocity(y_velocity, vUpdate, factor);
 }
 
-float Player::UpdateVelocity(float velocity, VelocityUpdate vUpdate, double factor) {
+float Player::UpdateVelocity(float velocity, VelocityUpdate vUpdate, double deltaTime) {
     float updatedVelocity = velocity;
 
     switch(vUpdate) {
         case VelocityUpdate::INCREASE:
-            updatedVelocity = velocity + (VELOCITY_STEP * factor);
-            if(updatedVelocity > VELOCITY_MAX) {
-                updatedVelocity = VELOCITY_MAX;
+            updatedVelocity = velocity + (ACCELERATION * deltaTime);
+            if(updatedVelocity > MAX_VELOCITY) {
+                updatedVelocity = MAX_VELOCITY;
             }
             break;
         case VelocityUpdate::DECREASE:
-            updatedVelocity = velocity - (VELOCITY_STEP * factor);
-            if(updatedVelocity < -VELOCITY_MAX) {
-                updatedVelocity = -VELOCITY_MAX;
+            updatedVelocity = velocity - (ACCELERATION * deltaTime);
+            if(updatedVelocity < -MAX_VELOCITY) {
+                updatedVelocity = -MAX_VELOCITY;
             }
             break;
         case VelocityUpdate::TO_ZERO:
             if(velocity > 0.0f) {
-                updatedVelocity = velocity - (DECELERATION_FACTOR * factor);
+                updatedVelocity = velocity - (DECELERATION * deltaTime);
                 if(updatedVelocity < 0.0f) {
                     updatedVelocity = 0.0f;
                 }
             } else if (velocity < 0.0f) {
-                updatedVelocity = velocity + (DECELERATION_FACTOR * factor);
+                updatedVelocity = velocity + (DECELERATION * deltaTime);
                 if(updatedVelocity > 0.0f) {
                     updatedVelocity = 0.0f;
                 }
@@ -63,12 +61,8 @@ void Player::updatePosition(Position new_position) {
     this->position.y = new_position.y;
 }
 
-float Player::getXPosition() {
-    return position.x;
-}
-
-float Player::getYPosition() {
-    return position.y;
+Position Player::getPosition() {
+    return position;
 }
 
 float Player::getXVelocity() {
@@ -79,9 +73,27 @@ float Player::getYVelocity() {
     return y_velocity;
 }
 
-Position Player::getNextPosition(double deltaTime) {
+Position Player::getNextPosition(ControlState controlState, double deltaTime) {
+    double upScale = controlState.getUp();
+    double downScale = controlState.getDown();
+    double leftScale = controlState.getLeft();
+    double rightScale = controlState.getRight();
+
+    updateXVelocity(VelocityUpdate::INCREASE, rightScale * deltaTime);
+    updateXVelocity(VelocityUpdate::DECREASE, leftScale * deltaTime);
+
+    updateYVelocity(VelocityUpdate::INCREASE, upScale * deltaTime);
+    updateYVelocity(VelocityUpdate::DECREASE, downScale * deltaTime);
+
+    if(upScale == 0.0f && downScale == 0.0f) {
+        updateYVelocity(VelocityUpdate::TO_ZERO, deltaTime);
+    }
+
+    if(leftScale == 0.0f && rightScale == 0.0f) {
+        updateXVelocity(VelocityUpdate::TO_ZERO, deltaTime);
+    }
+
     float new_x = x_velocity * deltaTime + position.x;
     float new_y = y_velocity * deltaTime + position.y;
     return {new_x, new_y};
 }
-

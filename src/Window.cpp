@@ -9,6 +9,10 @@
 
 float ASPECT_RATIO;
 
+Window::Window(ConfigStore c) :
+    config(c),
+    window(){}
+
 Window::~Window() {
     glfwTerminate();
 }
@@ -22,7 +26,7 @@ void Window::FrameBufferSizeCallback(GLFWwindow *window, int width, int height) 
 }
 
 
-void Window::initialize(ConfigStore config) {
+void Window::initialize() {
     glfwInit();
 #if __APPLE__
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -107,3 +111,5 @@ void Window::SwapBuffersAndPollEvents() {
 float Window::GetAspectRatio() {
     return ASPECT_RATIO;
 }
+
+

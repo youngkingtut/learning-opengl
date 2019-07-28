@@ -6,17 +6,19 @@
 
 class Window {
 public:
-    Window() = default;
+    explicit Window(ConfigStore c);
     ~Window();
 
-    void initialize(ConfigStore config);
+    void initialize();
     void ProcessInput(ControlState& controlState);
     bool ShouldExit();
     void SwapBuffersAndPollEvents();
     float GetAspectRatio();
 
 private:
+    ConfigStore config;
     GLFWwindow* window;
+
     static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 };
 

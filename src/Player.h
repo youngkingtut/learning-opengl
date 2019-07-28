@@ -2,6 +2,8 @@
 
 #include <vmath.h>
 #include "Position.h"
+#include "ControlState.h"
+
 
 enum VelocityUpdate {
     INCREASE,
@@ -11,15 +13,13 @@ enum VelocityUpdate {
 
 class Player {
 public:
-    Player() = default;
-    void initialize(float x, float y, float v_x, float v_y, const vmath::vec3& dir);
-    void updateXVelocity(VelocityUpdate vUpdate, double factor);
-    void updateYVelocity(VelocityUpdate vUpdate, double factor);
+    Player(float x, float y, float v_x, float v_y, const vmath::vec3& dir);
+    void updateXVelocity(VelocityUpdate vUpdate, double deltaTime);
+    void updateYVelocity(VelocityUpdate vUpdate, double deltaTime);
     void updatePosition(Position position);
-    Position getNextPosition(double deltaTime);
+    Position getNextPosition(ControlState controlState, double deltaTime);
 
-    float getXPosition();
-    float getYPosition();
+    Position getPosition();
     float getXVelocity();
     float getYVelocity();
 
@@ -29,5 +29,5 @@ private:
     float y_velocity{};
     vmath::vec3 direction;
 
-    static float UpdateVelocity(float velocity, VelocityUpdate vUpdate, double factor);
+    static float UpdateVelocity(float velocity, VelocityUpdate vUpdate, double deltaTime);
 };

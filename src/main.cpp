@@ -11,9 +11,7 @@ int main() {
     config.setWorldWidth(1.5f);
     config.setWorldHeight(1.5f);
 
-    Game game;
-
-    game.initialize(config);
+    Game game(config);
     game.run();
 
     return 0;

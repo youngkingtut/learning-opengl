@@ -9,7 +9,7 @@
 
 class Game {
 public:
-    void initialize(ConfigStore config);
+    explicit Game(ConfigStore config);
     void run();
 
 private:

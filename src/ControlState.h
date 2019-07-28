@@ -3,6 +3,7 @@
 
 class ControlState {
 public:
+    ControlState() = default;
     void setUp(float up);
     void setDown(float down);
     void setRight(float right);
