@@ -6,6 +6,7 @@
 
 class Window {
 public:
+    Window() = default;
     ~Window();
 
     void initialize(ConfigStore config);

@@ -8,59 +8,67 @@ void World::initialize(ConfigStore config) {
     width = config.getWorldWidth();
     height = config.getWorldHeight();
 
-    if(width < 1.0f) {
-        width = 1.0f;
-        std::cout << "World width must be at least 1.0f" << std::endl;
-    }
-
-    if(height < 1.0f) {
-        height = 1.0f;
-        std::cout << "World height must be at least 1.0f" << std::endl;
-    }
-
     player.initialize(width / 2, height / 2, 0, 0, vmath::vec3(1.0f, 0.0f, 0.0f));
 }
 
 void World::updateFromInput(ControlState controlState, double deltaTime) {
-    // If the fps drops below 60, use this factor to slow down world updates
-    // to compensate and give the user a more smooth experience at the cost
-    // of world slow down.
-    double smoothnessFactor = 1.0f;
+    double smoothnessFactor = deltaTime / FPS_60;
 
-    if(deltaTime > FPS_60) {
-        smoothnessFactor = deltaTime / FPS_60;
-    }
-
-    double upFactor = controlState.getUp() * smoothnessFactor;
-    double downFactor = controlState.getDown() * smoothnessFactor;
-    double leftFactor = controlState.getLeft() * smoothnessFactor;
-    double rightFactor = controlState.getRight() * smoothnessFactor;
+    double upFactor = controlState.getUp();
+    double downFactor = controlState.getDown();
+    double leftFactor = controlState.getLeft();
+    double rightFactor = controlState.getRight();
 
     if(upFactor > 0.0f) {
-        player.updateYVelocity(VelocityUpdate::INCREASE, upFactor);
-    } else {
-        player.updateYVelocity(VelocityUpdate::DECREASE_TO_ZERO, 0.3);
+        player.updateYVelocity(VelocityUpdate::INCREASE, upFactor * smoothnessFactor);
     }
 
     if(downFactor > 0.0f) {
-        player.updateYVelocity(VelocityUpdate::DECREASE, downFactor);
-    } else {
-        player.updateYVelocity(VelocityUpdate::INCREASE_TO_ZERO, 0.3);
+        player.updateYVelocity(VelocityUpdate::DECREASE, downFactor * smoothnessFactor);
     }
 
     if(leftFactor > 0.0f) {
-        player.updateXVelocity(VelocityUpdate::DECREASE, leftFactor);
-    } else {
-        player.updateXVelocity(VelocityUpdate::INCREASE_TO_ZERO, 2.0);
+        player.updateXVelocity(VelocityUpdate::DECREASE, leftFactor * smoothnessFactor);
     }
 
     if(rightFactor > 0.0f) {
-        player.updateXVelocity(VelocityUpdate::INCREASE, rightFactor);
-    } else {
-        player.updateXVelocity(VelocityUpdate::DECREASE_TO_ZERO, 2.0);
+        player.updateXVelocity(VelocityUpdate::INCREASE, rightFactor * smoothnessFactor);
     }
 
-    player.updatePosition(FPS_60 * smoothnessFactor);
+    if(upFactor == 0.0f && downFactor == 0.0f) {
+        player.updateYVelocity(VelocityUpdate::TO_ZERO, smoothnessFactor);
+    }
 
-    std::cout << "Player x: " << player.getXPosition() << " | Player y: " << player.getYPosition() << std::endl;
+    if(leftFactor == 0.0f && rightFactor == 0.0f) {
+        player.updateXVelocity(VelocityUpdate::TO_ZERO, smoothnessFactor);
+    }
+
+    Position pos = player.getNextPosition(deltaTime);
+
+    player.updatePosition(BoundaryCheck(pos));
+}
+
+Player World::getPlayer() const {
+    return player;
+}
+
+Position World::BoundaryCheck(Position pos) {
+    if(pos.x > width) {
+        pos.x = width;
+    } else if (pos.x < 0) {
+        pos.x = 0;
+    }
+
+    if(pos.y > height) {
+        pos.y = height;
+    } else if (pos.y < 0) {
+        pos.y = 0;
+    }
+
+    return pos;
+}
+
+World::World(float width, float height) {
+    this->width = width;
+    this->height = height;
 }

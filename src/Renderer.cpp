@@ -90,7 +90,7 @@ void Renderer::render(const World& world, float aspectRatio) {
 
     vmath::mat4 proj_matrix = vmath::perspective(50.0f, aspectRatio, 0.1f, 1000.0f);
     vmath::mat4 mv_matrix =
-            vmath::translate(x_translate, y_translate, -4.0f) *
+            vmath::translate(world.getPlayer().getXPosition(), world.getPlayer().getYPosition(), -4.0f) *
             vmath::rotate((float)currentTime * 45.0f, 0.0f, 1.0f, 0.0f) *
             vmath::rotate((float)currentTime * 81.0f, 1.0f, 0.0f, 0.0f);
 
