@@ -7,5 +7,5 @@ uniform mat4 mv_matrix;
 void main()
 {
   gl_Position = proj_matrix * mv_matrix * position;
-  color = position * 2.0 * vec4(0.5, 0.5, 0.5, 1.0);
+  color = vec4(1.0, 1.0, 1.0, 1.0);
 }

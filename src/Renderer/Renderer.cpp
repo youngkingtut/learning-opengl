@@ -19,34 +19,13 @@ void Renderer::initialize() {
 
     // cube
     static const GLfloat vertices[] = {
-            -0.25f,  0.25f, -0.25f,
-            -0.25f, -0.25f, -0.25f,
-            0.25f, -0.25f, -0.25f,
-            0.25f,  0.25f, -0.25f,
-            0.25f, -0.25f,  0.25f,
-            0.25f,  0.25f,  0.25f,
-            -0.25f, -0.25f,  0.25f,
-            -0.25f,  0.25f,  0.25f,
+            -0.25f,  0.0f, 0.0f,
+             0.25f,  0.0f, 0.0f,
+              0.0f,  0.5f, 0.0f,
     };
 
     static const GLuint indicies[] = {
-            0, 1, 2,
-            2, 3, 0,
-
-            2, 4, 3,
-            4, 5, 3,
-
-            4, 6, 5,
-            6, 7, 5,
-
-            6, 1, 7,
-            1, 0, 7,
-
-            6, 4, 2,
-            2, 1, 6,
-
-            0, 3, 5,
-            5, 7, 0,
+            2, 1, 0
     };
 
 
@@ -83,7 +62,7 @@ void Renderer::initialize() {
 void Renderer::render(const World& world, float aspectRatio) {
     static const GLfloat one = 1.0f;
 
-    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearBufferfv(GL_DEPTH, 0, &one);
 
@@ -99,5 +78,5 @@ void Renderer::render(const World& world, float aspectRatio) {
     glUniformMatrix4fv(proj_location, 1, GL_FALSE, proj_matrix);
     glUniformMatrix4fv(mv_location, 1, GL_FALSE, mv_matrix);
     glBindVertexArray(vao);
-    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 }

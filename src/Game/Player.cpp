@@ -5,7 +5,7 @@
 
 #define DECELERATION 10.0f
 #define ACCELERATION 13.0f
-#define MAX_VELOCITY 4.0f
+#define MAX_VELOCITY 6.0f
 
 
 Player::Player():
@@ -90,9 +90,9 @@ float Player::getAngle() {
 }
 
 float Player::calculateAngle(vmath::vec2& dir) {
-    float angle = vmath::angle(vmath::vec2(1.0, 0.0), dir);
-    if(dir[1] < 0) {
-        angle += M_PI;
+    float angle = vmath::angle(vmath::vec2(0.0, 1.0), dir);
+    if(dir[0] > 0) {
+        angle = -angle;
     }
     return vmath::degrees(angle);
 }
