@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vmath.h>
-#include "Position.h"
 #include "ControlState.h"
 
 
