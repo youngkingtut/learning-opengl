@@ -19,5 +19,5 @@ private:
     float width;
     float height;
 
-    Position BoundaryCheck(Position pos);
+    vmath::vec2 BoundaryCheck(vmath::vec2 position);
 };

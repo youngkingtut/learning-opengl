@@ -87,12 +87,12 @@ void Renderer::render(const World& world, float aspectRatio) {
     glClear(GL_COLOR_BUFFER_BIT);
     glClearBufferfv(GL_DEPTH, 0, &one);
 
-    Position playerPosition = world.getPlayer().getPosition();
+    vmath::vec2 playerPosition = world.getPlayer().getPosition();
     float playerAngle = world.getPlayer().getAngle();
 
     vmath::mat4 proj_matrix = vmath::perspective(50.0f, aspectRatio, 0.1f, 1000.0f);
     vmath::mat4 mv_matrix =
-            vmath::translate(playerPosition.x, playerPosition.y, -13.0f) *
+            vmath::translate(playerPosition[0], playerPosition[1], -13.0f) *
             vmath::rotate(playerAngle, 0.0f, 0.0f, 1.0f);
 
     glUseProgram(shaderProgram);

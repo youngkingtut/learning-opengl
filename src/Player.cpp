@@ -8,38 +8,25 @@
 #define MAX_VELOCITY 4.0f
 
 
-Player::Player(float x, float y, float v_x, float v_y, const vmath::vec2 &dir):
-position(x, y),
-x_velocity(v_x),
-y_velocity(v_y),
-direction(vmath::normalize(dir)){
-    angle = calculateAngle(direction);
-}
+Player::Player():
+    position(0, 0),
+    velocity(0, 0),
+    angle(0){}
 
 void Player::updateXVelocity(VelocityUpdate vUpdate, double factor) {
-    x_velocity = updateVelocity(x_velocity, vUpdate, factor);
+    velocity[0] = updateVelocity(velocity[0], vUpdate, factor);
 }
 
 void Player::updateYVelocity(VelocityUpdate vUpdate, double factor) {
-    y_velocity = updateVelocity(y_velocity, vUpdate, factor);
+    velocity[1] = updateVelocity(velocity[1], vUpdate, factor);
 }
 
 float Player::updateVelocity(float velocity, VelocityUpdate vUpdate, double deltaTime) {
-    // todo velocity needs to be normalized
     float updatedVelocity = velocity;
 
     switch(vUpdate) {
         case VelocityUpdate::INCREASE:
             updatedVelocity = velocity + (ACCELERATION * deltaTime);
-            if(updatedVelocity > MAX_VELOCITY) {
-                updatedVelocity = MAX_VELOCITY;
-            }
-            break;
-        case VelocityUpdate::DECREASE:
-            updatedVelocity = velocity - (ACCELERATION * deltaTime);
-            if(updatedVelocity < -MAX_VELOCITY) {
-                updatedVelocity = -MAX_VELOCITY;
-            }
             break;
         case VelocityUpdate::TO_ZERO:
             if(velocity > 0.0f) {
@@ -61,65 +48,41 @@ float Player::updateVelocity(float velocity, VelocityUpdate vUpdate, double delt
     return updatedVelocity;
 }
 
-void Player::setPosition(Position new_position) {
-    this->position.x = new_position.x;
-    this->position.y = new_position.y;
+void Player::setPosition(vmath::vec2 p) {
+    position[0] = p[0];
+    position[1] = p[1];
 }
 
-Position Player::getPosition() {
+vmath::vec2 Player::getPosition() {
     return position;
 }
 
-Position Player::getNextPosition(ControlState controlState, double deltaTime) {
-    double upScale = controlState.getUp();
-    double downScale = controlState.getDown();
-    double leftScale = controlState.getLeft();
-    double rightScale = controlState.getRight();
+vmath::vec2 Player::getNextPosition(ControlState controlState, double deltaTime) {
+    vmath::vec2 controlDirection = vmath::vec2(controlState.getRight() - controlState.getLeft(), controlState.getUp() - controlState.getDown());
 
-    if(x_velocity >= 0.0f) {
-        updateXVelocity(VelocityUpdate::INCREASE, rightScale * deltaTime);
-        if(leftScale > 0.0f) {
-            updateXVelocity(VelocityUpdate::TO_ZERO, deltaTime);
-            updateXVelocity(VelocityUpdate::DECREASE, leftScale * deltaTime);
-        }
-    } else {
-        updateXVelocity(VelocityUpdate::DECREASE, leftScale * deltaTime);
-        if(rightScale > 0.0f) {
-            updateXVelocity(VelocityUpdate::TO_ZERO, deltaTime);
-            updateXVelocity(VelocityUpdate::INCREASE, rightScale * deltaTime);
-        }
+    // Update angle and normalize control direction if present
+    if(vmath::length(controlDirection) > 0) {
+        controlDirection = vmath::normalize(controlDirection);
+        angle = calculateAngle(controlDirection);
+        updateXVelocity(VelocityUpdate::INCREASE, controlDirection[0] * deltaTime);
+        updateYVelocity(VelocityUpdate::INCREASE, controlDirection[1] * deltaTime);
     }
 
-    if(leftScale == 0.0f && rightScale == 0.0f) {
+    if(controlDirection[0] == 0) {
         updateXVelocity(VelocityUpdate::TO_ZERO, deltaTime);
     }
 
-    if(y_velocity >= 0.0f) {
-        updateYVelocity(VelocityUpdate::INCREASE, upScale * deltaTime);
-        if(downScale > 0.0f) {
-            updateYVelocity(VelocityUpdate::TO_ZERO, deltaTime);
-            updateYVelocity(VelocityUpdate::DECREASE, downScale * deltaTime);
-        }
-    } else {
-        updateYVelocity(VelocityUpdate::DECREASE, downScale * deltaTime);
-        if(upScale > 0.0f) {
-            updateYVelocity(VelocityUpdate::TO_ZERO, deltaTime);
-            updateYVelocity(VelocityUpdate::INCREASE, upScale * deltaTime);
-        }
-    }
-
-    if(upScale == 0.0f && downScale == 0.0f) {
+    if(controlDirection[1] == 0) {
         updateYVelocity(VelocityUpdate::TO_ZERO, deltaTime);
     }
 
-    if(upScale > 0 || downScale > 0 || rightScale > 0 || leftScale > 0) {
-        direction = vmath::normalize(vmath::vec2(rightScale - leftScale, upScale - downScale));
-        angle = calculateAngle(direction);
+    if(vmath::length(velocity) > MAX_VELOCITY) {
+        velocity = vmath::normalize(velocity) * MAX_VELOCITY;
     }
 
-    float new_x = x_velocity * deltaTime + position.x;
-    float new_y = y_velocity * deltaTime + position.y;
-    return {new_x, new_y};
+    position[0] = velocity[0] * deltaTime + position[0];
+    position[1] = velocity[1] * deltaTime + position[1];
+    return position;
 }
 
 float Player::getAngle() {
