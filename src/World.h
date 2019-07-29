@@ -12,6 +12,10 @@ public:
 
 private:
     Player player;
+    float lower_x;
+    float lower_y;
+    float upper_x;
+    float upper_y;
     float width;
     float height;
 

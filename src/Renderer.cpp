@@ -1,6 +1,8 @@
 #include <src/ShaderCompiler/ShaderCompiler.hpp>
+#include <iostream>
 #include <ctime>
 #include <vmath.h>
+
 #include "Renderer.h"
 
 
@@ -79,7 +81,6 @@ void Renderer::initialize() {
 }
 
 void Renderer::render(const World& world, float aspectRatio) {
-    float currentTime = (float)std::clock() / CLOCKS_PER_SEC;
     static const GLfloat one = 1.0f;
 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
@@ -87,10 +88,12 @@ void Renderer::render(const World& world, float aspectRatio) {
     glClearBufferfv(GL_DEPTH, 0, &one);
 
     Position playerPosition = world.getPlayer().getPosition();
+    float playerAngle = world.getPlayer().getAngle();
+
     vmath::mat4 proj_matrix = vmath::perspective(50.0f, aspectRatio, 0.1f, 1000.0f);
     vmath::mat4 mv_matrix =
-            vmath::translate(playerPosition.x, playerPosition.y, -10.0f) *
-            vmath::rotate((float)currentTime * 45.0f, 0.0f, 0.0f, 1.0f);
+            vmath::translate(playerPosition.x, playerPosition.y, -13.0f) *
+            vmath::rotate(playerAngle, 0.0f, 0.0f, 1.0f);
 
     glUseProgram(shaderProgram);
     glUniformMatrix4fv(proj_location, 1, GL_FALSE, proj_matrix);

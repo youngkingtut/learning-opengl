@@ -8,8 +8,8 @@ int main() {
     ConfigStore config = ConfigStore();
     config.setScreenWidth(800);
     config.setScreenHeight(600);
-    config.setWorldWidth(1.5f);
-    config.setWorldHeight(1.5f);
+    config.setWorldWidth(10.0f);
+    config.setWorldHeight(10.0f);
 
     Game game(config);
     game.run();
