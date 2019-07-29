@@ -1,6 +1,5 @@
-
-#include "ConfigStore.h"
-#include "Game.h"
+#include "Utils/ConfigStore.h"
+#include "Game/Game.h"
 
 
 int main() {

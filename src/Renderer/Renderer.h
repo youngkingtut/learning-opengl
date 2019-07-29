@@ -1,7 +1,9 @@
 #pragma once
 
 #include <glad/glad.h>
-#include "World.h"
+
+#include "../Game/World.h"
+
 
 class Renderer {
 public:

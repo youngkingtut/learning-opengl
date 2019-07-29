@@ -1,8 +1,8 @@
 #pragma once
 
-#include "ConfigStore.h"
+#include "../Interface/ControlState.h"
+#include "../Utils/ConfigStore.h"
 #include "Player.h"
-#include "ControlState.h"
 
 class World {
 public:

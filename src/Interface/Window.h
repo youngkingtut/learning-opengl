@@ -1,7 +1,7 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "ConfigStore.h"
+#include "../Utils/ConfigStore.h"
 #include "ControlState.h"
 
 class Window {

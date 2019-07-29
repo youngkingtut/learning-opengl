@@ -1,8 +1,8 @@
-#include <src/ShaderCompiler/ShaderCompiler.hpp>
 #include <iostream>
 #include <ctime>
 #include <vmath.h>
 
+#include "../ShaderCompiler/ShaderCompiler.hpp"
 #include "Renderer.h"
 
 

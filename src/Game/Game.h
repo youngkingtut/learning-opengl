@@ -1,10 +1,10 @@
 #pragma once
 
-#include "ConfigStore.h"
-#include "Window.h"
-#include "Renderer.h"
+#include "../Interface/Window.h"
+#include "../Interface/ControlState.h"
+#include "../Renderer/Renderer.h"
+#include "../Utils/ConfigStore.h"
 #include "World.h"
-#include "ControlState.h"
 
 
 class Game {

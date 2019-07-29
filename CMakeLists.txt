@@ -25,18 +25,30 @@ include_directories("${EXTERNAL_LIBRARIES}/glad/include")
 include_directories("${EXTERNAL_LIBRARIES}/sb7/include")
 
 ##############################################################
-# Shaders
-##############################################################
-add_library(ShaderCompilation ${PROJECT_SOURCE_DIR}/ShaderCompiler/ShaderCompiler.cpp)
-target_include_directories(ShaderCompilation PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-
-##############################################################
 # Build
 ##############################################################
-add_executable(${PROJECT_NAME} ${PROJECT_SOURCE_DIR}/main.cpp src/Game.cpp src/Game.h src/ConfigStore.cpp src/ConfigStore.h src/Window.cpp src/Window.h src/Renderer.cpp src/Renderer.h src/World.cpp src/World.h src/Player.cpp src/Player.h src/Constants.h src/ControlState.cpp src/ControlState.h)
+add_executable(${PROJECT_NAME}
+        src/main.cpp
+        src/Game/Game.cpp
+        src/Game/Game.h
+        src/Utils/ConfigStore.cpp
+        src/Utils/ConfigStore.h
+        src/Interface/Window.cpp
+        src/Interface/Window.h
+        src/Renderer/Renderer.cpp
+        src/Renderer/Renderer.h
+        src/Game/World.cpp
+        src/Game/World.h
+        src/Game/Player.cpp
+        src/Game/Player.h
+        src/Utils/Constants.h
+        src/Interface/ControlState.cpp
+        src/Interface/ControlState.h
+        src/ShaderCompiler/ShaderCompiler.cpp
+        src/ShaderCompiler/ShaderCompiler.hpp
+        )
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
-target_link_libraries(${PROJECT_NAME} ShaderCompilation ${SHADERCOMPILATION_LIBRARIES})
 
 ##############################################################
 # 'Link' Shaders

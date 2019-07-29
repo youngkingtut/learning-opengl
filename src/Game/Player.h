@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vmath.h>
-#include "ControlState.h"
+#include "../Interface/ControlState.h"
 
 
 enum VelocityUpdate {

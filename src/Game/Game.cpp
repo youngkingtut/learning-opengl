@@ -4,8 +4,9 @@
 #include <iostream>
 #include <ctime>
 
-#include "Window.h"
-#include "Constants.h"
+#include "../Interface/Window.h"
+#include "../Utils/Constants.h"
+
 
 Game::Game(ConfigStore config):
 window(config),
