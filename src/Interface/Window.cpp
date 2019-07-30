@@ -69,33 +69,60 @@ void Window::ProcessInput(ControlState& controlState) {
         return;
     }
 
-    int w_state = glfwGetKey(window, GLFW_KEY_W);
-    int a_state = glfwGetKey(window, GLFW_KEY_A);
-    int s_state = glfwGetKey(window, GLFW_KEY_S);
-    int d_state = glfwGetKey(window, GLFW_KEY_D);
+    int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
+    if(present > 0) {
+        int count;
+        const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
+        float x_axes = axes[0];
+        float y_axes = axes[1];
 
-    if(w_state == GLFW_PRESS) {
-        controlState.setUp(1.0f);
-    } else if(w_state == GLFW_RELEASE) {
-        controlState.setUp(0.0f);
-    }
+        if(x_axes < 0.2 && x_axes > -0.2) {
+            controlState.setRight(0);
+            controlState.setLeft(0);
+        } else if(x_axes > 0) {
+            controlState.setRight(x_axes);
+        } else {
+            controlState.setLeft(-x_axes);
+        }
 
-    if(a_state == GLFW_PRESS) {
-        controlState.setLeft(1.0f);
-    } else if(a_state == GLFW_RELEASE) {
-        controlState.setLeft(0.0f);
-    }
+        if(y_axes < 0.2 && y_axes > -0.2) {
+            y_axes = 0;
+            controlState.setUp(-y_axes);
+            controlState.setDown(y_axes);
+        } else if(y_axes > 0) {
+            controlState.setUp(-y_axes);
+        } else {
+            controlState.setDown(y_axes);
+        }
+    } else {
+        int w_state = glfwGetKey(window, GLFW_KEY_W);
+        int a_state = glfwGetKey(window, GLFW_KEY_A);
+        int s_state = glfwGetKey(window, GLFW_KEY_S);
+        int d_state = glfwGetKey(window, GLFW_KEY_D);
 
-    if(s_state == GLFW_PRESS) {
-        controlState.setDown(1.0f);
-    } else if(s_state == GLFW_RELEASE) {
-        controlState.setDown(0.0f);
-    }
+        if (w_state == GLFW_PRESS) {
+            controlState.setUp(1.0f);
+        } else if (w_state == GLFW_RELEASE) {
+            controlState.setUp(0.0f);
+        }
 
-    if(d_state == GLFW_PRESS) {
-        controlState.setRight(1.0f);
-    } else if(d_state == GLFW_RELEASE) {
-        controlState.setRight(0.0f);
+        if (a_state == GLFW_PRESS) {
+            controlState.setLeft(1.0f);
+        } else if (a_state == GLFW_RELEASE) {
+            controlState.setLeft(0.0f);
+        }
+
+        if (s_state == GLFW_PRESS) {
+            controlState.setDown(1.0f);
+        } else if (s_state == GLFW_RELEASE) {
+            controlState.setDown(0.0f);
+        }
+
+        if (d_state == GLFW_PRESS) {
+            controlState.setRight(1.0f);
+        } else if (d_state == GLFW_RELEASE) {
+            controlState.setRight(0.0f);
+        }
     }
 }
 
