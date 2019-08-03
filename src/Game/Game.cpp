@@ -10,15 +10,16 @@
 
 Game::Game(ConfigStore config):
 window(config),
+world(),
 renderer(),
-world(config.getWorldWidth(), config.getWorldHeight()),
 controlState()
 {
 
 }
+
 void Game::run() {
     window.initialize();
-    renderer.initialize();
+    renderer.initialize(world);
 
     double time = glfwGetTime();
     double time_plus_one = time + 1.0f;

@@ -1,22 +1,16 @@
 #pragma once
 
+#include <vmath.h>
+
 
 class ControlState {
 public:
     ControlState() = default;
-    void setUp(float up);
-    void setDown(float down);
-    void setRight(float right);
-    void setLeft(float left);
+    void setMovementDirection(float xAxis, float yAxis);
 
-    float getUp();
-    float getDown();
-    float getRight();
-    float getLeft();
+    vmath::vec2 getMovementDirection() const;
+    float getMovementMagnitude() const;
 
 private:
-    float up;
-    float down;
-    float left;
-    float right;
+    vmath::vec2 movementDirection;
 };

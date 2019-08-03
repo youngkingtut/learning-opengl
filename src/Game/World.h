@@ -6,18 +6,19 @@
 
 class World {
 public:
-    World(float width, float height);
-    void update(ControlState controlState, double deltaTime);
+    World();
+    void update(const ControlState& controlState, double deltaTime);
     Player getPlayer() const;
+
+    vmath::vec2 getSize() const;
 
 private:
     Player player;
+    vmath::vec2 size;
     float lower_x;
     float lower_y;
     float upper_x;
     float upper_y;
-    float width;
-    float height;
 
-    vmath::vec2 BoundaryCheck(vmath::vec2 position);
+    vmath::vec2 BoundaryCheck(vmath::vec2 position, vmath::vec2 size);
 };

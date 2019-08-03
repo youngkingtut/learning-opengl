@@ -1,17 +1,20 @@
+#include <utility>
+
 #include "Player.h"
 
 #include <iostream>
 
 
-#define DECELERATION 10.0f
-#define ACCELERATION 13.0f
-#define MAX_VELOCITY 6.0f
+#define DECELERATION 320.0f
+#define ACCELERATION 1500.0f
+#define MAX_VELOCITY 300.0f
 
 
-Player::Player():
+Player::Player(vmath::vec2 s):
     position(0, 0),
     velocity(0, 0),
-    angle(0){}
+    angle(0),
+    size(std::move(s)){}
 
 void Player::updateXVelocity(VelocityUpdate vUpdate, double factor) {
     velocity[0] = updateVelocity(velocity[0], vUpdate, factor);
@@ -53,15 +56,12 @@ void Player::setPosition(vmath::vec2 p) {
     position[1] = p[1];
 }
 
-vmath::vec2 Player::getPosition() {
-    return position;
-}
-
-vmath::vec2 Player::getNextPosition(ControlState controlState, double deltaTime) {
-    vmath::vec2 controlDirection = vmath::vec2(controlState.getRight() - controlState.getLeft(), controlState.getUp() - controlState.getDown());
+vmath::vec2 Player::setNextPosition(const ControlState &controlState, double deltaTime) {
+    vmath::vec2 controlDirection = controlState.getMovementDirection();
+    float controlMagnitude = controlState.getMovementMagnitude();
 
     // Update angle and normalize control direction if present
-    if(vmath::length(controlDirection) > 0) {
+    if(controlMagnitude > 0) {
         controlDirection = vmath::normalize(controlDirection);
         angle = calculateAngle(controlDirection);
         updateXVelocity(VelocityUpdate::INCREASE, controlDirection[0] * deltaTime);
@@ -85,14 +85,22 @@ vmath::vec2 Player::getNextPosition(ControlState controlState, double deltaTime)
     return position;
 }
 
-float Player::getAngle() {
-    return angle;
-}
-
 float Player::calculateAngle(vmath::vec2& dir) {
     float angle = vmath::angle(vmath::vec2(0.0, 1.0), dir);
     if(dir[0] > 0) {
         angle = -angle;
     }
     return vmath::degrees(angle);
+}
+
+vmath::vec2 Player::getSize() const {
+    return size;
+}
+
+vmath::vec2 Player::getPosition() const {
+    return position;
+}
+
+float Player::getAngle() const {
+    return angle;
 }

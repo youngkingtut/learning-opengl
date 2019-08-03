@@ -11,15 +11,17 @@ enum VelocityUpdate {
 
 class Player {
 public:
-    Player();
+    explicit Player(vmath::vec2 size);
 
     void setPosition(vmath::vec2 position);
 
-    vmath::vec2 getPosition();
-    vmath::vec2 getNextPosition(ControlState controlState, double deltaTime);
-    float getAngle();
+    vmath::vec2 getSize() const;
+    vmath::vec2 getPosition() const;
+    vmath::vec2 setNextPosition(const ControlState &controlState, double deltaTime);
+    float getAngle() const;
 
 private:
+    vmath::vec2 size;
     vmath::vec2 position;
     vmath::vec2 velocity;
     float angle;

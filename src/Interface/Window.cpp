@@ -7,6 +7,8 @@
 #include "../Utils/Constants.h"
 
 
+#define JOYSTICK_DEAD_ZONE 0.2
+
 float ASPECT_RATIO;
 
 Window::Window(ConfigStore c) :
@@ -73,26 +75,17 @@ void Window::ProcessInput(ControlState& controlState) {
     if(present > 0) {
         int count;
         const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
-        float x_axes = axes[0];
-        float y_axes = axes[1];
+        float x_axis = axes[0];
+        float y_axis = axes[1];
 
-        if(x_axes < 0.2 && x_axes > -0.2) {
-            controlState.setRight(0);
-            controlState.setLeft(0);
-        } else if(x_axes > 0) {
-            controlState.setRight(x_axes);
+        // Account for dead zone to prevent drift from stationary stick
+        if(x_axis <  JOYSTICK_DEAD_ZONE &&
+           x_axis > -JOYSTICK_DEAD_ZONE &&
+           y_axis <  JOYSTICK_DEAD_ZONE &&
+           y_axis > -JOYSTICK_DEAD_ZONE) {
+            controlState.setMovementDirection(0.0f, 0.0f);
         } else {
-            controlState.setLeft(-x_axes);
-        }
-
-        if(y_axes < 0.2 && y_axes > -0.2) {
-            y_axes = 0;
-            controlState.setUp(-y_axes);
-            controlState.setDown(y_axes);
-        } else if(y_axes > 0) {
-            controlState.setUp(-y_axes);
-        } else {
-            controlState.setDown(y_axes);
+            controlState.setMovementDirection(x_axis, y_axis);
         }
     } else {
         int w_state = glfwGetKey(window, GLFW_KEY_W);
@@ -100,29 +93,25 @@ void Window::ProcessInput(ControlState& controlState) {
         int s_state = glfwGetKey(window, GLFW_KEY_S);
         int d_state = glfwGetKey(window, GLFW_KEY_D);
 
-        if (w_state == GLFW_PRESS) {
-            controlState.setUp(1.0f);
-        } else if (w_state == GLFW_RELEASE) {
-            controlState.setUp(0.0f);
+        float x = 0.0f;
+        float y = 0.0f;
+
+        if(d_state == GLFW_PRESS && a_state != GLFW_PRESS) {
+            x = 1.0f;
+        }
+        if(a_state == GLFW_PRESS && d_state != GLFW_PRESS) {
+            x = -1.0f;
         }
 
-        if (a_state == GLFW_PRESS) {
-            controlState.setLeft(1.0f);
-        } else if (a_state == GLFW_RELEASE) {
-            controlState.setLeft(0.0f);
+        if(w_state == GLFW_PRESS && s_state != GLFW_PRESS) {
+            y = -1.0f;
+        }
+        if(s_state == GLFW_PRESS && w_state != GLFW_PRESS) {
+            y = 1.0f;
         }
 
-        if (s_state == GLFW_PRESS) {
-            controlState.setDown(1.0f);
-        } else if (s_state == GLFW_RELEASE) {
-            controlState.setDown(0.0f);
-        }
+        controlState.setMovementDirection(x, y);
 
-        if (d_state == GLFW_PRESS) {
-            controlState.setRight(1.0f);
-        } else if (d_state == GLFW_RELEASE) {
-            controlState.setRight(0.0f);
-        }
     }
 }
 
