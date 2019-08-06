@@ -12,3 +12,15 @@ vmath::vec2 ControlState::getMovementDirection() const {
 float ControlState::getMovementMagnitude() const {
     return vmath::length(movementDirection);
 }
+
+void ControlState::setBulletDirection(float xAxis, float yAxis) {
+    bulletDirection = vmath::vec2(xAxis, yAxis);
+}
+
+vmath::vec2 ControlState::getBulletDirection() const {
+    return bulletDirection;
+}
+
+float ControlState::getBulletMagnitude() const {
+    return vmath::length(bulletDirection);
+}

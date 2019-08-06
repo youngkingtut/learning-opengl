@@ -16,8 +16,8 @@ private:
     GLuint shaderProgram{};
     GLint mv_location{};
     GLint proj_location{};
-    GLuint vao[2]{0, 0};
-    GLuint vbo[2]{0, 0};
-    GLuint ebo[2]{0, 0};
+    GLuint vao[3]{0, 0, 0};
+    GLuint vbo[3]{0, 0, 0};
+    GLuint ebo[3]{0, 0, 0};
 };
 

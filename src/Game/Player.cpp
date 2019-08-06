@@ -104,3 +104,7 @@ vmath::vec2 Player::getPosition() const {
 float Player::getAngle() const {
     return angle;
 }
+
+vmath::vec2 Player::getVelocity() const {
+    return velocity;
+}

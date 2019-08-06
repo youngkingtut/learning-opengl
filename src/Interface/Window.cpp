@@ -75,23 +75,40 @@ void Window::ProcessInput(ControlState& controlState) {
     if(present > 0) {
         int count;
         const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
-        float x_axis = axes[0];
-        float y_axis = axes[1];
+        float movementXAxis = axes[0];
+        float movementYAxis = axes[1];
+        float bulletXAxis = axes[3];
+        float bulletYAxis = axes[4];
 
         // Account for dead zone to prevent drift from stationary stick
-        if(x_axis <  JOYSTICK_DEAD_ZONE &&
-           x_axis > -JOYSTICK_DEAD_ZONE &&
-           y_axis <  JOYSTICK_DEAD_ZONE &&
-           y_axis > -JOYSTICK_DEAD_ZONE) {
+        if(movementXAxis <  JOYSTICK_DEAD_ZONE &&
+           movementXAxis > -JOYSTICK_DEAD_ZONE &&
+           movementYAxis <  JOYSTICK_DEAD_ZONE &&
+           movementYAxis > -JOYSTICK_DEAD_ZONE) {
             controlState.setMovementDirection(0.0f, 0.0f);
         } else {
-            controlState.setMovementDirection(x_axis, y_axis);
+            controlState.setMovementDirection(movementXAxis, movementYAxis);
+        }
+
+
+        if(bulletXAxis <  JOYSTICK_DEAD_ZONE &&
+           bulletXAxis > -JOYSTICK_DEAD_ZONE &&
+           bulletYAxis <  JOYSTICK_DEAD_ZONE &&
+           bulletYAxis > -JOYSTICK_DEAD_ZONE) {
+            controlState.setBulletDirection(0.0f, 0.0f);
+        } else {
+            controlState.setBulletDirection(bulletXAxis, -bulletYAxis);
         }
     } else {
         int w_state = glfwGetKey(window, GLFW_KEY_W);
         int a_state = glfwGetKey(window, GLFW_KEY_A);
         int s_state = glfwGetKey(window, GLFW_KEY_S);
         int d_state = glfwGetKey(window, GLFW_KEY_D);
+        int up_state = glfwGetKey(window, GLFW_KEY_UP);
+        int down_state = glfwGetKey(window, GLFW_KEY_DOWN);
+        int left_state = glfwGetKey(window, GLFW_KEY_LEFT);
+        int right_state = glfwGetKey(window, GLFW_KEY_RIGHT);
+
 
         float x = 0.0f;
         float y = 0.0f;
@@ -112,6 +129,24 @@ void Window::ProcessInput(ControlState& controlState) {
 
         controlState.setMovementDirection(x, y);
 
+        x = 0.0f;
+        y = 0.0f;
+
+        if(right_state == GLFW_PRESS && left_state != GLFW_PRESS) {
+            x = 1.0f;
+        }
+        if(left_state == GLFW_PRESS && right_state != GLFW_PRESS) {
+            x = -1.0f;
+        }
+
+        if(up_state == GLFW_PRESS && down_state != GLFW_PRESS) {
+            y = 1.0f;
+        }
+        if(down_state == GLFW_PRESS && up_state != GLFW_PRESS) {
+            y = -1.0f;
+        }
+
+        controlState.setBulletDirection(x, y);
     }
 }
 

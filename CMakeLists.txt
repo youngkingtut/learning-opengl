@@ -46,7 +46,10 @@ add_executable(${PROJECT_NAME}
         src/Interface/ControlState.h
         src/ShaderCompiler/ShaderCompiler.cpp
         src/ShaderCompiler/ShaderCompiler.hpp
-        )
+        src/Game/WorldObject.cpp
+        src/Game/WorldObject.h
+        src/Game/Bullet.cpp
+        src/Game/Bullet.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 

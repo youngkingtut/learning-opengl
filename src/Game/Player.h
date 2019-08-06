@@ -17,6 +17,7 @@ public:
 
     vmath::vec2 getSize() const;
     vmath::vec2 getPosition() const;
+    vmath::vec2 getVelocity() const;
     vmath::vec2 setNextPosition(const ControlState &controlState, double deltaTime);
     float getAngle() const;
 
