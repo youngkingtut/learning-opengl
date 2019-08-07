@@ -7,7 +7,7 @@
 World::World() :
 bullets(),
 cooldown(0.0f),
-player(vmath::vec2(20, 20)),
+player(vmath::vec2(20, 20), vmath::vec2(0, 0), vmath::vec2(0, 0), 0),
 size(vmath::vec2(400, 300))
 {
     lower_x = -size[0];
@@ -16,28 +16,43 @@ size(vmath::vec2(400, 300))
     upper_y = size[1];
 }
 
+vmath::vec2 World::getSize() const {
+    return size;
+}
+
+Player World::getPlayer() const {
+    return player;
+}
+
+std::vector<Bullet> World::getBullets() const {
+    return bullets;
+}
+
 void World::update(const ControlState& controlState, double deltaTime) {
     // Update player position
     vmath::vec2 playerPosition = player.setNextPosition(controlState, deltaTime);
-    playerPosition = BoundaryCheck(playerPosition, player.getSize());
+    playerPosition = BoundaryCheck(playerPosition, player.getSize() / 2);
     player.setPosition(playerPosition);
 
     // Generate Bullets
     cooldown += deltaTime;
-    if(cooldown > 0.02f) {
+    if(cooldown > 0.01f && controlState.getBulletMagnitude() > 0) {
         cooldown = 0.0f;
-        vmath::vec2 playerVelocity = player.getVelocity();
-        createBullet(controlState, playerPosition, playerVelocity);
+        vmath::vec2 bulletDirection = controlState.getBulletDirection();
+        Bullet bullet = Bullet(vmath::vec2(5, 5), playerPosition, BULLET_VELOCITY * vmath::normalize(bulletDirection), 0);
+        this->bullets.push_back(bullet);
     }
 
-    for(auto & bulletStart : bullets) {
-        bulletStart.setNextPosition(controlState, deltaTime);
+    // Get next bullet position and remove out of bounds bullets
+    for(auto & bullet : bullets) {
+        vmath::vec2 bulletPosition = bullet.setNextPosition(controlState, deltaTime);
+        bullet.setRemove(outOfBounds(bullet.getPosition(), bullet.getSize() / 2));
     }
-
+    auto new_end = std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& b){return b.shouldRemove();});
+    bullets.erase(new_end, bullets.end());
 }
 
 vmath::vec2 World::BoundaryCheck(vmath::vec2 position, vmath::vec2 s) {
-    // todo take in to account object geometry
     if(position[0] + s[0] > upper_x) {
         position[0] = upper_x - s[0];
     } else if (position[0] - s[0] < lower_x) {
@@ -53,22 +68,10 @@ vmath::vec2 World::BoundaryCheck(vmath::vec2 position, vmath::vec2 s) {
     return position;
 }
 
-vmath::vec2 World::getSize() const {
-    return size;
-}
-
-Player World::getPlayer() const {
-    return player;
-}
-
-void World::createBullet(const ControlState &controlState, const vmath::vec2 &position, const vmath::vec2& velocity) {
-    if(controlState.getBulletMagnitude() > 0) {
-        vmath::vec2 bulletDirection = controlState.getBulletDirection();
-        Bullet bullet = Bullet(vmath::vec2(5, 5), bulletDirection, position);
-        this->bullets.push_back(bullet);
+bool World::outOfBounds(vmath::vec2 position, vmath::vec2 s) {
+    if(position[0] + s[0] > upper_x || position[0] - s[0] < lower_x) {
+        return true;
     }
-}
 
-std::vector<Bullet> World::getBullets() const {
-    return bullets;
+    return position[1] + s[1] > upper_y || position[1] - s[1] < lower_y;
 }

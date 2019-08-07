@@ -27,9 +27,9 @@ void Renderer::initialize(const World& world) {
     };
 
     static const GLfloat playerVertices[] = {
-            -playerSize[0]/2,  0.0f, depth,
-             playerSize[0]/2,  0.0f, depth,
-              0.0f,   playerSize[1], depth,
+            -playerSize[0]/2,  -playerSize[1]/2, depth,
+             playerSize[0]/2,  -playerSize[1]/2, depth,
+              0.0f,   playerSize[1]/2, depth,
     };
 
     static const GLfloat worldVertices[] = {

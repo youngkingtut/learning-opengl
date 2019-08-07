@@ -4,8 +4,8 @@
 
 #include "../Interface/ControlState.h"
 #include "../Utils/ConfigStore.h"
-#include "Player.h"
-#include "Bullet.h"
+#include "Objects/Player.h"
+#include "Objects/Bullet.h"
 
 class World {
 public:
@@ -26,6 +26,7 @@ private:
     float upper_y;
     std::vector<Bullet> bullets;
 
+    bool outOfBounds(vmath::vec2 position, vmath::vec2 size);
     vmath::vec2 BoundaryCheck(vmath::vec2 position, vmath::vec2 size);
     void createBullet(const ControlState& controlState, const vmath::vec2& position, const vmath::vec2& velocity);
 };
