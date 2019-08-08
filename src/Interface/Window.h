@@ -18,7 +18,5 @@ public:
 private:
     ConfigStore config;
     GLFWwindow* window;
-
-    static void FrameBufferSizeCallback(GLFWwindow* window, int width, int height);
 };
 

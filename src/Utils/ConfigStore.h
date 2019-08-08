@@ -9,13 +9,22 @@ class ConfigStore {
 public:
     ConfigStore() = default;
 
-    void setScreenWidth(unsigned int width);
-    void setScreenHeight(unsigned int height);
+    void setScreenSize(float width, float height);
+    void setWorldSize(float width, float height);
+    void setPlayerSize(float width, float height);
 
-    unsigned int getScreenWidth();
-    unsigned int getScreenHeight();
+    float getScreenWidth();
+    float getScreenHeight();
+    float getWorldWidth();
+    float getWorldHeight();
+    float getPlayerWidth();
+    float getPlayerHeight();
 
 private:
-    unsigned int screenWidth;
-    unsigned int screenHeight;
+    float screenWidth;
+    float screenHeight;
+    float worldWidth;
+    float worldHeight;
+    float playerWidth;
+    float playerHeight;
 };

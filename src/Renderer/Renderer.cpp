@@ -6,15 +6,19 @@
 #include "Renderer.h"
 
 
+Renderer::Renderer(ConfigStore &configStore) : config(configStore){}
+
 Renderer::~Renderer() {
     glDeleteVertexArrays(3, vao);
     glDeleteBuffers(3, vbo);
     glDeleteBuffers(3, ebo);
 }
 
-void Renderer::initialize(const World& world) {
-    vmath::vec2 worldSize = world.getSize();
-    vmath::vec2 playerSize = world.getPlayer().getSize();
+void Renderer::initialize() {
+    float worldWidth = config.getWorldWidth();
+    float worldHeight = config.getWorldHeight();
+    float playerWidth = config.getPlayerWidth();
+    float playerHeight = config.getPlayerHeight();
 
     // todo calculate based on world size?
     float depth = -760.0f;
@@ -27,16 +31,16 @@ void Renderer::initialize(const World& world) {
     };
 
     static const GLfloat playerVertices[] = {
-            -playerSize[0]/2,  -playerSize[1]/2, depth,
-             playerSize[0]/2,  -playerSize[1]/2, depth,
-              0.0f,   playerSize[1]/2, depth,
+            -playerWidth/2,  -playerHeight/2, depth,
+             playerWidth/2,  -playerHeight/2, depth,
+              0.0f,   playerHeight/2, depth,
     };
 
     static const GLfloat worldVertices[] = {
-            -worldSize[0],  worldSize[1], depth,
-             worldSize[0],  worldSize[1], depth,
-             worldSize[0], -worldSize[1], depth,
-            -worldSize[0], -worldSize[1], depth,
+            -worldWidth,  worldHeight, depth,
+             worldWidth,  worldHeight, depth,
+             worldWidth, -worldHeight, depth,
+            -worldWidth, -worldHeight, depth,
     };
 
     static const GLuint playerIndices[] = {
@@ -99,8 +103,9 @@ void Renderer::initialize(const World& world) {
     glDepthFunc(GL_LEQUAL);
 
     shaderProgram = LoadShaders("Shaders/shader.vert", "Shaders/shader.frag");
-    mv_location = glGetUniformLocation(shaderProgram, "mv_matrix");
-    proj_location = glGetUniformLocation(shaderProgram, "proj_matrix");
+    modelViewLocation = glGetUniformLocation(shaderProgram, "mv_matrix");
+    projectionLocation = glGetUniformLocation(shaderProgram, "proj_matrix");
+
 }
 
 void Renderer::render(const World& world, float aspectRatio) {
@@ -121,15 +126,15 @@ void Renderer::render(const World& world, float aspectRatio) {
     // draw world
     glBindVertexArray(vao[1]);
     vmath::mat4 modelViewMatrix = vmath::translate(0.0f, 0.0f, 0.0f);
-    glUniformMatrix4fv(proj_location, 1, GL_FALSE, projectionMatrix);
-    glUniformMatrix4fv(mv_location, 1, GL_FALSE, modelViewMatrix);
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projectionMatrix);
+    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, modelViewMatrix);
     glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, nullptr);
 
     // draw player
     glBindVertexArray(vao[0]);
     modelViewMatrix = vmath::translate(playerPosition[0], playerPosition[1], 0.0f) *
                       vmath::rotate(playerAngle, 0.0f, 0.0f, 1.0f);
-    glUniformMatrix4fv(mv_location, 1, GL_FALSE, modelViewMatrix);
+    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, modelViewMatrix);
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
 
 
@@ -141,7 +146,7 @@ void Renderer::render(const World& world, float aspectRatio) {
         float bulletAngle = bullet.getAngle();
         modelViewMatrix = vmath::translate(bulletPosition[0], bulletPosition[1], 0.0f) *
                           vmath::rotate(bulletAngle, 0.0f, 0.0f, 1.0f);
-        glUniformMatrix4fv(mv_location, 1, GL_FALSE, modelViewMatrix);
+        glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, modelViewMatrix);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 

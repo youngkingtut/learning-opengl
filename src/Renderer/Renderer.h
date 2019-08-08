@@ -7,15 +7,17 @@
 
 class Renderer {
 public:
+    explicit Renderer(ConfigStore& configStore);
     ~Renderer();
 
-    void initialize(const World& world);
+    void initialize();
     void render(const World& world, float aspectRatio);
 
 private:
+    ConfigStore config;
     GLuint shaderProgram{};
-    GLint mv_location{};
-    GLint proj_location{};
+    GLint modelViewLocation{};
+    GLint projectionLocation{};
     GLuint vao[3]{0, 0, 0};
     GLuint vbo[3]{0, 0, 0};
     GLuint ebo[3]{0, 0, 0};

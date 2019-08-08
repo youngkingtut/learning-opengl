@@ -19,14 +19,6 @@ Window::~Window() {
     glfwTerminate();
 }
 
-/*
- * Callbacks
- */
-void Window::FrameBufferSizeCallback(GLFWwindow *window, int width, int height) {
-    ASPECT_RATIO = (float)width / height;
-    glViewport(0, 0, width, height);
-}
-
 
 void Window::initialize() {
     glfwInit();
@@ -39,6 +31,7 @@ void Window::initialize() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 #endif
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
     ASPECT_RATIO = (float)config.getScreenWidth() / config.getScreenHeight();
     window = glfwCreateWindow(config.getScreenWidth(), config.getScreenHeight(), GAME_TITLE, nullptr, nullptr);
@@ -62,7 +55,6 @@ void Window::initialize() {
     // Trying sticky keys for event based processing with the keyboard
     // https://www.glfw.org/docs/latest/input_guide.html#input_key
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
-    glfwSetFramebufferSizeCallback(window, Window::FrameBufferSizeCallback);
 }
 
 void Window::ProcessInput(ControlState& controlState) {

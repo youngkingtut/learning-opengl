@@ -1,17 +1,18 @@
 #include <utility>
 
+#include <utility>
+
+#include <utility>
+
+#include <utility>
+
 #include "Player.h"
 
-#include <iostream>
-
-
-#define DECELERATION 320.0f
-#define ACCELERATION 1500.0f
-#define MAX_VELOCITY 300.0f
+#include "../../Utils/Constants.h"
 
 
 Player::Player(vmath::vec2 size, vmath::vec2 position, vmath::vec2 velocity, float angle) :
-WorldObject(size, position,velocity, angle) {}
+WorldObject(std::move(size), std::move(position), std::move(velocity), angle) {}
 
 void Player::updateXVelocity(VelocityUpdate vUpdate, double factor) {
     velocity[0] = updateVelocity(velocity[0], vUpdate, factor);

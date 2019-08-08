@@ -4,20 +4,18 @@
 #include "../Utils/Constants.h"
 
 
-World::World() :
+World::World(ConfigStore configStore) :
+config(configStore),
 bullets(),
 cooldown(0.0f),
-player(vmath::vec2(20, 20), vmath::vec2(0, 0), vmath::vec2(0, 0), 0),
-size(vmath::vec2(400, 300))
+player(vmath::vec2(configStore.getPlayerWidth(), configStore.getPlayerHeight()), vmath::vec2(0, 0), vmath::vec2(0, 0), 0)
 {
-    lower_x = -size[0];
-    lower_y = -size[1];
-    upper_x = size[0];
-    upper_y = size[1];
-}
-
-vmath::vec2 World::getSize() const {
-    return size;
+    float worldWidth = config.getWorldWidth();
+    float worldHeight = config.getWorldHeight();
+    lower_x = -worldWidth;
+    lower_y = -worldHeight;
+    upper_x = worldWidth;
+    upper_y = worldHeight;
 }
 
 Player World::getPlayer() const {
@@ -29,12 +27,15 @@ std::vector<Bullet> World::getBullets() const {
 }
 
 void World::update(const ControlState& controlState, double deltaTime) {
+
     // Update player position
     vmath::vec2 playerPosition = player.setNextPosition(controlState, deltaTime);
+
     playerPosition = BoundaryCheck(playerPosition, player.getSize() / 2);
     player.setPosition(playerPosition);
 
-    // Generate Bullets
+
+    // Generate bullets
     cooldown += deltaTime;
     if(cooldown > 0.01f && controlState.getBulletMagnitude() > 0) {
         cooldown = 0.0f;
