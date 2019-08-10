@@ -8,10 +8,10 @@
 #include "../Utils/Constants.h"
 
 
-Game::Game(ConfigStore config):
-window(config),
-world(config),
-renderer(config){}
+Game::Game():
+window(),
+world(),
+renderer(){}
 
 void Game::run() {
     window.initialize();

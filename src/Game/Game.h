@@ -2,13 +2,12 @@
 
 #include "../Interface/Window.h"
 #include "../Renderer/Renderer.h"
-#include "../Utils/ConfigStore.h"
 #include "World.h"
 
 
 class Game {
 public:
-    explicit Game(ConfigStore config);
+    explicit Game();
     void run();
 
 private:

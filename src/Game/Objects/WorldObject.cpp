@@ -1,21 +1,16 @@
+#include <utility>
+
 #include "WorldObject.h"
 
-WorldObject::WorldObject(vmath::vec2 s, vmath::vec2 p, vmath::vec2 v, float a) :
-size(s),
-position(p),
-velocity(v),
-angle(a){}
 
-vmath::vec2 WorldObject::getSize() const {
-    return size;
-}
+WorldObject::WorldObject(vmath::vec2 s, vmath::vec2 p, vmath::vec2 v, const float &a)  :
+size(std::move(s)),
+position(std::move(p)),
+velocity(std::move(v)),
+angle(a){}
 
 vmath::vec2 WorldObject::getPosition() const {
     return position;
-}
-
-vmath::vec2 WorldObject::getVelocity() const {
-    return velocity;
 }
 
 float WorldObject::getAngle() const {
@@ -30,6 +25,6 @@ float WorldObject::calculateAngle(vmath::vec2& dir) {
     return vmath::degrees(angle);
 }
 
-void WorldObject::setPosition(const vmath::vec2& pos) {
-    this->position = pos;
+bool WorldObject::shouldRemove() const {
+    return remove;
 }

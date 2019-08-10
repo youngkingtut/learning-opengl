@@ -1,12 +1,11 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "../Utils/ConfigStore.h"
 #include "ControlState.h"
 
 class Window {
 public:
-    explicit Window(ConfigStore c);
+    explicit Window();
     ~Window();
 
     void initialize();
@@ -16,7 +15,6 @@ public:
     float GetAspectRatio();
 
 private:
-    ConfigStore config;
     GLFWwindow* window;
 };
 

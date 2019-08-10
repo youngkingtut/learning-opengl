@@ -2,11 +2,11 @@
 #include <ctime>
 #include <vmath.h>
 
-#include "../ShaderCompiler/ShaderCompiler.hpp"
 #include "Renderer.h"
 
+#include "../ShaderCompiler/ShaderCompiler.hpp"
+#include "../Utils/Constants.h"
 
-Renderer::Renderer(ConfigStore &configStore) : config(configStore){}
 
 Renderer::~Renderer() {
     glDeleteVertexArrays(3, vao);
@@ -15,10 +15,10 @@ Renderer::~Renderer() {
 }
 
 void Renderer::initialize() {
-    float worldWidth = config.getWorldWidth();
-    float worldHeight = config.getWorldHeight();
-    float playerWidth = config.getPlayerWidth();
-    float playerHeight = config.getPlayerHeight();
+    float worldWidth = WORLD_SIZE_WIDTH;
+    float worldHeight = WORLD_SIZE_HEIGHT;
+    float playerWidth = PLAYER_SIZE_WIDTH;
+    float playerHeight = PLAYER_SIZE_HEIGHT;
 
     // todo calculate based on world size?
     float depth = -760.0f;

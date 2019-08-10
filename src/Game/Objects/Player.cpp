@@ -49,7 +49,7 @@ float Player::updateVelocity(float velocity, VelocityUpdate vUpdate, double delt
     return updatedVelocity;
 }
 
-vmath::vec2 Player::setNextPosition(const ControlState &controlState, double deltaTime) {
+void Player::setNextPosition(const ControlState& controlState, const WorldState& worldState, const float& deltaTime) {
     vmath::vec2 controlDirection = controlState.getMovementDirection();
     float controlMagnitude = controlState.getMovementMagnitude();
 
@@ -75,7 +75,31 @@ vmath::vec2 Player::setNextPosition(const ControlState &controlState, double del
 
     position[0] = velocity[0] * deltaTime + position[0];
     position[1] = velocity[1] * deltaTime + position[1];
-    return position;
+
+    // Boundary check
+    if(position[0] + size[0] > worldState.worldUpperX) {
+        position[0] = worldState.worldUpperX - size[0];
+    } else if (position[0] - size[0] < worldState.worldLowerX) {
+        position[0] = worldState.worldLowerX + size[0];
+    }
+
+    if(position[1] + size[1] > worldState.worldUpperY) {
+        position[1] = worldState.worldUpperY - size[1];
+    } else if (position[1] - size[1] < worldState.worldLowerY) {
+        position[1] = worldState.worldLowerY + size[1];
+    }
+}
+
+void Player::generateBullet(const ControlState& controlState, const float& deltaTime, std::vector<Bullet>& bullets) {
+    coolDown += deltaTime;
+    float bound = PLAYER_BULLET_COOL_DOWN;
+    if(coolDown > bound) {
+        vmath::vec2 bulletDirection = controlState.getBulletDirection();
+        if(vmath::length(bulletDirection) > 0) {
+            Bullet bullet = Bullet(vmath::vec2(5, 5), position, BULLET_VELOCITY * vmath::normalize(bulletDirection), 0);
+            bullets.push_back(bullet);
+        }
+    }
 }
 
 

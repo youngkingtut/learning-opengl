@@ -11,8 +11,7 @@
 
 float ASPECT_RATIO;
 
-Window::Window(ConfigStore c) :
-    config(c),
+Window::Window() :
     window(){}
 
 Window::~Window() {
@@ -33,8 +32,8 @@ void Window::initialize() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    ASPECT_RATIO = (float)config.getScreenWidth() / config.getScreenHeight();
-    window = glfwCreateWindow(config.getScreenWidth(), config.getScreenHeight(), GAME_TITLE, nullptr, nullptr);
+    ASPECT_RATIO = SCREEN_SIZE_WIDTH / SCREEN_SIZE_HEIGHT;
+    window = glfwCreateWindow(SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT, GAME_TITLE, nullptr, nullptr);
 
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;

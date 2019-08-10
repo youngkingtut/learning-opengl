@@ -9,10 +9,5 @@
 class Bullet : public WorldObject {
 public:
     Bullet(const vmath::vec2 &size, const vmath::vec2 &position, const vmath::vec2 &velocity, float angle);
-    vmath::vec2 setNextPosition(const ControlState &controlState, double deltaTime);
-    bool shouldRemove() const;
-    void setRemove(bool r);
-
-private:
-    bool remove;
+    void setNextPosition(const ControlState& controlState, const WorldState& worldState, const float& deltaTime) override;
 };

@@ -31,8 +31,6 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Game/Game.cpp
         src/Game/Game.h
-        src/Utils/ConfigStore.cpp
-        src/Utils/ConfigStore.h
         src/Interface/Window.cpp
         src/Interface/Window.h
         src/Renderer/Renderer.cpp
@@ -49,7 +47,7 @@ add_executable(${PROJECT_NAME}
         src/Game/Objects/WorldObject.cpp
         src/Game/Objects/WorldObject.h
         src/Game/Objects/Bullet.cpp
-        src/Game/Objects/Bullet.h)
+        src/Game/Objects/Bullet.h src/Game/WorldState.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 
