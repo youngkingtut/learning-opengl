@@ -1,10 +1,5 @@
 #include <utility>
-
-#include <utility>
-
-#include <utility>
-
-#include <utility>
+#include <iostream>
 
 #include "Player.h"
 
@@ -92,10 +87,11 @@ void Player::setNextPosition(const ControlState& controlState, const WorldState&
 
 void Player::generateBullet(const ControlState& controlState, const float& deltaTime, std::vector<Bullet>& bullets) {
     coolDown += deltaTime;
-    float bound = PLAYER_BULLET_COOL_DOWN;
-    if(coolDown > bound) {
+    std::cout << coolDown << std::endl;
+    if(coolDown > PLAYER_BULLET_COOL_DOWN) {
         vmath::vec2 bulletDirection = controlState.getBulletDirection();
         if(vmath::length(bulletDirection) > 0) {
+            coolDown = 0.0f;
             Bullet bullet = Bullet(vmath::vec2(2.5, 2.5), position, BULLET_MAX_VELOCITY * vmath::normalize(bulletDirection), 0);
             bullets.push_back(bullet);
         }
