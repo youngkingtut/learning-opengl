@@ -1,8 +1,6 @@
 #include <utility>
-#include <iostream>
 
 #include "Player.h"
-
 #include "../../Utils/Constants.h"
 
 
@@ -87,7 +85,6 @@ void Player::setNextPosition(const ControlState& controlState, const WorldState&
 
 void Player::generateBullet(const ControlState& controlState, const float& deltaTime, std::vector<Bullet>& bullets) {
     coolDown += deltaTime;
-    std::cout << coolDown << std::endl;
     if(coolDown > PLAYER_BULLET_COOL_DOWN) {
         vmath::vec2 bulletDirection = controlState.getBulletDirection();
         if(vmath::length(bulletDirection) > 0) {
