@@ -12,7 +12,6 @@ public:
     vmath::vec2 getMovementDirection() const;
     float getMovementMagnitude() const;
     vmath::vec2 getBulletDirection() const;
-    float getBulletMagnitude() const;
 
 private:
     vmath::vec2 movementDirection;

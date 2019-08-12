@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include <iostream>
+#include <random>
 #include "../Utils/Constants.h"
 
 
@@ -16,8 +17,6 @@ worldState{}
     worldState.worldUpperY = WORLD_SIZE_HEIGHT;
     worldState.playerX = 0.0f;
     worldState.playerY = 0.0f;
-    enemies.emplace_back(Enemy(vmath::vec2(10.0f, 10.0f), vmath::vec2(100.0f, 100.0f)));
-    enemies.emplace_back(Enemy(vmath::vec2(10.0f, 10.0f), vmath::vec2(-100.0f, -100.0f)));
 }
 
 Player World::getPlayer() const {
@@ -40,20 +39,42 @@ void World::update(const ControlState& controlState, double deltaTime) {
     worldState.playerX = playerPosition[0];
     worldState.playerY = playerPosition[1];
 
-    // Get next bullet position and remove out of bounds bullets
+    // Bullets
     for(auto & bullet : bullets) {
         bullet.setNextPosition(controlState, worldState, deltaTime);
     }
-    auto new_end = std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& b){return b.shouldRemove();});
-    bullets.erase(new_end, bullets.end());
 
-
-    // Handle enemies
+    // Enemies
     for(auto & enemy: enemies) {
         enemy.setNextPosition(controlState, worldState, deltaTime);
     }
+
+    // Bullet collision with enemy
+    for(auto & bullet : bullets) {
+        for(auto & enemy: enemies) {
+            enemy.bulletCollision(bullet);
+        }
+    }
+
+    // Remove any object marked as such
+    auto new_end = std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& b){return b.shouldRemove();});
+    bullets.erase(new_end, bullets.end());
     auto enemyEnd = std::remove_if(enemies.begin(), enemies.end(), [](const Enemy& e){return e.shouldRemove();});
     enemies.erase(enemyEnd, enemies.end());
 
 
+    // Generate Enemies
+    coolDown += deltaTime;
+    if(coolDown > WORLD_ENEMY_COOL_DOWN) {
+        coolDown = 0.0f;
+        float enemyX = std::rand() % (int) worldState.worldUpperX;
+        float enemyY = std::rand() % (int) worldState.worldUpperY;
+        if (std::rand() % 2 > 0) {
+            enemyX = -enemyX;
+        }
+        if (std::rand() % 2 > 0) {
+            enemyY = -enemyY;
+        }
+        enemies.emplace_back(Enemy(vmath::vec2(10.0f, 10.0f), vmath::vec2(enemyX, enemyY)));
+    }
 }

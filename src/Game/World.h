@@ -22,4 +22,6 @@ private:
     Player player;
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;
+
+    float coolDown{0.0f};
 };

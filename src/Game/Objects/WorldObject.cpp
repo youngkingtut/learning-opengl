@@ -13,6 +13,10 @@ vmath::vec2 WorldObject::getPosition() const {
     return position;
 }
 
+vmath::vec2 WorldObject::getSize() const {
+    return size;
+}
+
 float WorldObject::getAngle() const {
     return angle;
 }
@@ -27,4 +31,8 @@ float WorldObject::calculateAngle(vmath::vec2& dir) {
 
 bool WorldObject::shouldRemove() const {
     return remove;
+}
+
+void WorldObject::removeObject() {
+    remove = true;
 }

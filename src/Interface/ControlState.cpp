@@ -20,7 +20,3 @@ void ControlState::setBulletDirection(float xAxis, float yAxis) {
 vmath::vec2 ControlState::getBulletDirection() const {
     return bulletDirection;
 }
-
-float ControlState::getBulletMagnitude() const {
-    return vmath::length(bulletDirection);
-}
