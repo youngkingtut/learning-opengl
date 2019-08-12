@@ -5,4 +5,6 @@ struct WorldState {
     float worldLowerY;
     float worldUpperX;
     float worldUpperY;
+    float playerX;
+    float playerY;
 };

@@ -18,6 +18,7 @@ protected:
     vmath::vec2 size;
     vmath::vec2 position;
     vmath::vec2 velocity;
+    vmath::vec4 boundaries;
     float angle{0};
     bool remove{false};
 

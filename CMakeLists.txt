@@ -47,7 +47,8 @@ add_executable(${PROJECT_NAME}
         src/Game/Objects/WorldObject.cpp
         src/Game/Objects/WorldObject.h
         src/Game/Objects/Bullet.cpp
-        src/Game/Objects/Bullet.h src/Game/WorldState.h)
+        src/Game/Objects/Bullet.h
+        src/Game/WorldState.h src/Game/Objects/Enemy.cpp src/Game/Objects/Enemy.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 

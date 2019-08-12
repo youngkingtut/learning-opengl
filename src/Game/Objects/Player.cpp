@@ -69,8 +69,8 @@ void Player::setNextPosition(const ControlState& controlState, const WorldState&
         updateYVelocity(VelocityUpdate::TO_ZERO, deltaTime);
     }
 
-    if(vmath::length(velocity) > MAX_VELOCITY) {
-        velocity = vmath::normalize(velocity) * MAX_VELOCITY;
+    if(vmath::length(velocity) > PLAYER_MAX_VELOCITY) {
+        velocity = vmath::normalize(velocity) * PLAYER_MAX_VELOCITY;
     }
 
     position[0] = velocity[0] * deltaTime + position[0];
@@ -96,7 +96,7 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
     if(coolDown > bound) {
         vmath::vec2 bulletDirection = controlState.getBulletDirection();
         if(vmath::length(bulletDirection) > 0) {
-            Bullet bullet = Bullet(vmath::vec2(5, 5), position, BULLET_VELOCITY * vmath::normalize(bulletDirection), 0);
+            Bullet bullet = Bullet(vmath::vec2(2.5, 2.5), position, BULLET_MAX_VELOCITY * vmath::normalize(bulletDirection), 0);
             bullets.push_back(bullet);
         }
     }

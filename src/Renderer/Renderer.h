@@ -14,11 +14,11 @@ public:
     void render(const World& world, float aspectRatio);
 
 private:
-    GLuint shaderProgram{};
-    GLint modelViewLocation{};
-    GLint projectionLocation{};
-    GLuint vao[3]{0, 0, 0};
-    GLuint vbo[3]{0, 0, 0};
-    GLuint ebo[3]{0, 0, 0};
+    GLuint shaderProgram{0};
+    GLint modelViewLocation{0};
+    GLint projectionLocation{0};
+    GLuint vao{0};
+    GLuint vbo{0};
+    GLuint ebo{0};
 };
 

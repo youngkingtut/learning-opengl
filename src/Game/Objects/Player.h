@@ -14,7 +14,7 @@ enum VelocityUpdate {
 
 class Player: public WorldObject {
 public:
-    explicit Player(vmath::vec2 size, vmath::vec2 position, vmath::vec2 velocity, float angle);
+    Player(vmath::vec2 size, vmath::vec2 position, vmath::vec2 velocity, float angle);
     void setNextPosition(const ControlState& controlState, const WorldState& worldState, const float& deltaTime) override;
     void generateBullet(const ControlState& controlState, const float& deltaTime, std::vector<Bullet>& bullets);
 
@@ -23,5 +23,5 @@ private:
     void updateXVelocity(VelocityUpdate vUpdate, double deltaTime);
     void updateYVelocity(VelocityUpdate vUpdate, double deltaTime);
 
-    float coolDown;
+    float coolDown{0};
 };
