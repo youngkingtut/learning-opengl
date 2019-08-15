@@ -2,3 +2,7 @@
 	path = ext/glfw
 	url = https://github.com/glfw/glfw
 	branch = 3.3-stable
+[submodule "ext/glm"]
+	path = ext/glm
+	url = https://github.com/g-truc/glm.git
+	branch = 0.9.6
