@@ -25,7 +25,7 @@ void Game::run() {
             time = timeNow;
             window.ProcessInput(controlState);
             world.update(controlState, delta);
-            renderer.render(world);
+            renderer.renderWorld(world);
             window.SwapBuffersAndPollEvents();
         }
     }

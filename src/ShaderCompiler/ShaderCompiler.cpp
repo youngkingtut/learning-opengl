@@ -16,8 +16,6 @@
 
 
 std::string ReadShaderFile(const char* file_path) {
-    std::cout << "Reading: " << file_path << std::endl;
-
     std::string file_string;
     std::ifstream stream(file_path, std::ios::in);
 
@@ -42,8 +40,6 @@ std::string ReadShaderFile(const char* file_path) {
 }
 
 GLuint CompileShader(const char* code, GLenum type) {
-    std::cout << "Compiling shader: " << type << std::endl;
-
     GLuint shaderId   = glCreateShader(type);
 
     GLint result = 0;
@@ -66,10 +62,7 @@ GLuint CompileShader(const char* code, GLenum type) {
     return shaderId;
 }
 
-
 GLuint CreateProgram(GLuint vertexShaderID, GLuint fragmentShaderID) {
-    std::cout << "Creating Program" << std::endl;
-
     GLuint programID = glCreateProgram();
     GLint result = 0;
     int infoLogLength = 512;
@@ -100,6 +93,8 @@ GLuint CreateProgram(GLuint vertexShaderID, GLuint fragmentShaderID) {
 }
 
 GLuint LoadShaders(const char* vertex_file_path, const char* fragment_file_path) {
+    std::cout << "Creating Shader Program with [" << vertex_file_path << "] and [" << fragment_file_path << "]." << std::endl;
+
     // Read shaders from file path
     std::string vertexShaderCode = ReadShaderFile(vertex_file_path);
     std::string fragmentShaderCode = ReadShaderFile(fragment_file_path);

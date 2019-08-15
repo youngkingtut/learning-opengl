@@ -17,6 +17,7 @@ set(EXTERNAL_LIBRARIES ext)
 add_subdirectory("${EXTERNAL_LIBRARIES}/glfw")
 add_subdirectory("${EXTERNAL_LIBRARIES}/glad")
 add_subdirectory("${EXTERNAL_LIBRARIES}/glm")
+add_subdirectory("${EXTERNAL_LIBRARIES}/freetype2")
 add_definitions(-DGLFW_INCLUDE_NONE)
 
 ##############################################################
@@ -25,6 +26,7 @@ add_definitions(-DGLFW_INCLUDE_NONE)
 include_directories("${EXTERNAL_LIBRARIES}/glfw/include")
 include_directories("${EXTERNAL_LIBRARIES}/glad/include")
 include_directories("${EXTERNAL_LIBRARIES}/glm")
+include_directories("${EXTERNAL_LIBRARIES}/freetype/include")
 
 ##############################################################
 # Build
@@ -33,26 +35,30 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Game/Game.cpp
         src/Game/Game.h
-        src/Interface/Window.cpp
-        src/Interface/Window.h
-        src/Renderer/Renderer.cpp
-        src/Renderer/Renderer.h
         src/Game/World.cpp
         src/Game/World.h
+        src/Game/WorldState.h
         src/Game/Objects/Player.cpp
         src/Game/Objects/Player.h
-        src/Utils/Constants.h
-        src/Interface/ControlState.cpp
-        src/Interface/ControlState.h
-        src/ShaderCompiler/ShaderCompiler.cpp
-        src/ShaderCompiler/ShaderCompiler.hpp
         src/Game/Objects/WorldObject.cpp
         src/Game/Objects/WorldObject.h
         src/Game/Objects/Bullet.cpp
         src/Game/Objects/Bullet.h
-        src/Game/WorldState.h src/Game/Objects/Enemy.cpp src/Game/Objects/Enemy.h)
+        src/Game/Objects/Enemy.cpp
+        src/Game/Objects/Enemy.h
+        src/Interface/ControlState.cpp
+        src/Interface/ControlState.h
+        src/Interface/Window.cpp
+        src/Interface/Window.h
+        src/Renderer/Renderer.cpp
+        src/Renderer/Renderer.h
+        src/ShaderCompiler/ShaderCompiler.cpp
+        src/ShaderCompiler/ShaderCompiler.hpp
+        src/Utils/Constants.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
+target_link_libraries(${PROJECT_NAME} freetype)
+
 
 ##############################################################
 # 'Link' Shaders
