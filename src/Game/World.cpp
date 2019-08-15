@@ -1,6 +1,5 @@
 #include "World.h"
 
-#include <iostream>
 #include <random>
 #include "../Utils/Constants.h"
 
@@ -8,7 +7,7 @@
 World::World() :
 bullets(),
 enemies(),
-player(vmath::vec2(PLAYER_SIZE_WIDTH, PLAYER_SIZE_HEIGHT), vmath::vec2(0, 0), vmath::vec2(0, 0), 0),
+player(glm::vec2(PLAYER_SIZE_WIDTH, PLAYER_SIZE_HEIGHT), glm::vec2(0, 0), glm::vec2(0, 0), 0),
 worldState{}
 {
     worldState.worldLowerX = -WORLD_SIZE_WIDTH;
@@ -35,7 +34,7 @@ void World::update(const ControlState& controlState, double deltaTime) {
     // Update player position and generate bullets
     player.setNextPosition(controlState, worldState, deltaTime);
     player.generateBullet(controlState, deltaTime, bullets);
-    vmath::vec2 playerPosition = player.getPosition();
+    glm::vec2 playerPosition = player.getPosition();
     worldState.playerX = playerPosition[0];
     worldState.playerY = playerPosition[1];
 
@@ -75,6 +74,6 @@ void World::update(const ControlState& controlState, double deltaTime) {
         if (std::rand() % 2 > 0) {
             enemyY = -enemyY;
         }
-        enemies.emplace_back(Enemy(vmath::vec2(10.0f, 10.0f), vmath::vec2(enemyX, enemyY)));
+        enemies.emplace_back(Enemy(glm::vec2(10.0f, 10.0f), glm::vec2(enemyX, enemyY)));
     }
 }

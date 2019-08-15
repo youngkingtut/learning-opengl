@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <vmath.h>
 #include "../../Interface/ControlState.h"
 #include "WorldObject.h"
 #include "Bullet.h"
@@ -14,7 +13,7 @@ enum VelocityUpdate {
 
 class Player: public WorldObject {
 public:
-    Player(vmath::vec2 size, vmath::vec2 position, vmath::vec2 velocity, float angle);
+    Player(const glm::vec2& size, const glm::vec2& position, const glm::vec2& velocity, float angle);
     void setNextPosition(const ControlState& controlState, const WorldState& worldState, const float& deltaTime) override;
     void generateBullet(const ControlState& controlState, const float& deltaTime, std::vector<Bullet>& bullets);
 

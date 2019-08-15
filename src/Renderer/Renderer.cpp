@@ -1,6 +1,9 @@
 #include <iostream>
 #include <ctime>
-#include <vmath.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Renderer.h"
 
@@ -87,52 +90,49 @@ void Renderer::initialize() {
     shaderProgram = LoadShaders("Shaders/shader.vert", "Shaders/shader.frag");
     modelViewLocation = glGetUniformLocation(shaderProgram, "mv_matrix");
     projectionLocation = glGetUniformLocation(shaderProgram, "proj_matrix");
-
+    projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1f, 800.0f);
 }
 
-void Renderer::render(const World& world, float aspectRatio) {
+void Renderer::render(const World& world) {
     static const GLfloat one = 1.0f;
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT);
     glClearBufferfv(GL_DEPTH, 0, &one);
 
-    vmath::vec2 playerPosition = world.getPlayer().getPosition();
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+
+    glm::vec2 playerPosition = world.getPlayer().getPosition();
     float playerAngle = world.getPlayer().getAngle();
-
-    vmath::mat4 projectionMatrix = vmath::perspective(WINDOW_FOV, aspectRatio, 0.1f, 1000.0f);
-
 
     glUseProgram(shaderProgram);
 
     // draw world
     glBindVertexArray(vao);
-    vmath::mat4 modelViewMatrix = vmath::translate(0.0f, 0.0f, 0.0f);
-    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, projectionMatrix);
-    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, modelViewMatrix);
+    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
+    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
     glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, (GLvoid*)(0 * sizeof(GLuint)));
 
     // draw player
-    modelViewMatrix = vmath::translate(playerPosition[0], playerPosition[1], 0.0f) *
-                      vmath::rotate(playerAngle, 0.0f, 0.0f, 1.0f);
-    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, modelViewMatrix);
+    modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0f)) *
+                      glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (GLvoid*)(5 * sizeof(GLuint)));
 
 
     // draw bullets
     for(auto & bullet : world.getBullets()) {
-        vmath::vec2 bulletPosition = bullet.getPosition();
-        modelViewMatrix = vmath::translate(bulletPosition[0], bulletPosition[1], 0.0f);
-        glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, modelViewMatrix);
+        glm::vec2 bulletPosition = bullet.getPosition();
+        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], 0.0f));
+        glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (GLvoid*)(8 * sizeof(GLuint)));
     }
 
     // draw enemies
     for(auto & enemy : world.getEnemies()) {
-        vmath::vec2 enemyPosition = enemy.getPosition();
-        modelViewMatrix = vmath::translate(enemyPosition[0], enemyPosition[1], 0.0f) *
-                          vmath::rotate(45.0f, 0.0f, 0.0f, 1.0f);
-        glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, modelViewMatrix);
+        glm::vec2 enemyPosition = enemy.getPosition();
+        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(enemyPosition[0], enemyPosition[1], 0.0f));
+        glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (GLvoid*)(14 * sizeof(GLuint)));
     }
 

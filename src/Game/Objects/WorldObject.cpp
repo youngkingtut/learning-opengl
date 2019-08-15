@@ -1,19 +1,19 @@
-#include <utility>
+#include <glm/gtx/vector_angle.hpp>
 
 #include "WorldObject.h"
 
 
-WorldObject::WorldObject(vmath::vec2 s, vmath::vec2 p, vmath::vec2 v, const float &a)  :
-size(std::move(s)),
-position(std::move(p)),
-velocity(std::move(v)),
+WorldObject::WorldObject(const glm::vec2& s, const glm::vec2& p, const glm::vec2& v, const float &a)  :
+size(s),
+position(p),
+velocity(v),
 angle(a){}
 
-vmath::vec2 WorldObject::getPosition() const {
+glm::vec2 WorldObject::getPosition() const {
     return position;
 }
 
-vmath::vec2 WorldObject::getSize() const {
+glm::vec2 WorldObject::getSize() const {
     return size;
 }
 
@@ -21,12 +21,12 @@ float WorldObject::getAngle() const {
     return angle;
 }
 
-float WorldObject::calculateAngle(vmath::vec2& dir) {
-    float angle = vmath::angle(vmath::vec2(0.0, 1.0), dir);
+float WorldObject::calculateAngle(glm::vec2& dir) {
+    float angle = glm::angle(glm::vec2(0.0, 1.0), dir);
     if(dir[0] > 0) {
         angle = -angle;
     }
-    return vmath::degrees(angle);
+    return angle;
 }
 
 bool WorldObject::shouldRemove() const {

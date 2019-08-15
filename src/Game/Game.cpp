@@ -1,9 +1,5 @@
 #include "Game.h"
 
-#include <vmath.h>
-#include <iostream>
-#include <ctime>
-
 #include "../Interface/Window.h"
 #include "../Utils/Constants.h"
 
@@ -20,7 +16,7 @@ void Game::run() {
     ControlState controlState;
     double time = glfwGetTime();
 
-    while (window.ShouldExit()) {
+    while(window.ShouldExit()) {
         double timeNow = glfwGetTime();
         double delta = timeNow - time;
 
@@ -29,7 +25,7 @@ void Game::run() {
             time = timeNow;
             window.ProcessInput(controlState);
             world.update(controlState, delta);
-            renderer.render(world, window.GetAspectRatio());
+            renderer.render(world);
             window.SwapBuffersAndPollEvents();
         }
     }

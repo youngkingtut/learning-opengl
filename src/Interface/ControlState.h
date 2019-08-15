@@ -1,7 +1,6 @@
 #pragma once
 
-#include <vmath.h>
-
+#include <glm/glm.hpp>
 
 class ControlState {
 public:
@@ -9,11 +8,11 @@ public:
     void setMovementDirection(float xAxis, float yAxis);
     void setBulletDirection(float xAxis, float yAxis);
 
-    vmath::vec2 getMovementDirection() const;
+    glm::vec2 getMovementDirection() const;
     float getMovementMagnitude() const;
-    vmath::vec2 getBulletDirection() const;
+    glm::vec2 getBulletDirection() const;
 
 private:
-    vmath::vec2 movementDirection;
-    vmath::vec2 bulletDirection;
+    glm::vec2 movementDirection;
+    glm::vec2 bulletDirection;
 };

@@ -1,7 +1,7 @@
 #include "Bullet.h"
 
 
-Bullet::Bullet(const vmath::vec2 &s, const vmath::vec2 &p, const vmath::vec2 &v, float a) :
+Bullet::Bullet(const glm::vec2 &s, const glm::vec2 &p, const glm::vec2 &v, float a) :
 WorldObject(s, p, v, a){}
 
 void Bullet::setNextPosition(const ControlState &controlState, const WorldState &worldState, const float &deltaTime) {

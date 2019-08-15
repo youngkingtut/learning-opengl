@@ -3,15 +3,16 @@
 #define GAME_TITLE "InsertGameTitle"
 #define FPS_60 0.0166f
 
-#define SCREEN_SIZE_WIDTH 800.0f
-#define SCREEN_SIZE_HEIGHT 600.0f
+// Window settings
+#define WINDOW_SIZE_WIDTH 800.0f
+#define WINDOW_SIZE_HEIGHT 600.0f
+#define WINDOW_ASPECT_RATIO 1.33f
 
 // Game Dimensions
-#define WINDOW_FOV 50.0f
+#define FOV 0.872665f // 50 degrees in radians
 #define WORLD_SIZE_WIDTH 400.0f
 #define WORLD_SIZE_HEIGHT 300.0f
 #define WORLD_ENEMY_COOL_DOWN 0.5f
-
 #define PLAYER_SIZE_WIDTH 7.5f
 #define PLAYER_SIZE_HEIGHT 7.5f
 

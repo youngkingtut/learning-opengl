@@ -9,8 +9,6 @@
 
 #define JOYSTICK_DEAD_ZONE 0.2
 
-float ASPECT_RATIO;
-
 Window::Window() :
     window(){}
 
@@ -32,8 +30,7 @@ void Window::initialize() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
-    ASPECT_RATIO = SCREEN_SIZE_WIDTH / SCREEN_SIZE_HEIGHT;
-    window = glfwCreateWindow(SCREEN_SIZE_WIDTH, SCREEN_SIZE_HEIGHT, GAME_TITLE, nullptr, nullptr);
+    window = glfwCreateWindow(WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT, GAME_TITLE, nullptr, nullptr);
 
     if (window == nullptr) {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -149,9 +146,3 @@ void Window::SwapBuffersAndPollEvents() {
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
-
-float Window::GetAspectRatio() {
-    return ASPECT_RATIO;
-}
-
-

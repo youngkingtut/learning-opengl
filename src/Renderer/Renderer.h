@@ -11,7 +11,7 @@ public:
     ~Renderer();
 
     void initialize();
-    void render(const World& world, float aspectRatio);
+    void render(const World& world);
 
 private:
     GLuint shaderProgram{0};
@@ -20,5 +20,6 @@ private:
     GLuint vao{0};
     GLuint vbo{0};
     GLuint ebo{0};
+    glm::mat4 projectionMatrix{};
 };
 

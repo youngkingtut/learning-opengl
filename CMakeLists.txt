@@ -15,6 +15,7 @@ set(EXTERNAL_LIBRARIES ext)
 ##############################################################
 add_subdirectory("${EXTERNAL_LIBRARIES}/glfw")
 add_subdirectory("${EXTERNAL_LIBRARIES}/glad")
+add_subdirectory("${EXTERNAL_LIBRARIES}/glm")
 add_definitions(-DGLFW_INCLUDE_NONE)
 
 ##############################################################
@@ -22,7 +23,7 @@ add_definitions(-DGLFW_INCLUDE_NONE)
 ##############################################################
 include_directories("${EXTERNAL_LIBRARIES}/glfw/include")
 include_directories("${EXTERNAL_LIBRARIES}/glad/include")
-include_directories("${EXTERNAL_LIBRARIES}/sb7/include")
+include_directories("${EXTERNAL_LIBRARIES}/glm")
 
 ##############################################################
 # Build

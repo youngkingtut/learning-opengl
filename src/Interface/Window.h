@@ -12,7 +12,6 @@ public:
     void ProcessInput(ControlState& controlState);
     bool ShouldExit();
     void SwapBuffersAndPollEvents();
-    float GetAspectRatio();
 
 private:
     GLFWwindow* window;
