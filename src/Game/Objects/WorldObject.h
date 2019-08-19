@@ -1,7 +1,7 @@
 #pragma once
 
 #include "../../Interface/ControlState.h"
-#include "../WorldState.h"
+#include "../GameState.h"
 
 
 class WorldObject {
@@ -13,7 +13,7 @@ public:
     float getAngle() const;
     void removeObject();
 
-    virtual void setNextPosition(const ControlState& controlState, const WorldState& worldState, const float& deltaTime) = 0;
+    virtual void setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) = 0;
 
 protected:
     glm::vec2 size;

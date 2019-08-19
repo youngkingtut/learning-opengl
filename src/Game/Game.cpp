@@ -5,9 +5,17 @@
 
 
 Game::Game():
+state(),
 window(),
-world(),
-renderer(){}
+renderer(),
+world(state){
+    state.worldLowerX = -WORLD_SIZE_WIDTH;
+    state.worldLowerY = -WORLD_SIZE_HEIGHT;
+    state.worldUpperX = WORLD_SIZE_WIDTH;
+    state.worldUpperY = WORLD_SIZE_HEIGHT;
+    state.playerX = 0.0f;
+    state.playerY = 0.0f;
+}
 
 void Game::run() {
     window.initialize();

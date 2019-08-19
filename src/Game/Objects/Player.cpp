@@ -40,7 +40,7 @@ float Player::updateVelocity(float velocity, VelocityUpdate vUpdate, double delt
     return updatedVelocity;
 }
 
-void Player::setNextPosition(const ControlState& controlState, const WorldState& worldState, const float& deltaTime) {
+void Player::setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) {
     glm::vec2 controlDirection = controlState.getMovementDirection();
     float controlMagnitude = controlState.getMovementMagnitude();
 

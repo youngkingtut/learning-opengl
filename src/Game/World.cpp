@@ -4,19 +4,11 @@
 #include "../Utils/Constants.h"
 
 
-World::World() :
-bullets(),
-enemies(),
-player(glm::vec2(PLAYER_SIZE_WIDTH, PLAYER_SIZE_HEIGHT), glm::vec2(0, 0), glm::vec2(0, 0), 0),
-worldState{}
-{
-    worldState.worldLowerX = -WORLD_SIZE_WIDTH;
-    worldState.worldLowerY = -WORLD_SIZE_HEIGHT;
-    worldState.worldUpperX = WORLD_SIZE_WIDTH;
-    worldState.worldUpperY = WORLD_SIZE_HEIGHT;
-    worldState.playerX = 0.0f;
-    worldState.playerY = 0.0f;
-}
+World::World(GameState &state) :
+    bullets(),
+    enemies(),
+    gameState(state),
+    player(glm::vec2(PLAYER_SIZE_WIDTH, PLAYER_SIZE_HEIGHT), glm::vec2(state.playerX, state.playerY), glm::vec2(0, 0), 0){}
 
 Player World::getPlayer() const {
     return player;
@@ -30,22 +22,26 @@ std::vector<Enemy> World::getEnemies() const {
     return enemies;
 }
 
+GameState World::getState() const {
+    return gameState;
+}
+
 void World::update(const ControlState& controlState, double deltaTime) {
     // Update player position and generate bullets
-    player.setNextPosition(controlState, worldState, deltaTime);
+    player.setNextPosition(controlState, gameState, deltaTime);
     player.generateBullet(controlState, deltaTime, bullets);
     glm::vec2 playerPosition = player.getPosition();
-    worldState.playerX = playerPosition[0];
-    worldState.playerY = playerPosition[1];
+    gameState.playerX = playerPosition[0];
+    gameState.playerY = playerPosition[1];
 
     // Bullets
     for(auto & bullet : bullets) {
-        bullet.setNextPosition(controlState, worldState, deltaTime);
+        bullet.setNextPosition(controlState, gameState, deltaTime);
     }
 
     // Enemies
     for(auto & enemy: enemies) {
-        enemy.setNextPosition(controlState, worldState, deltaTime);
+        enemy.setNextPosition(controlState, gameState, deltaTime);
     }
 
     // Bullet collision with enemy
@@ -66,8 +62,8 @@ void World::update(const ControlState& controlState, double deltaTime) {
     coolDown += deltaTime;
     if(coolDown > WORLD_ENEMY_COOL_DOWN) {
         coolDown = 0.0f;
-        float enemyX = std::rand() % (int) worldState.worldUpperX;
-        float enemyY = std::rand() % (int) worldState.worldUpperY;
+        float enemyX = std::rand() % (int) gameState.worldUpperX;
+        float enemyY = std::rand() % (int) gameState.worldUpperY;
         if (std::rand() % 2 > 0) {
             enemyX = -enemyX;
         }

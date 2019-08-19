@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "../Interface/ControlState.h"
-#include "WorldState.h"
+#include "GameState.h"
 #include "Objects/Player.h"
 #include "Objects/Bullet.h"
 #include "Objects/Enemy.h"
@@ -11,14 +11,16 @@
 
 class World {
 public:
-    explicit World();
+    explicit World(GameState &state);
+
     void update(const ControlState& controlState, double deltaTime);
     Player getPlayer() const;
     std::vector<Bullet> getBullets() const;
     std::vector<Enemy> getEnemies() const;
+    GameState getState() const;
 
 private:
-    WorldState worldState;
+    GameState &gameState;
     Player player;
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;

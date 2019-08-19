@@ -35,9 +35,9 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Game/Game.cpp
         src/Game/Game.h
+        src/Game/GameState.h
         src/Game/World.cpp
         src/Game/World.h
-        src/Game/WorldState.h
         src/Game/Objects/Player.cpp
         src/Game/Objects/Player.h
         src/Game/Objects/WorldObject.cpp
@@ -66,6 +66,6 @@ target_link_libraries(${PROJECT_NAME} freetype)
 add_custom_command(
         TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E create_symlink
-        ${CMAKE_SOURCE_DIR}/src/Shaders
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Shaders
+        ${CMAKE_SOURCE_DIR}/src/Resources
+        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Resources
 )

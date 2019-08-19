@@ -11,6 +11,7 @@ public:
     void run();
 
 private:
+    GameState state;
     Window window;
     Renderer renderer;
     World world;

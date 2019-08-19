@@ -7,6 +7,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <ft2build.h>
+#include <sstream>
 #include FT_FREETYPE_H
 
 #include "Renderer.h"
@@ -91,7 +92,7 @@ void Renderer::initialize() {
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
 
-    worldShaderProgram = LoadShaders("Shaders/shader.vert", "Shaders/shader.frag");
+    worldShaderProgram = LoadShaders("Resources/Shaders/shader.vert", "Resources/Shaders/shader.frag");
     modelViewLocation = glGetUniformLocation(worldShaderProgram, "mv_matrix");
     projectionLocation = glGetUniformLocation(worldShaderProgram, "proj_matrix");
     projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1f, 800.0f);
@@ -105,7 +106,7 @@ void Renderer::initialize() {
     glViewport(0, 0, WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT);
 
     // Compile and setup the shader
-    textShaderProgram = LoadShaders("Shaders/text.vert", "Shaders/text.frag");
+    textShaderProgram = LoadShaders("Resources/Shaders/text.vert", "Resources/Shaders/text.frag");
     glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(WINDOW_SIZE_WIDTH), 0.0f, static_cast<GLfloat>(WINDOW_SIZE_HEIGHT));
     glUseProgram(textShaderProgram);
     glUniformMatrix4fv(glGetUniformLocation(textShaderProgram, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
@@ -120,7 +121,7 @@ void Renderer::initialize() {
 
     // Load font as face
     FT_Face face;
-    if (FT_New_Face(ft, "/Library/Fonts/Arial.ttf", 0, &face)) {
+    if (FT_New_Face(ft, "Resources/Fonts/joystix_monospace.ttf", 0, &face)) {
         std::cout << "ERROR::FREETYPE: Failed to load font" << std::endl;
         exit(-1);
     }
@@ -229,7 +230,9 @@ void Renderer::renderWorld(const World &world) {
     }
 
     glUseProgram(textShaderProgram);
-    renderText("Score ", 45.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    std::stringstream ss;
+    ss << "Score " << world.getState().score;
+    renderText(ss.str(), 45.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
     glBindVertexArray(0);
 }
