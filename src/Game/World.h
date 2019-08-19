@@ -26,4 +26,7 @@ private:
     std::vector<Enemy> enemies;
 
     float coolDown{0.0f};
+
+    void removeEnemies();
+    void updateScore(int value);
 };

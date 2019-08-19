@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include <random>
+#include <iostream>
 #include "../Utils/Constants.h"
 
 
@@ -51,12 +52,11 @@ void World::update(const ControlState& controlState, double deltaTime) {
         }
     }
 
-    // Remove any object marked as such
+    // Remove Bullets
     auto new_end = std::remove_if(bullets.begin(), bullets.end(), [](const Bullet& b){return b.shouldRemove();});
     bullets.erase(new_end, bullets.end());
-    auto enemyEnd = std::remove_if(enemies.begin(), enemies.end(), [](const Enemy& e){return e.shouldRemove();});
-    enemies.erase(enemyEnd, enemies.end());
 
+    removeEnemies();
 
     // Generate Enemies
     coolDown += deltaTime;
@@ -72,4 +72,20 @@ void World::update(const ControlState& controlState, double deltaTime) {
         }
         enemies.emplace_back(Enemy(glm::vec2(10.0f, 10.0f), glm::vec2(enemyX, enemyY)));
     }
+}
+
+void World::removeEnemies() {
+    auto head = enemies.begin();
+    for(auto enemy = enemies.begin(); enemy != enemies.end(); enemy++) {
+        if(enemy->shouldRemove()) {
+            updateScore(Enemy::value);
+            std::iter_swap(head, enemy);
+            head++;
+        }
+    }
+    enemies.erase(enemies.begin(), head);
+}
+
+void World::updateScore(int value) {
+    gameState.score += gameState.multiplier * value;
 }

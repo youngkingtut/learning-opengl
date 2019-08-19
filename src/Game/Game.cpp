@@ -15,6 +15,7 @@ world(state){
     state.worldUpperY = WORLD_SIZE_HEIGHT;
     state.playerX = 0.0f;
     state.playerY = 0.0f;
+    state.multiplier = 1;
 }
 
 void Game::run() {
