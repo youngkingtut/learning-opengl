@@ -1,9 +1,11 @@
 #include "Player.h"
+#include <iostream>
+#include <glm/gtx/projection.hpp>
 #include "../../Utils/Constants.h"
 
 
-Player::Player(const glm::vec2& size, const glm::vec2& position, const glm::vec2& velocity, float angle) :
-WorldObject(size, position, velocity, angle) {}
+Player::Player(const glm::vec2& position, const glm::vec2& velocity, const glm::vec2 &direction) :
+WorldObject(position, velocity, direction) {}
 
 void Player::updateXVelocity(VelocityUpdate vUpdate, double factor) {
     velocity[0] = updateVelocity(velocity[0], vUpdate, factor);
@@ -44,12 +46,11 @@ void Player::setNextPosition(const ControlState& controlState, const GameState& 
     glm::vec2 controlDirection = controlState.getMovementDirection();
     float controlMagnitude = controlState.getMovementMagnitude();
 
-    // Update angle and normalize control direction if present
+    // Update direction
     if(controlMagnitude > 0) {
-        controlDirection = glm::normalize(controlDirection);
-        angle = calculateAngle(controlDirection);
-        updateXVelocity(VelocityUpdate::INCREASE, controlDirection[0] * deltaTime);
-        updateYVelocity(VelocityUpdate::INCREASE, controlDirection[1] * deltaTime);
+        direction = glm::normalize(controlDirection);
+        updateXVelocity(VelocityUpdate::INCREASE, direction[0] * deltaTime);
+        updateYVelocity(VelocityUpdate::INCREASE, direction[1] * deltaTime);
     }
 
     if(controlDirection[0] == 0) {
@@ -68,16 +69,16 @@ void Player::setNextPosition(const ControlState& controlState, const GameState& 
     position[1] = velocity[1] * deltaTime + position[1];
 
     // Boundary check
-    if(position[0] + size[0] > worldState.worldUpperX) {
-        position[0] = worldState.worldUpperX - size[0];
-    } else if (position[0] - size[0] < worldState.worldLowerX) {
-        position[0] = worldState.worldLowerX + size[0];
+    if(position[0] + PLAYER_SIZE > worldState.worldUpperX) {
+        position[0] = worldState.worldUpperX - PLAYER_SIZE;
+    } else if (position[0] - PLAYER_SIZE < worldState.worldLowerX) {
+        position[0] = worldState.worldLowerX + PLAYER_SIZE;
     }
 
-    if(position[1] + size[1] > worldState.worldUpperY) {
-        position[1] = worldState.worldUpperY - size[1];
-    } else if (position[1] - size[1] < worldState.worldLowerY) {
-        position[1] = worldState.worldLowerY + size[1];
+    if(position[1] + PLAYER_SIZE > worldState.worldUpperY) {
+        position[1] = worldState.worldUpperY - PLAYER_SIZE;
+    } else if (position[1] - PLAYER_SIZE < worldState.worldLowerY) {
+        position[1] = worldState.worldLowerY + PLAYER_SIZE;
     }
 }
 
@@ -87,7 +88,15 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
         glm::vec2 bulletDirection = controlState.getBulletDirection();
         if(glm::length(bulletDirection) > 0) {
             coolDown = 0.0f;
-            Bullet bullet = Bullet(glm::vec2(2.5, 2.5), position, BULLET_MAX_VELOCITY * glm::normalize(bulletDirection), 0);
+            glm::vec2 bulletVelocity;
+            glm::vec2 normalizedBulletDirection = glm::normalize(bulletDirection);
+            if(glm::length(velocity) == 0) {
+                bulletVelocity = BULLET_MAX_VELOCITY * normalizedBulletDirection;
+            } else {
+                bulletVelocity = BULLET_MAX_VELOCITY * normalizedBulletDirection + glm::proj(velocity, normalizedBulletDirection);
+            }
+            std::cout << glm::length(bulletVelocity) << std::endl;
+            Bullet bullet = Bullet(position, bulletVelocity);
             bullets.push_back(bullet);
         }
     }

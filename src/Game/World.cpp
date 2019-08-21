@@ -9,7 +9,7 @@ World::World(GameState &state) :
     bullets(),
     enemies(),
     gameState(state),
-    player(glm::vec2(PLAYER_SIZE_WIDTH, PLAYER_SIZE_HEIGHT), glm::vec2(state.playerX, state.playerY), glm::vec2(0, 0), 0){}
+    player(glm::vec2(state.playerX, state.playerY), glm::vec2(0, 0), glm::vec2(0, 1)){}
 
 Player World::getPlayer() const {
     return player;
@@ -70,7 +70,7 @@ void World::update(const ControlState& controlState, double deltaTime) {
         if (std::rand() % 2 > 0) {
             enemyY = -enemyY;
         }
-        enemies.emplace_back(Enemy(glm::vec2(10.0f, 10.0f), glm::vec2(enemyX, enemyY)));
+        enemies.emplace_back(Enemy(glm::vec2(enemyX, enemyY)));
     }
 }
 

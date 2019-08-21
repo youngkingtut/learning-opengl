@@ -5,6 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/vector_angle.hpp>
 
 #include <ft2build.h>
 #include <sstream>
@@ -37,21 +38,21 @@ void Renderer::initialize() {
             -WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, depth,
 
             // Player
-            -PLAYER_SIZE_WIDTH,  -PLAYER_SIZE_HEIGHT, depth,
-            PLAYER_SIZE_WIDTH,  -PLAYER_SIZE_HEIGHT, depth,
-            0.0f,   PLAYER_SIZE_HEIGHT, depth,
+            -PLAYER_SIZE,  -PLAYER_SIZE, depth,
+            PLAYER_SIZE,  -PLAYER_SIZE, depth,
+            0.0f,   PLAYER_SIZE, depth,
 
             // Bullet
-            -2.5, -2.5, depth,
-            -2.5,  2.5, depth,
-            2.5,  2.5, depth,
-            2.5, -2.5, depth,
+            -BULLET_SIZE, -BULLET_SIZE, depth,
+            -BULLET_SIZE,  BULLET_SIZE, depth,
+            BULLET_SIZE,  BULLET_SIZE, depth,
+            BULLET_SIZE, -BULLET_SIZE, depth,
 
             // Enemy
-            -5.0, -5.0, depth,
-            -5.0,  5.0, depth,
-            5.0,  5.0, depth,
-            5.0, -5.0, depth,
+            -ENEMY_SIZE, -ENEMY_SIZE, depth,
+            -ENEMY_SIZE,  ENEMY_SIZE, depth,
+            ENEMY_SIZE,  ENEMY_SIZE, depth,
+            ENEMY_SIZE, -ENEMY_SIZE, depth,
     };
 
     static const GLuint indices[] = {
@@ -203,7 +204,12 @@ void Renderer::renderWorld(const World &world) {
 
     // draw player
     glm::vec2 playerPosition = world.getPlayer().getPosition();
-    float playerAngle = world.getPlayer().getAngle();
+    glm::vec2 playerDirection = world.getPlayer().getDirection();
+    glm::vec2 up = glm::vec2(0, 1);
+    float playerAngle = glm::angle(playerDirection, up);
+    if(playerDirection[0] > 0) {
+        playerAngle = -playerAngle;
+    }
     modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0f)) *
                       glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
