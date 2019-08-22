@@ -1,6 +1,7 @@
 #include "World.h"
 
 #include <random>
+#include <algorithm>
 #include "../Utils/Constants.h"
 
 
@@ -61,15 +62,16 @@ void World::update(const ControlState& controlState, double deltaTime) {
     coolDown += deltaTime;
     if(coolDown > WORLD_ENEMY_COOL_DOWN) {
         coolDown = 0.0f;
-        float enemyX = std::rand() % (int) gameState.worldUpperX;
-        float enemyY = std::rand() % (int) gameState.worldUpperY;
-        if (std::rand() % 2 > 0) {
-            enemyX = -enemyX;
-        }
-        if (std::rand() % 2 > 0) {
-            enemyY = -enemyY;
-        }
-        enemies.emplace_back(Enemy(glm::vec2(enemyX, enemyY)));
+        float upperX = gameState.worldUpperX - ENEMY_SIZE;
+        float lowerX = gameState.worldLowerX + ENEMY_SIZE;
+
+        float upperY = gameState.worldUpperY - ENEMY_SIZE;
+        float lowerY = gameState.worldLowerY + ENEMY_SIZE;
+
+        enemies.emplace_back(Enemy(glm::vec2(upperX, upperY)));
+        enemies.emplace_back(Enemy(glm::vec2(upperX, lowerY)));
+        enemies.emplace_back(Enemy(glm::vec2(lowerX, upperY)));
+        enemies.emplace_back(Enemy(glm::vec2(lowerX, lowerY)));
     }
 }
 

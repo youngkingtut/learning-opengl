@@ -1,5 +1,6 @@
 #include "Player.h"
 #include <glm/gtx/projection.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include "../../Utils/Constants.h"
 
 
@@ -94,8 +95,14 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
             } else {
                 bulletVelocity = BULLET_MAX_VELOCITY * normalizedBulletDirection + glm::proj(velocity, normalizedBulletDirection);
             }
-            Bullet bullet = Bullet(position, bulletVelocity, normalizedBulletDirection);
-            bullets.push_back(bullet);
+            glm::vec2 bulletFirstPosition = position + (PLAYER_SIZE + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, 0.4f);
+            glm::vec2 bulletSecondPosition = position + (PLAYER_SIZE + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, -0.4f);
+
+            Bullet bulletFirst = Bullet(bulletFirstPosition, bulletVelocity, normalizedBulletDirection);
+            Bullet bulletSecond = Bullet(bulletSecondPosition, bulletVelocity, normalizedBulletDirection);
+            bullets.push_back(bulletFirst);
+            bullets.push_back(bulletSecond);
+
         }
     }
 }

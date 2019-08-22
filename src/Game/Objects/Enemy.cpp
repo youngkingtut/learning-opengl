@@ -12,6 +12,9 @@ void Enemy::setNextPosition(const ControlState &controlState, const GameState &w
 }
 
 void Enemy::bulletCollision(Bullet &bullet) {
+    if(bullet.shouldRemove()) {
+        return;
+    }
     glm::vec2 bulletPosition = bullet.getPosition();
 
     float bulletLeftX = bulletPosition[0] - BULLET_SIZE;

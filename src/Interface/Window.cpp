@@ -7,8 +7,6 @@
 #include "../Utils/Constants.h"
 
 
-#define JOYSTICK_DEAD_ZONE 0.2
-
 Window::Window() :
     window(){}
 
@@ -65,8 +63,8 @@ void Window::ProcessInput(ControlState& controlState) {
         const float* axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &count);
         float movementXAxis = axes[0];
         float movementYAxis = axes[1];
-        float bulletXAxis = axes[3];
-        float bulletYAxis = axes[4];
+        float bulletXAxis = axes[2];
+        float bulletYAxis = axes[3];
 
         // Account for dead zone to prevent drift from stationary stick
         if(movementXAxis <  JOYSTICK_DEAD_ZONE &&
