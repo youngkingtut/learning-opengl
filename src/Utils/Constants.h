@@ -14,10 +14,16 @@
 #define WORLD_SIZE_WIDTH 400.0f
 #define WORLD_SIZE_HEIGHT 300.0f
 #define WORLD_ENEMY_COOL_DOWN 0.5f
+
 #define PLAYER_SIZE 7.5f
+#define PLAYER_RADIUS 3.2f
 #define PLAYER_BOUNDARY 0.5f
-#define BULLET_SIZE 2.7f
+
+#define BULLET_SIZE 2.8f
+#define BULLET_RADIUS 2.8f
+
 #define ENEMY_SIZE 6.0f
+#define ENEMY_RADIUS 6.0f
 
 // Game mechanics
 #define DECELERATION 600.0f

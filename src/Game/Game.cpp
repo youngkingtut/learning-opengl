@@ -16,6 +16,7 @@ world(state){
     state.playerX = 0.0f;
     state.playerY = 0.0f;
     state.multiplier = 1;
+    state.playerAlive = true;
 }
 
 void Game::run() {

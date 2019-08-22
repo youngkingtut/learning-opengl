@@ -10,5 +10,4 @@ struct GameState {
     float score;
     int multiplier;
     bool playerAlive;
-    int lives;
 };

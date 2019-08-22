@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Enemy.h"
 #include "../../Utils/Constants.h"
 
@@ -12,23 +13,27 @@ void Enemy::setNextPosition(const ControlState &controlState, const GameState &w
 }
 
 void Enemy::bulletCollision(Bullet &bullet) {
-    if(bullet.shouldRemove()) {
-        return;
-    }
-    glm::vec2 bulletPosition = bullet.getPosition();
+    float distance = glm::distance(position, bullet.getPosition());
 
-    float bulletLeftX = bulletPosition[0] - BULLET_SIZE;
-    float bulletRightX = bulletPosition[0] + BULLET_SIZE;
-    float enemyLeftX = position[0] - ENEMY_SIZE;
-    float enemyRightX = position[0] + ENEMY_SIZE;
-    float bulletLeftY = bulletPosition[1] - BULLET_SIZE;
-    float bulletRightY = bulletPosition[1] + BULLET_SIZE;
-    float enemyLeftY = position[1] - ENEMY_SIZE;
-    float enemyRightY = position[1] + ENEMY_SIZE;
-
-    if(!((enemyLeftX < bulletLeftX && enemyRightX < bulletLeftX) || (enemyLeftX > bulletRightX && enemyRightX > bulletRightX)) &&
-       !((enemyLeftY < bulletLeftY && enemyRightY < bulletLeftY) || (enemyLeftY > bulletRightY && enemyRightY > bulletRightY))) {
+    if(distance <= ENEMY_RADIUS + BULLET_RADIUS) {
         remove = true;
         bullet.removeObject();
     }
+
+//    glm::vec2 bulletPosition = bullet.getPosition();
+//
+//    float bulletLeftX = bulletPosition[0] - BULLET_SIZE;
+//    float bulletRightX = bulletPosition[0] + BULLET_SIZE;
+//    float enemyLeftX = position[0] - ENEMY_SIZE;
+//    float enemyRightX = position[0] + ENEMY_SIZE;
+//    float bulletLeftY = bulletPosition[1] - BULLET_SIZE;
+//    float bulletRightY = bulletPosition[1] + BULLET_SIZE;
+//    float enemyLeftY = position[1] - ENEMY_SIZE;
+//    float enemyRightY = position[1] + ENEMY_SIZE;
+//
+//    if(!((enemyLeftX < bulletLeftX && enemyRightX < bulletLeftX) || (enemyLeftX > bulletRightX && enemyRightX > bulletRightX)) &&
+//       !((enemyLeftY < bulletLeftY && enemyRightY < bulletLeftY) || (enemyLeftY > bulletRightY && enemyRightY > bulletRightY))) {
+//        remove = true;
+//        bullet.removeObject();
+//    }
 }

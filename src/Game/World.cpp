@@ -48,7 +48,9 @@ void World::update(const ControlState& controlState, double deltaTime) {
     // Bullet collision with enemy
     for(auto & bullet : bullets) {
         for(auto & enemy: enemies) {
-            enemy.bulletCollision(bullet);
+            if(!bullet.shouldRemove()) {
+                enemy.bulletCollision(bullet);
+            }
         }
     }
 
