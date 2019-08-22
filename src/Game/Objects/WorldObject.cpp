@@ -12,14 +12,19 @@ glm::vec2 WorldObject::getPosition() const {
     return position;
 }
 
-glm::vec2 WorldObject::getDirection() const {
-    return direction;
-}
-
 bool WorldObject::shouldRemove() const {
     return remove;
 }
 
 void WorldObject::removeObject() {
     remove = true;
+}
+
+float WorldObject::getAngle() const {
+    glm::vec2 up = glm::vec2(0, 1);
+    float angle = glm::angle(this->direction, up);
+    if(direction[0] > 0) {
+        angle = -angle;
+    }
+    return angle;
 }

@@ -1,5 +1,4 @@
 #include "Player.h"
-#include <iostream>
 #include <glm/gtx/projection.hpp>
 #include "../../Utils/Constants.h"
 
@@ -95,8 +94,7 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
             } else {
                 bulletVelocity = BULLET_MAX_VELOCITY * normalizedBulletDirection + glm::proj(velocity, normalizedBulletDirection);
             }
-            std::cout << glm::length(bulletVelocity) << std::endl;
-            Bullet bullet = Bullet(position, bulletVelocity);
+            Bullet bullet = Bullet(position, bulletVelocity, normalizedBulletDirection);
             bullets.push_back(bullet);
         }
     }

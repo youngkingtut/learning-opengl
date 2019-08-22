@@ -5,7 +5,6 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <glm/gtx/vector_angle.hpp>
 
 #include <ft2build.h>
 #include <sstream>
@@ -204,12 +203,7 @@ void Renderer::renderWorld(const World &world) {
 
     // draw player
     glm::vec2 playerPosition = world.getPlayer().getPosition();
-    glm::vec2 playerDirection = world.getPlayer().getDirection();
-    glm::vec2 up = glm::vec2(0, 1);
-    float playerAngle = glm::angle(playerDirection, up);
-    if(playerDirection[0] > 0) {
-        playerAngle = -playerAngle;
-    }
+    float playerAngle = world.getPlayer().getAngle();
     modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0f)) *
                       glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
@@ -219,7 +213,9 @@ void Renderer::renderWorld(const World &world) {
     // draw bullets
     for(auto & bullet : world.getBullets()) {
         glm::vec2 bulletPosition = bullet.getPosition();
-        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], 0.0f));
+        float bulletAngle = bullet.getAngle();
+        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], 0.0f)) *
+                          glm::rotate(glm::mat4(), bulletAngle, glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (GLvoid*)(8 * sizeof(GLuint)));
     }

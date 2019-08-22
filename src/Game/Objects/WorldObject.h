@@ -8,8 +8,8 @@ class WorldObject {
 public:
     WorldObject(const glm::vec2 &position, const glm::vec2 &velocity, const glm::vec2 &direction);
     bool shouldRemove() const;
+    float getAngle() const;
     glm::vec2 getPosition() const;
-    glm::vec2 getDirection() const;
     void removeObject();
 
     virtual void setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) = 0;

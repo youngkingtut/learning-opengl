@@ -6,6 +6,6 @@
 
 class Bullet : public WorldObject {
 public:
-    Bullet(const glm::vec2 &position, const glm::vec2 &velocity);
+    Bullet(const glm::vec2 &position, const glm::vec2 &velocity, const glm::vec2 &direction);
     void setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) override;
 };
