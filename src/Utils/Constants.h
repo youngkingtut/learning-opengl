@@ -20,10 +20,10 @@
 #define PLAYER_BOUNDARY 0.5f
 
 #define BULLET_SIZE 2.8f
-#define BULLET_RADIUS 2.8f
+#define BULLET_RADIUS 3.948f
 
 #define ENEMY_SIZE 6.0f
-#define ENEMY_RADIUS 6.0f
+#define ENEMY_RADIUS 8.46f
 
 // Game mechanics
 #define DECELERATION 600.0f
