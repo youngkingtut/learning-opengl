@@ -21,6 +21,7 @@ public:
 
     void initialize();
     void renderWorld(const World &world);
+    void renderGameOverScreen();
 
 private:
     GLuint worldShaderProgram{0};
@@ -36,5 +37,6 @@ private:
     std::map<GLchar, Character> characters{};
 
     void renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color);
+    static void clearScreen();
 };
 

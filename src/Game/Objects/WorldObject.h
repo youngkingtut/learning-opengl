@@ -11,6 +11,8 @@ public:
     float getAngle() const;
     glm::vec2 getPosition() const;
     void removeObject();
+    bool collision(const WorldObject &object, float radiusSelf, float radiusOther);
+    void zeroVelocity();
 
     virtual void setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) = 0;
 
@@ -19,5 +21,4 @@ protected:
     glm::vec2 velocity;
     glm::vec2 direction;
     bool remove{false};
-
 };

@@ -16,7 +16,7 @@ world(state){
     state.playerX = 0.0f;
     state.playerY = 0.0f;
     state.multiplier = 1;
-    state.playerAlive = true;
+    state.lives = 3;
 }
 
 void Game::run() {
@@ -34,8 +34,14 @@ void Game::run() {
         if(delta > FPS_60) {
             time = timeNow;
             window.ProcessInput(controlState);
-            world.update(controlState, delta);
-            renderer.renderWorld(world);
+
+            if(state.lives > 0) {
+                world.update(controlState, delta);
+                renderer.renderWorld(world);
+            } else {
+                renderer.renderGameOverScreen();
+            }
+
             window.SwapBuffersAndPollEvents();
         }
     }

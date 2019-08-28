@@ -12,11 +12,6 @@ void Enemy::setNextPosition(const ControlState &controlState, const GameState &w
     position[1] = velocity[1] * deltaTime + position[1];
 }
 
-void Enemy::bulletCollision(Bullet &bullet) {
-    float distance = glm::distance(position, bullet.getPosition());
-
-    if(distance <= ENEMY_RADIUS + BULLET_RADIUS) {
-        remove = true;
-        bullet.removeObject();
-    }
+bool Enemy::bulletCollision(Bullet &bullet) {
+    return collision(bullet, ENEMY_RADIUS, BULLET_RADIUS);
 }

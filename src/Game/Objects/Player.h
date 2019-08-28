@@ -4,6 +4,7 @@
 #include "../../Interface/ControlState.h"
 #include "WorldObject.h"
 #include "Bullet.h"
+#include "Enemy.h"
 
 
 enum VelocityUpdate {
@@ -16,6 +17,7 @@ public:
     Player(const glm::vec2 &position, const glm::vec2 &velocity, const glm::vec2 &direction);
     void setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) override;
     void generateBullet(const ControlState& controlState, const float& deltaTime, std::vector<Bullet>& bullets);
+    bool enemyCollision(const Enemy &enemy);
 
 private:
     float updateVelocity(float velocity, VelocityUpdate vUpdate, double deltaTime);

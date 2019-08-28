@@ -25,8 +25,16 @@ private:
     std::vector<Bullet> bullets;
     std::vector<Enemy> enemies;
 
-    float coolDown{0.0f};
+    float enemyCoolDown{0.0f};
+    float deathCoolDown{0.0f};
+    bool playerAlive{true};
 
-    void removeEnemies();
+    void removeObjects();
+    void markAllObjectsForRemoval();
     void updateScore(int value);
+    void updatePlayer(const ControlState& controlState, double deltaTime);
+    void updateEnemies(const ControlState& controlState, double deltaTime);
+    void updateBullets(const ControlState& controlState, double deltaTime);
+
+    void playerDied();
 };

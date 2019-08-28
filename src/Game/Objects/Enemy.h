@@ -9,5 +9,5 @@ public:
     const static int value = 10;
     explicit Enemy(const glm::vec2 &position);
     void setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) override;
-    void bulletCollision(Bullet &bullet);
+    bool bulletCollision(Bullet &bullet);
 };

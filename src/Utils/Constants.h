@@ -13,7 +13,8 @@
 #define FOV 0.872665f // 50 degrees in radians
 #define WORLD_SIZE_WIDTH 400.0f
 #define WORLD_SIZE_HEIGHT 300.0f
-#define WORLD_ENEMY_COOL_DOWN 0.5f
+#define WORLD_ENEMY_COOL_DOWN 1.0f
+#define WORLD_DEATH_COOL_DOWN 2.0f
 
 #define PLAYER_SIZE 7.5f
 #define PLAYER_RADIUS 3.2f

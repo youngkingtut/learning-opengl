@@ -186,11 +186,7 @@ void Renderer::initialize() {
 }
 
 void Renderer::renderWorld(const World &world) {
-    static const GLfloat one = 1.0f;
-
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
-    glClearBufferfv(GL_DEPTH, 0, &one);
+    clearScreen();
 
     glUseProgram(worldShaderProgram);
     glBindVertexArray(worldVAO);
@@ -229,9 +225,32 @@ void Renderer::renderWorld(const World &world) {
     }
 
     glUseProgram(textShaderProgram);
-    std::stringstream ss;
-    ss << "Score " << world.getState().score;
-    renderText(ss.str(), 45.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    std::stringstream score;
+    std::stringstream lives;
+    score << "Score " << world.getState().score;
+    lives << "Lives " << world.getState().lives;
+    renderText(score.str(), 45.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    renderText(lives.str(), WINDOW_SIZE_WIDTH - 200.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+
+    glBindVertexArray(0);
+}
+
+
+void Renderer::renderGameOverScreen() {
+    clearScreen();
+
+    glUseProgram(worldShaderProgram);
+    glBindVertexArray(worldVAO);
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+
+    // draw world
+    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
+    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
+    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, (GLvoid*)(0 * sizeof(GLuint)));
+
+    glUseProgram(textShaderProgram);
+    std::string gameOver = "GAME OVER";
+    renderText(gameOver, 210.0f, WINDOW_SIZE_HEIGHT - 310.0f, 2.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 
     glBindVertexArray(0);
 }
@@ -277,4 +296,12 @@ void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat
         x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Renderer::clearScreen() {
+    static const GLfloat one = 1.0f;
+
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+    glClearBufferfv(GL_DEPTH, 0, &one);
 }

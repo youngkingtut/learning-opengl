@@ -28,3 +28,12 @@ float WorldObject::getAngle() const {
     }
     return angle;
 }
+
+bool WorldObject::collision(const WorldObject &object, float radiusSelf, float radiusOther) {
+    return glm::distance(position, object.getPosition()) <= radiusSelf + radiusOther;
+}
+
+void WorldObject::zeroVelocity() {
+    velocity[0] = 0.0f;
+    velocity[1] = 0.0f;
+}
