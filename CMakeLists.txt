@@ -54,7 +54,9 @@ add_executable(${PROJECT_NAME}
         src/Renderer/Renderer.h
         src/ShaderCompiler/ShaderCompiler.cpp
         src/ShaderCompiler/ShaderCompiler.hpp
-        src/Utils/Constants.h)
+        src/Utils/Constants.h
+        src/Renderer/ObjLoader.cpp
+        src/Renderer/ObjLoader.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

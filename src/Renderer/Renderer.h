@@ -36,6 +36,11 @@ private:
     glm::mat4 projectionMatrix{};
     std::map<GLchar, Character> characters{};
 
+    GLuint worldOffset{0};
+    GLuint playerOffset{0};
+    GLuint enemyOffset{0};
+    GLuint bulletOffset{0};
+
     void renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color);
     static void clearScreen();
 };
