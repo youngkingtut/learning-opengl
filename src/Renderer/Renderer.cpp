@@ -220,9 +220,10 @@ void Renderer::renderWorld(const World &world) {
     for(auto & bullet : world.getBullets()) {
         glm::vec2 bulletPosition = bullet.getPosition();
         float bulletAngle = bullet.getAngle();
-        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], -760.0f)) *
-                glm::scale(glm::mat4(), glm::vec3(15.0f, 15.0f, 0.0f)) *
-                          glm::rotate(glm::mat4(), bulletAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], -760.0)) *
+                          glm::scale(glm::mat4(), glm::vec3(10.0f, 10.0f, 0.0f)) *
+                          glm::rotate(glm::mat4(), bulletAngle, glm::vec3(0.0f, 0.0f, 1.0f)) *
+                          glm::rotate(glm::mat4(), float(M_PI_2), glm::vec3(1.0f, 0.0f, 0.0f));
         glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
         glDrawElements(GL_TRIANGLES, worldOffset - 1, GL_UNSIGNED_INT, nullptr);
     }
@@ -257,7 +258,7 @@ void Renderer::renderGameOverScreen() {
     // draw world
     glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
     glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, (GLvoid*)(0 * sizeof(GLuint)));
+    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, (GLvoid*)(worldOffset * sizeof(GLuint)));
 
     glUseProgram(textShaderProgram);
     std::string gameOver = "GAME OVER";

@@ -130,8 +130,10 @@ void World::updateBullets(const ControlState& controlState, double deltaTime) {
 }
 
 void World::playerDied() {
-    player.zeroVelocity();
-    playerAlive = false;
-    gameState.lives -= 1;
+    if(playerAlive) {
+        player.zeroVelocity();
+        playerAlive = false;
+        gameState.lives -= 1;
+    }
 }
 
