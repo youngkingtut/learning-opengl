@@ -14,7 +14,6 @@
 
 #include "../ShaderCompiler/ShaderCompiler.hpp"
 #include "../Utils/Constants.h"
-#include "ObjLoader.h"
 
 
 Renderer::~Renderer() {
@@ -26,34 +25,27 @@ Renderer::~Renderer() {
 }
 
 void Renderer::initialize() {
-    // todo calculate based on world size?
-    float depth = -760.0f;
-
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
-    loadObj("Resources/Models/bullet.obj", vertices, elements);
+    playerModel.loadStatic();
 
     GLuint vertexOffset = vertices.size();
 
-    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH, WORLD_SIZE_HEIGHT, depth));
-    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH, WORLD_SIZE_HEIGHT, depth));
-    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, depth));
-    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, depth));
+    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH, WORLD_SIZE_HEIGHT, -760.0f));
+    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH, WORLD_SIZE_HEIGHT, -760.0f));
+    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, -760.0f));
+    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, -760.0f));
 
-    vertices.emplace_back(glm::vec3(-PLAYER_SIZE,  -PLAYER_SIZE, depth));
-    vertices.emplace_back(glm::vec3( PLAYER_SIZE,  -PLAYER_SIZE, depth));
-    vertices.emplace_back(glm::vec3(        0.0f,   PLAYER_SIZE, depth));
+    vertices.emplace_back(glm::vec3(-BULLET_SIZE, -BULLET_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3(-BULLET_SIZE,  BULLET_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3( BULLET_SIZE,  BULLET_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3( BULLET_SIZE, -BULLET_SIZE, -760.0f));
 
-    vertices.emplace_back(glm::vec3(-BULLET_SIZE, -BULLET_SIZE, depth));
-    vertices.emplace_back(glm::vec3(-BULLET_SIZE,  BULLET_SIZE, depth));
-    vertices.emplace_back(glm::vec3( BULLET_SIZE,  BULLET_SIZE, depth));
-    vertices.emplace_back(glm::vec3( BULLET_SIZE, -BULLET_SIZE, depth));
-
-    vertices.emplace_back(glm::vec3(-ENEMY_SIZE, -ENEMY_SIZE, depth));
-    vertices.emplace_back(glm::vec3(-ENEMY_SIZE,  ENEMY_SIZE, depth));
-    vertices.emplace_back(glm::vec3( ENEMY_SIZE,  ENEMY_SIZE, depth));
-    vertices.emplace_back(glm::vec3( ENEMY_SIZE, -ENEMY_SIZE, depth));
+    vertices.emplace_back(glm::vec3(-ENEMY_SIZE, -ENEMY_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3(-ENEMY_SIZE,  ENEMY_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3( ENEMY_SIZE,  ENEMY_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3( ENEMY_SIZE, -ENEMY_SIZE, -760.0f));
 
     worldOffset = elements.size();
     elements.emplace_back(vertexOffset + 0);
@@ -61,24 +53,20 @@ void Renderer::initialize() {
     elements.emplace_back(vertexOffset + 2);
     elements.emplace_back(vertexOffset + 3);
     elements.emplace_back(vertexOffset + 0);
-    playerOffset = elements.size();
-    elements.emplace_back(vertexOffset + 4);
-    elements.emplace_back(vertexOffset + 5);
-    elements.emplace_back(vertexOffset + 6);
     bulletOffset = elements.size();
-    elements.emplace_back(vertexOffset + 9);
-    elements.emplace_back(vertexOffset + 8);
+    elements.emplace_back(vertexOffset + 6);
+    elements.emplace_back(vertexOffset + 5);
+    elements.emplace_back(vertexOffset + 4);
+    elements.emplace_back(vertexOffset + 4);
     elements.emplace_back(vertexOffset + 7);
-    elements.emplace_back(vertexOffset + 7);
+    elements.emplace_back(vertexOffset + 6);
+    enemyOffset = elements.size();
     elements.emplace_back(vertexOffset + 10);
     elements.emplace_back(vertexOffset + 9);
-    enemyOffset = elements.size();
-    elements.emplace_back(vertexOffset + 13);
-    elements.emplace_back(vertexOffset + 12);
+    elements.emplace_back(vertexOffset + 8);
+    elements.emplace_back(vertexOffset + 8);
     elements.emplace_back(vertexOffset + 11);
-    elements.emplace_back(vertexOffset + 11);
-    elements.emplace_back(vertexOffset + 14);
-    elements.emplace_back(vertexOffset + 13);
+    elements.emplace_back(vertexOffset + 10);
 
 
     glGenVertexArrays(1, &worldVAO);
@@ -96,7 +84,7 @@ void Renderer::initialize() {
 
     glBindVertexArray(0);
 
-//    glEnable(GL_CULL_FACE);
+    glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
 
     glEnable(GL_DEPTH_TEST);
@@ -208,24 +196,18 @@ void Renderer::renderWorld(const World &world) {
     glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, (GLvoid*)(worldOffset * sizeof(GLuint)));
 
     // draw player
-    glm::vec2 playerPosition = world.getPlayer().getPosition();
-    float playerAngle = world.getPlayer().getAngle();
-    modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0f)) *
-                      glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f));
-    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (GLvoid*)(playerOffset * sizeof(GLuint)));
+    playerModel.draw(world.getPlayer(), modelViewLocation);
 
+    glBindVertexArray(worldVAO);
 
     // draw bullets
     for(auto & bullet : world.getBullets()) {
         glm::vec2 bulletPosition = bullet.getPosition();
         float bulletAngle = bullet.getAngle();
-        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], -760.0)) *
-                          glm::scale(glm::mat4(), glm::vec3(10.0f, 10.0f, 0.0f)) *
-                          glm::rotate(glm::mat4(), bulletAngle, glm::vec3(0.0f, 0.0f, 1.0f)) *
-                          glm::rotate(glm::mat4(), float(M_PI_2), glm::vec3(1.0f, 0.0f, 0.0f));
+        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], 0.0)) *
+                          glm::rotate(glm::mat4(), bulletAngle, glm::vec3(0.0f, 0.0f, 1.0f));
         glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-        glDrawElements(GL_TRIANGLES, worldOffset - 1, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (GLvoid*)(bulletOffset * sizeof(GLuint)));
     }
 
     // draw enemies
@@ -280,11 +262,11 @@ void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat
     {
         Character ch = characters[*c];
 
-        GLfloat xpos = x + ch.Bearing.x * scale;
-        GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        GLfloat xpos = x + ch.bearing.x * scale;
+        GLfloat ypos = y - (ch.size.y - ch.bearing.y) * scale;
 
-        GLfloat w = ch.Size.x * scale;
-        GLfloat h = ch.Size.y * scale;
+        GLfloat w = ch.size.x * scale;
+        GLfloat h = ch.size.y * scale;
         // Update VBO for each character
         GLfloat vertices[6][4] = {
                 { xpos,     ypos + h,   0.0, 0.0 },
@@ -296,7 +278,7 @@ void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat
                 { xpos + w, ypos + h,   1.0, 0.0 }
         };
         // Render glyph texture over quad
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+        glBindTexture(GL_TEXTURE_2D, ch.textureId);
         // Update content of VBO memory
         glBindBuffer(GL_ARRAY_BUFFER, textVBO);
         glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices); // Be sure to use glBufferSubData and not glBufferData
@@ -305,7 +287,7 @@ void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat
         // Render quad
         glDrawArrays(GL_TRIANGLES, 0, 6);
         // Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-        x += (ch.Advance >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
+        x += (ch.offset >> 6) * scale; // Bitshift by 6 to get value in pixels (2^6 = 64 (divide amount of 1/64th pixels by 64 to get amount of pixels))
     }
     glBindTexture(GL_TEXTURE_2D, 0);
 }

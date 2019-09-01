@@ -1,14 +1,14 @@
-#include "ObjLoader.h"
+#include "BaseModel.h"
 
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <string>
 #include <sstream>
 #include <glm/geometric.hpp>
 #include <stdlib.h>
 
 
-void loadObj(const char* filename, std::vector<glm::vec3> &vertices, std::vector<GLuint> &elements) {
+void BaseModel::loadFromFile(const char *filename, std::vector<glm::vec3> &vertices, std::vector<GLuint> &elements) {
     std::ifstream in(filename, std::ios::in);
     if(!in.is_open()) {
         std::cout << "Cannot open " << filename << std::endl;

@@ -5,14 +5,19 @@
 #include <glad/glad.h>
 
 #include "../Game/World.h"
+#include "Models/ModelType.h"
+#include "Models/BaseModel.h"
+#include "Models/PlayerModel.h"
+
 
 // Text Rendering using this guide: https://learnopengl.com/In-Practice/Text-Rendering
 struct Character {
-    GLuint TextureID;   // ID handle of the glyph texture
-    glm::ivec2 Size;    // Size of glyph
-    glm::ivec2 Bearing;  // Offset from baseline to left/top of glyph
-    GLuint Advance;    // Horizontal offset to advance to next glyph
+    GLuint textureId;   // ID handle of the glyph texture
+    glm::ivec2 size;    // Size of glyph
+    glm::ivec2 bearing; // Offset from baseline to left/top of glyph
+    GLuint offset;      // Horizontal offset to advance to next glyph
 };
+
 
 class Renderer {
 public:
@@ -24,6 +29,8 @@ public:
     void renderGameOverScreen();
 
 private:
+    PlayerModel playerModel{};
+
     GLuint worldShaderProgram{0};
     GLuint textShaderProgram{0};
     GLint modelViewLocation{0};
@@ -44,4 +51,3 @@ private:
     void renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color);
     static void clearScreen();
 };
-
