@@ -50,14 +50,21 @@ add_executable(${PROJECT_NAME}
         src/Interface/ControlState.h
         src/Interface/Window.cpp
         src/Interface/Window.h
+        src/Renderer/Models/BaseModel.cpp
+        src/Renderer/Models/BaseModel.h
+        src/Renderer/Models/BulletModel.cpp
+        src/Renderer/Models/BulletModel.h
+        src/Renderer/Models/EnemyModel.cpp
+        src/Renderer/Models/EnemyModel.h
+        src/Renderer/Models/PlayerModel.cpp
+        src/Renderer/Models/PlayerModel.h
+        src/Renderer/Models/WorldModel.cpp
+        src/Renderer/Models/WorldModel.h
         src/Renderer/Renderer.cpp
         src/Renderer/Renderer.h
         src/ShaderCompiler/ShaderCompiler.cpp
         src/ShaderCompiler/ShaderCompiler.hpp
-        src/Utils/Constants.h
-        src/Renderer/Models/BaseModel.cpp
-        src/Renderer/Models/BaseModel.h
-        src/Renderer/Models/ModelType.h src/Renderer/Models/PlayerModel.cpp src/Renderer/Models/PlayerModel.h)
+        src/Utils/Constants.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

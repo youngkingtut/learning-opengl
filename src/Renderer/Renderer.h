@@ -5,9 +5,11 @@
 #include <glad/glad.h>
 
 #include "../Game/World.h"
-#include "Models/ModelType.h"
 #include "Models/BaseModel.h"
 #include "Models/PlayerModel.h"
+#include "Models/EnemyModel.h"
+#include "Models/WorldModel.h"
+#include "Models/BulletModel.h"
 
 
 // Text Rendering using this guide: https://learnopengl.com/In-Practice/Text-Rendering
@@ -29,7 +31,10 @@ public:
     void renderGameOverScreen();
 
 private:
+    WorldModel worldModel{};
     PlayerModel playerModel{};
+    EnemyModel enemyModel{};
+    BulletModel bulletModel{};
 
     GLuint worldShaderProgram{0};
     GLuint textShaderProgram{0};

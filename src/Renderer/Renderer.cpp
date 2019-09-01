@@ -25,64 +25,10 @@ Renderer::~Renderer() {
 }
 
 void Renderer::initialize() {
-    std::vector<glm::vec3> vertices;
-    std::vector<GLuint> elements;
-
+    worldModel.loadStatic();
     playerModel.loadStatic();
-
-    GLuint vertexOffset = vertices.size();
-
-    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH, WORLD_SIZE_HEIGHT, -760.0f));
-    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH, WORLD_SIZE_HEIGHT, -760.0f));
-    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, -760.0f));
-    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, -760.0f));
-
-    vertices.emplace_back(glm::vec3(-BULLET_SIZE, -BULLET_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3(-BULLET_SIZE,  BULLET_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( BULLET_SIZE,  BULLET_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( BULLET_SIZE, -BULLET_SIZE, -760.0f));
-
-    vertices.emplace_back(glm::vec3(-ENEMY_SIZE, -ENEMY_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3(-ENEMY_SIZE,  ENEMY_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( ENEMY_SIZE,  ENEMY_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( ENEMY_SIZE, -ENEMY_SIZE, -760.0f));
-
-    worldOffset = elements.size();
-    elements.emplace_back(vertexOffset + 0);
-    elements.emplace_back(vertexOffset + 1);
-    elements.emplace_back(vertexOffset + 2);
-    elements.emplace_back(vertexOffset + 3);
-    elements.emplace_back(vertexOffset + 0);
-    bulletOffset = elements.size();
-    elements.emplace_back(vertexOffset + 6);
-    elements.emplace_back(vertexOffset + 5);
-    elements.emplace_back(vertexOffset + 4);
-    elements.emplace_back(vertexOffset + 4);
-    elements.emplace_back(vertexOffset + 7);
-    elements.emplace_back(vertexOffset + 6);
-    enemyOffset = elements.size();
-    elements.emplace_back(vertexOffset + 10);
-    elements.emplace_back(vertexOffset + 9);
-    elements.emplace_back(vertexOffset + 8);
-    elements.emplace_back(vertexOffset + 8);
-    elements.emplace_back(vertexOffset + 11);
-    elements.emplace_back(vertexOffset + 10);
-
-
-    glGenVertexArrays(1, &worldVAO);
-    glGenBuffers(1, &worldVBO);
-    glGenBuffers(1, &worldEBO);
-
-    glBindVertexArray(worldVAO);
-
-    glBindBuffer(GL_ARRAY_BUFFER, worldVBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec3), &vertices[0], GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, worldEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, elements.size() * sizeof(GLuint), &elements[0], GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
-    glEnableVertexAttribArray(0);
-
-    glBindVertexArray(0);
+    enemyModel.loadStatic();
+    bulletModel.loadStatic();
 
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
@@ -187,35 +133,23 @@ void Renderer::renderWorld(const World &world) {
     clearScreen();
 
     glUseProgram(worldShaderProgram);
-    glBindVertexArray(worldVAO);
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
     // draw world
-    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
-    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, (GLvoid*)(worldOffset * sizeof(GLuint)));
+    worldModel.draw(modelViewLocation);
 
     // draw player
     playerModel.draw(world.getPlayer(), modelViewLocation);
 
-    glBindVertexArray(worldVAO);
 
     // draw bullets
     for(auto & bullet : world.getBullets()) {
-        glm::vec2 bulletPosition = bullet.getPosition();
-        float bulletAngle = bullet.getAngle();
-        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(bulletPosition[0], bulletPosition[1], 0.0)) *
-                          glm::rotate(glm::mat4(), bulletAngle, glm::vec3(0.0f, 0.0f, 1.0f));
-        glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (GLvoid*)(bulletOffset * sizeof(GLuint)));
+        bulletModel.draw(bullet, modelViewLocation);
     }
 
     // draw enemies
     for(auto & enemy : world.getEnemies()) {
-        glm::vec2 enemyPosition = enemy.getPosition();
-        modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(enemyPosition[0], enemyPosition[1], 0.0f));
-        glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (GLvoid*)(enemyOffset * sizeof(GLuint)));
+        enemyModel.draw(enemy, modelViewLocation);
     }
 
     glUseProgram(textShaderProgram);
@@ -225,8 +159,6 @@ void Renderer::renderWorld(const World &world) {
     lives << "Lives " << world.getState().lives;
     renderText(score.str(), 45.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
     renderText(lives.str(), WINDOW_SIZE_WIDTH - 200.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-
-    glBindVertexArray(0);
 }
 
 
@@ -234,19 +166,14 @@ void Renderer::renderGameOverScreen() {
     clearScreen();
 
     glUseProgram(worldShaderProgram);
-    glBindVertexArray(worldVAO);
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
     // draw world
-    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
-    glUniformMatrix4fv(modelViewLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, (GLvoid*)(worldOffset * sizeof(GLuint)));
+    worldModel.draw(modelViewLocation);
 
     glUseProgram(textShaderProgram);
     std::string gameOver = "GAME OVER";
     renderText(gameOver, 210.0f, WINDOW_SIZE_HEIGHT - 310.0f, 2.0f, glm::vec3(1.0f, 1.0f, 1.0f));
-
-    glBindVertexArray(0);
 }
 
 

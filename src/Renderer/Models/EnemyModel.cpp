@@ -1,4 +1,4 @@
-#include "PlayerModel.h"
+#include "EnemyModel.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -7,16 +7,20 @@
 #include "../../Utils/Constants.h"
 
 
-void PlayerModel::loadStatic() {
+void EnemyModel::loadStatic() {
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
-    vertices.emplace_back(glm::vec3(-PLAYER_SIZE,  -PLAYER_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( PLAYER_SIZE,  -PLAYER_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3(        0.0f,   PLAYER_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3(-ENEMY_SIZE, -ENEMY_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3(-ENEMY_SIZE,  ENEMY_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3( ENEMY_SIZE,  ENEMY_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3( ENEMY_SIZE, -ENEMY_SIZE, -760.0f));
 
-    elements.emplace_back(0);
+    elements.emplace_back(2);
     elements.emplace_back(1);
+    elements.emplace_back(0);
+    elements.emplace_back(0);
+    elements.emplace_back(3);
     elements.emplace_back(2);
 
     glGenVertexArrays(1, &vertexArrayObject);
@@ -33,12 +37,12 @@ void PlayerModel::loadStatic() {
     glEnableVertexAttribArray(0);
 }
 
-void PlayerModel::draw(const Player &player, const GLuint &modelViewMatrixLocation) {
+void EnemyModel::draw(const Enemy &enemy, const GLuint &modelViewMatrixLocation) {
     glBindVertexArray(vertexArrayObject);
-    glm::vec2 playerPosition = player.getPosition();
-    float playerAngle = player.getAngle();
-    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0f)) *
-                                glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::vec2 position = enemy.getPosition();
+    float angle = enemy.getAngle();
+    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(position[0], position[1], 0.0f)) *
+                                glm::rotate(glm::mat4(), angle, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }
