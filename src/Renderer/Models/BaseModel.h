@@ -9,10 +9,12 @@
 class BaseModel {
 public:
     virtual void loadStatic() = 0;
+    ~BaseModel();
 protected:
     GLuint vertexArrayObject{0};
     GLuint vertexBufferObject{0};
     GLuint elementBufferObject{0};
-private:
+    GLuint elementBufferSize{0};
+
     void loadFromFile(const char* filename, std::vector<glm::vec3> &vertices, std::vector<GLuint> &elements);
 };

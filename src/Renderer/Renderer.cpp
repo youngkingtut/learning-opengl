@@ -17,9 +17,6 @@
 
 
 Renderer::~Renderer() {
-    glDeleteVertexArrays(1, &worldVAO);
-    glDeleteBuffers(1, &worldVBO);
-    glDeleteBuffers(1, &worldEBO);
     glDeleteVertexArrays(1, &textVAO);
     glDeleteBuffers(1, &textVBO);
 }
@@ -39,7 +36,7 @@ void Renderer::initialize() {
     worldShaderProgram = LoadShaders("Resources/Shaders/shader.vert", "Resources/Shaders/shader.frag");
     modelViewLocation = glGetUniformLocation(worldShaderProgram, "mv_matrix");
     projectionLocation = glGetUniformLocation(worldShaderProgram, "proj_matrix");
-    projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1f, 800.0f);
+    projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1f, 200.0f);
 
     // Set OpenGL options
     glEnable(GL_CULL_FACE);

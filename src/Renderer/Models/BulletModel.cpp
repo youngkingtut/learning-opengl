@@ -11,10 +11,10 @@ void BulletModel::loadStatic() {
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
-    vertices.emplace_back(glm::vec3(-BULLET_SIZE, -BULLET_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3(-BULLET_SIZE,  BULLET_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( BULLET_SIZE,  BULLET_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( BULLET_SIZE, -BULLET_SIZE, -760.0f));
+    vertices.emplace_back(glm::vec3(-BULLET_SIZE, -BULLET_SIZE, 0.0f));
+    vertices.emplace_back(glm::vec3(-BULLET_SIZE,  BULLET_SIZE, 0.0f));
+    vertices.emplace_back(glm::vec3( BULLET_SIZE,  BULLET_SIZE, 0.0f));
+    vertices.emplace_back(glm::vec3( BULLET_SIZE, -BULLET_SIZE, 0.0f));
 
     elements.emplace_back(2);
     elements.emplace_back(1);
@@ -42,7 +42,8 @@ void BulletModel::draw(const Bullet &bullet, const GLuint &modelViewMatrixLocati
     glm::vec2 position = bullet.getPosition();
     float angle = bullet.getAngle();
     glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(position[0], position[1], 0.0f)) *
-                                glm::rotate(glm::mat4(), angle, glm::vec3(0.0f, 0.0f, 1.0f));
+                                glm::rotate(glm::mat4(), angle, glm::vec3(0.0f, 0.0f, 1.0f)) *
+                                glm::lookAt(glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 }

@@ -8,6 +8,12 @@
 #include <stdlib.h>
 
 
+BaseModel::~BaseModel() {
+    glDeleteVertexArrays(1, &vertexArrayObject);
+    glDeleteBuffers(1, &vertexBufferObject);
+    glDeleteBuffers(1, &elementBufferObject);
+}
+
 void BaseModel::loadFromFile(const char *filename, std::vector<glm::vec3> &vertices, std::vector<GLuint> &elements) {
     std::ifstream in(filename, std::ios::in);
     if(!in.is_open()) {

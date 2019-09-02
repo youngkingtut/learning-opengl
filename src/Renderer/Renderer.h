@@ -31,27 +31,27 @@ public:
     void renderGameOverScreen();
 
 private:
+    // models
     WorldModel worldModel{};
     PlayerModel playerModel{};
     EnemyModel enemyModel{};
     BulletModel bulletModel{};
 
+    // shaders
     GLuint worldShaderProgram{0};
     GLuint textShaderProgram{0};
+
+    // uniforms
     GLint modelViewLocation{0};
     GLint projectionLocation{0};
-    GLuint worldVAO{0};
-    GLuint worldVBO{0};
-    GLuint worldEBO{0};
+
+    // buffers
     GLuint textVAO{0};
     GLuint textVBO{0};
+
+    // stores
     glm::mat4 projectionMatrix{};
     std::map<GLchar, Character> characters{};
-
-    GLuint worldOffset{0};
-    GLuint playerOffset{0};
-    GLuint enemyOffset{0};
-    GLuint bulletOffset{0};
 
     void renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color);
     static void clearScreen();

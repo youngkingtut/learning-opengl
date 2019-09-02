@@ -11,13 +11,16 @@ void PlayerModel::loadStatic() {
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
-    vertices.emplace_back(glm::vec3(-PLAYER_SIZE,  -PLAYER_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3( PLAYER_SIZE,  -PLAYER_SIZE, -760.0f));
-    vertices.emplace_back(glm::vec3(        0.0f,   PLAYER_SIZE, -760.0f));
+    loadFromFile("Resources/Models/player.obj", vertices, elements);
+    elementBufferSize = elements.size();
 
-    elements.emplace_back(0);
-    elements.emplace_back(1);
-    elements.emplace_back(2);
+//    vertices.emplace_back(glm::vec3(-PLAYER_SIZE,  -PLAYER_SIZE, 0.0f));
+//    vertices.emplace_back(glm::vec3( PLAYER_SIZE,  -PLAYER_SIZE, 0.0f));
+//    vertices.emplace_back(glm::vec3(        0.0f,   PLAYER_SIZE, 0.0f));
+//
+//    elements.emplace_back(0);
+//    elements.emplace_back(1);
+//    elements.emplace_back(2);
 
     glGenVertexArrays(1, &vertexArrayObject);
     glGenBuffers(1, &vertexBufferObject);
@@ -38,7 +41,8 @@ void PlayerModel::draw(const Player &player, const GLuint &modelViewMatrixLocati
     glm::vec2 playerPosition = player.getPosition();
     float playerAngle = player.getAngle();
     glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0f)) *
-                                glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+                                glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f)) *
+                                glm::lookAt(glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, elementBufferSize, GL_UNSIGNED_INT, nullptr);
 }

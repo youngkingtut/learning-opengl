@@ -69,16 +69,16 @@ void Player::setNextPosition(const ControlState& controlState, const GameState& 
     position[1] = velocity[1] * deltaTime + position[1];
 
     // Boundary check
-    if(position[0] + PLAYER_SIZE > worldState.worldUpperX) {
-        position[0] = worldState.worldUpperX - PLAYER_SIZE;
-    } else if (position[0] - PLAYER_SIZE < worldState.worldLowerX) {
-        position[0] = worldState.worldLowerX + PLAYER_SIZE;
+    if(position[0] + PLAYER_RADIUS > worldState.worldUpperX) {
+        position[0] = worldState.worldUpperX - PLAYER_RADIUS;
+    } else if (position[0] - PLAYER_RADIUS < worldState.worldLowerX) {
+        position[0] = worldState.worldLowerX + PLAYER_RADIUS;
     }
 
-    if(position[1] + PLAYER_SIZE > worldState.worldUpperY) {
-        position[1] = worldState.worldUpperY - PLAYER_SIZE;
-    } else if (position[1] - PLAYER_SIZE < worldState.worldLowerY) {
-        position[1] = worldState.worldLowerY + PLAYER_SIZE;
+    if(position[1] + PLAYER_RADIUS > worldState.worldUpperY) {
+        position[1] = worldState.worldUpperY - PLAYER_RADIUS;
+    } else if (position[1] - PLAYER_RADIUS < worldState.worldLowerY) {
+        position[1] = worldState.worldLowerY + PLAYER_RADIUS;
     }
 }
 
@@ -95,8 +95,8 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
             } else {
                 bulletVelocity = BULLET_MAX_VELOCITY * normalizedBulletDirection + glm::proj(velocity, normalizedBulletDirection);
             }
-            glm::vec2 bulletFirstPosition = position + (PLAYER_SIZE + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, 0.4f);
-            glm::vec2 bulletSecondPosition = position + (PLAYER_SIZE + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, -0.4f);
+            glm::vec2 bulletFirstPosition = position + (PLAYER_RADIUS + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, 0.4f);
+            glm::vec2 bulletSecondPosition = position + (PLAYER_RADIUS + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, -0.4f);
 
             Bullet bulletFirst = Bullet(bulletFirstPosition, bulletVelocity, normalizedBulletDirection);
             Bullet bulletSecond = Bullet(bulletSecondPosition, bulletVelocity, normalizedBulletDirection);
