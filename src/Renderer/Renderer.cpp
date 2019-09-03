@@ -37,7 +37,7 @@ void Renderer::initialize() {
     worldShaderProgram = LoadShaders("Resources/Shaders/shader.vert", "Resources/Shaders/shader.frag");
     modelLocation = glGetUniformLocation(worldShaderProgram, MODEL_MATRIX);
     viewLocation = glGetUniformLocation(worldShaderProgram, VIEW_MATRIX);
-    viewMatrix = glm::lookAt(glm::vec3(0.0f, 0.0f, 120.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    viewMatrix = glm::lookAt(glm::vec3(0.0f, 0.0f, 150.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
     projectionLocation = glGetUniformLocation(worldShaderProgram, PROJECTION_MATRIX);
     projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1f, 200.0f);
 

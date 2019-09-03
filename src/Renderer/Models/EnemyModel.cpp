@@ -11,7 +11,7 @@ void EnemyModel::loadStatic() {
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
-    loadFromFile("Resources/Models/enemy.obj", vertices, elements);
+    loadFromFile("Resources/Models/enemy1.obj", vertices, elements);
     elementBufferSize = elements.size();
 
     glGenVertexArrays(1, &vertexArrayObject);

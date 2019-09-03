@@ -22,7 +22,7 @@
 #define BULLET_SPREAD 0.3f
 #define BULLET_RADIUS 1.6f
 
-#define ENEMY_RADIUS 2.0f
+#define ENEMY_RADIUS 3.5f
 
 // Game mechanics
 #define DECELERATION 230.0f
