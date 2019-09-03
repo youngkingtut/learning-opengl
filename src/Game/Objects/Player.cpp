@@ -95,8 +95,8 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
             } else {
                 bulletVelocity = BULLET_MAX_VELOCITY * normalizedBulletDirection + glm::proj(velocity, normalizedBulletDirection);
             }
-            glm::vec2 bulletFirstPosition = position + (PLAYER_RADIUS + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, 0.4f);
-            glm::vec2 bulletSecondPosition = position + (PLAYER_RADIUS + PLAYER_BOUNDARY) * glm::rotate(bulletDirection, -0.4f);
+            glm::vec2 bulletFirstPosition = position + (PLAYER_RADIUS + PLAYER_BOUNDARY) * glm::rotate(normalizedBulletDirection, BULLET_SPREAD);
+            glm::vec2 bulletSecondPosition = position + (PLAYER_RADIUS + PLAYER_BOUNDARY) * glm::rotate(normalizedBulletDirection, -BULLET_SPREAD);
 
             Bullet bulletFirst = Bullet(bulletFirstPosition, bulletVelocity, normalizedBulletDirection);
             Bullet bulletSecond = Bullet(bulletSecondPosition, bulletVelocity, normalizedBulletDirection);

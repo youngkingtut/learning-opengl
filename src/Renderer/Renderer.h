@@ -27,8 +27,8 @@ public:
     ~Renderer();
 
     void initialize();
-    void renderWorld(const World &world);
-    void renderGameOverScreen();
+    void renderWorld(const World& world);
+    void renderGameOverScreen(const World& world);
 
 private:
     // models
@@ -42,7 +42,8 @@ private:
     GLuint textShaderProgram{0};
 
     // uniforms
-    GLint modelViewLocation{0};
+    GLint modelLocation{0};
+    GLint viewLocation{0};
     GLint projectionLocation{0};
 
     // buffers
@@ -50,6 +51,7 @@ private:
     GLuint textVBO{0};
 
     // stores
+    glm::mat4 viewMatrix{};
     glm::mat4 projectionMatrix{};
     std::map<GLchar, Character> characters{};
 

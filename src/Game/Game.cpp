@@ -16,7 +16,7 @@ world(state){
     state.playerX = 0.0f;
     state.playerY = 0.0f;
     state.multiplier = 1;
-    state.lives = 3;
+    state.lives = 99;
 }
 
 void Game::run() {
@@ -39,7 +39,7 @@ void Game::run() {
                 world.update(controlState, delta);
                 renderer.renderWorld(world);
             } else {
-                renderer.renderGameOverScreen();
+                renderer.renderGameOverScreen(world);
             }
 
             window.SwapBuffersAndPollEvents();

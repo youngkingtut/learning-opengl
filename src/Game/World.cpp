@@ -47,16 +47,16 @@ void World::update(const ControlState& controlState, double deltaTime) {
 
     removeObjects();
 
-    if(false) {
+    if(playerAlive) {
         // Generate Enemies
         enemyCoolDown += deltaTime;
         if (enemyCoolDown > WORLD_ENEMY_COOL_DOWN) {
             enemyCoolDown = 0.0f;
-            float upperX = gameState.worldUpperX - ENEMY_SIZE;
-            float lowerX = gameState.worldLowerX + ENEMY_SIZE;
+            float upperX = gameState.worldUpperX - ENEMY_RADIUS;
+            float lowerX = gameState.worldLowerX + ENEMY_RADIUS;
 
-            float upperY = gameState.worldUpperY - ENEMY_SIZE;
-            float lowerY = gameState.worldLowerY + ENEMY_SIZE;
+            float upperY = gameState.worldUpperY - ENEMY_RADIUS;
+            float lowerY = gameState.worldLowerY + ENEMY_RADIUS;
 
             enemies.emplace_back(Enemy(glm::vec2(upperX, upperY)));
             enemies.emplace_back(Enemy(glm::vec2(upperX, lowerY)));

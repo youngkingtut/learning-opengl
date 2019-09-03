@@ -21,6 +21,7 @@ Renderer::~Renderer() {
     glDeleteBuffers(1, &textVBO);
 }
 
+
 void Renderer::initialize() {
     worldModel.loadStatic();
     playerModel.loadStatic();
@@ -34,8 +35,10 @@ void Renderer::initialize() {
     glDepthFunc(GL_LEQUAL);
 
     worldShaderProgram = LoadShaders("Resources/Shaders/shader.vert", "Resources/Shaders/shader.frag");
-    modelViewLocation = glGetUniformLocation(worldShaderProgram, "mv_matrix");
-    projectionLocation = glGetUniformLocation(worldShaderProgram, "proj_matrix");
+    modelLocation = glGetUniformLocation(worldShaderProgram, MODEL_MATRIX);
+    viewLocation = glGetUniformLocation(worldShaderProgram, VIEW_MATRIX);
+    viewMatrix = glm::lookAt(glm::vec3(0.0f, 0.0f, 120.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    projectionLocation = glGetUniformLocation(worldShaderProgram, PROJECTION_MATRIX);
     projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1f, 200.0f);
 
     // Set OpenGL options
@@ -126,27 +129,33 @@ void Renderer::initialize() {
     glBindVertexArray(0);
 }
 
+
 void Renderer::renderWorld(const World &world) {
     clearScreen();
 
+    Player player = world.getPlayer();
+    glm::vec2 playerPosition = player.getPosition();
+
+    glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(-playerPosition[0], -playerPosition[1], 0.0f));
+
     glUseProgram(worldShaderProgram);
+    glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(translatedViewMatrix));
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
     // draw world
-    worldModel.draw(modelViewLocation);
+    worldModel.draw(modelLocation);
 
     // draw player
-    playerModel.draw(world.getPlayer(), modelViewLocation);
-
+    playerModel.draw(player, modelLocation);
 
     // draw bullets
     for(auto & bullet : world.getBullets()) {
-        bulletModel.draw(bullet, modelViewLocation);
+        bulletModel.draw(bullet, modelLocation);
     }
 
     // draw enemies
     for(auto & enemy : world.getEnemies()) {
-        enemyModel.draw(enemy, modelViewLocation);
+        enemyModel.draw(enemy, modelLocation);
     }
 
     glUseProgram(textShaderProgram);
@@ -159,17 +168,23 @@ void Renderer::renderWorld(const World &world) {
 }
 
 
-void Renderer::renderGameOverScreen() {
+void Renderer::renderGameOverScreen(const World& world) {
     clearScreen();
 
     glUseProgram(worldShaderProgram);
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
     // draw world
-    worldModel.draw(modelViewLocation);
+    worldModel.draw(modelLocation);
 
     glUseProgram(textShaderProgram);
     std::string gameOver = "GAME OVER";
+    std::stringstream score;
+    std::stringstream lives;
+    score << "Score " << world.getState().score;
+    lives << "Lives " << world.getState().lives;
+    renderText(score.str(), 45.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
+    renderText(lives.str(), WINDOW_SIZE_WIDTH - 200.0f, WINDOW_SIZE_HEIGHT - 33.0f, 1.0f, glm::vec3(1.0f, 1.0f, 1.0f));
     renderText(gameOver, 210.0f, WINDOW_SIZE_HEIGHT - 310.0f, 2.0f, glm::vec3(1.0f, 1.0f, 1.0f));
 }
 

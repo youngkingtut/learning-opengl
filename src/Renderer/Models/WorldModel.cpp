@@ -38,8 +38,7 @@ void WorldModel::loadStatic() {
 
 void WorldModel::draw(const GLuint &modelViewMatrixLocation) {
     glBindVertexArray(vertexArrayObject);
-    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f)) *
-                                glm::lookAt(glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
     glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, nullptr);
 }

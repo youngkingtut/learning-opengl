@@ -11,17 +11,8 @@ void EnemyModel::loadStatic() {
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
-    vertices.emplace_back(glm::vec3(-ENEMY_SIZE, -ENEMY_SIZE, 0.0f));
-    vertices.emplace_back(glm::vec3(-ENEMY_SIZE,  ENEMY_SIZE, 0.0f));
-    vertices.emplace_back(glm::vec3( ENEMY_SIZE,  ENEMY_SIZE, 0.0f));
-    vertices.emplace_back(glm::vec3( ENEMY_SIZE, -ENEMY_SIZE, 0.0f));
-
-    elements.emplace_back(2);
-    elements.emplace_back(1);
-    elements.emplace_back(0);
-    elements.emplace_back(0);
-    elements.emplace_back(3);
-    elements.emplace_back(2);
+    loadFromFile("Resources/Models/enemy.obj", vertices, elements);
+    elementBufferSize = elements.size();
 
     glGenVertexArrays(1, &vertexArrayObject);
     glGenBuffers(1, &vertexBufferObject);
@@ -42,8 +33,7 @@ void EnemyModel::draw(const Enemy &enemy, const GLuint &modelViewMatrixLocation)
     glm::vec2 position = enemy.getPosition();
     float angle = enemy.getAngle();
     glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(position[0], position[1], 0.0f)) *
-                                glm::rotate(glm::mat4(), angle, glm::vec3(0.0f, 0.0f, 1.0f)) *
-                                glm::lookAt(glm::vec3(0.0f, 0.0f, 100.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+                                glm::rotate(glm::mat4(), angle, glm::vec3(0.0f, 0.0f, 1.0f));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, elementBufferSize, GL_UNSIGNED_INT, nullptr);
 }
