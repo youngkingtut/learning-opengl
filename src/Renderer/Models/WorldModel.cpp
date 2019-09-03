@@ -11,16 +11,8 @@ void WorldModel::loadStatic() {
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
-    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH,  WORLD_SIZE_HEIGHT, 0.0f));
-    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH,  WORLD_SIZE_HEIGHT, 0.0f));
-    vertices.emplace_back(glm::vec3( WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, 0.0f));
-    vertices.emplace_back(glm::vec3(-WORLD_SIZE_WIDTH, -WORLD_SIZE_HEIGHT, 0.0f));
-
-    elements.emplace_back(0);
-    elements.emplace_back(1);
-    elements.emplace_back(2);
-    elements.emplace_back(3);
-    elements.emplace_back(0);
+    loadFromFile("Resources/Models/world.obj", vertices, elements);
+    elementBufferSize = elements.size();
 
     glGenVertexArrays(1, &vertexArrayObject);
     glGenBuffers(1, &vertexBufferObject);
@@ -40,5 +32,5 @@ void WorldModel::draw(const GLuint &modelViewMatrixLocation) {
     glBindVertexArray(vertexArrayObject);
     glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glDrawElements(GL_LINE_STRIP, 5, GL_UNSIGNED_INT, nullptr);
+    glDrawElements(GL_TRIANGLES, elementBufferSize, GL_UNSIGNED_INT, nullptr);
 }
