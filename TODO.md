@@ -21,7 +21,7 @@
 * Shield on spawn.
 * Mark enemy that killed player.
 
-### Spawn
+### Enemy Spawn
 * Spawn system with scaling options.
 
 ## Interface

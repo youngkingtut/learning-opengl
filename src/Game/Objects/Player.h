@@ -7,11 +7,6 @@
 #include "Enemy.h"
 
 
-enum VelocityUpdate {
-    INCREASE,
-    TO_ZERO
-};
-
 class Player: public WorldObject {
 public:
     Player(const glm::vec2 &position, const glm::vec2 &velocity, const glm::vec2 &direction);
@@ -20,9 +15,9 @@ public:
     bool enemyCollision(const Enemy &enemy);
 
 private:
-    float updateVelocity(float velocity, VelocityUpdate vUpdate, double deltaTime);
-    void updateXVelocity(VelocityUpdate vUpdate, double deltaTime);
-    void updateYVelocity(VelocityUpdate vUpdate, double deltaTime);
+    static float updateVelocity(float velocity, float targetVelocity, double deltaTime);
+    void updateXVelocity(float targetVelocity, double deltaTime);
+    void updateYVelocity(float targetVelocity, double deltaTime);
 
     float coolDown{0};
 };
