@@ -7,7 +7,8 @@
 #define WINDOW_SIZE_WIDTH 800.0f
 #define WINDOW_SIZE_HEIGHT 600.0f
 #define WINDOW_ASPECT_RATIO 1.33f
-#define JOYSTICK_DEAD_ZONE 0.2
+#define JOYSTICK_DEAD_ZONE_LOWER 0.15
+#define JOYSTICK_DEAD_ZONE_UPPER 0.85
 
 // Game Dimensions
 #define FOV 0.872665f // 50 degrees in radians
@@ -27,9 +28,9 @@
 // Game mechanics
 #define DECELERATION 230.0f
 #define ACCELERATION 250.0f
-#define PLAYER_MAX_VELOCITY 60.0f
+#define PLAYER_MAX_VELOCITY 80.0f
 #define BULLET_MAX_VELOCITY 110.0f
-#define ENEMY_MAX_VELOCITY 30.0f
+#define ENEMY_MAX_VELOCITY 50.0f
 #define PLAYER_BULLET_COOL_DOWN 0.1f
 
 

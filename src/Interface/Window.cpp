@@ -67,20 +67,32 @@ void Window::ProcessInput(ControlState& controlState) {
         float bulletYAxis = axes[3];
 
         // Account for dead zone to prevent drift from stationary stick
-        if(movementXAxis <  JOYSTICK_DEAD_ZONE &&
-           movementXAxis > -JOYSTICK_DEAD_ZONE &&
-           movementYAxis <  JOYSTICK_DEAD_ZONE &&
-           movementYAxis > -JOYSTICK_DEAD_ZONE) {
-            controlState.setMovementDirection(0.0f, 0.0f);
-        } else {
-            controlState.setMovementDirection(movementXAxis, movementYAxis);
+        float xMovement = movementXAxis;
+        float yMovement = movementYAxis;
+        if(glm::abs(movementXAxis) > JOYSTICK_DEAD_ZONE_UPPER) {
+            if(movementXAxis > 0.0f) {
+                xMovement = 1.0f;
+            } else {
+                xMovement = -1.0f;
+            }
+        } else if (glm::abs(movementXAxis) < JOYSTICK_DEAD_ZONE_LOWER) {
+            xMovement = 0.0f;
         }
+        if(glm::abs(movementYAxis) > JOYSTICK_DEAD_ZONE_UPPER) {
+            if(movementYAxis > 0.0f) {
+                yMovement = 1.0f;
+            } else {
+                yMovement = -1.0f;
+            }
+        } else if (glm::abs(movementYAxis) < JOYSTICK_DEAD_ZONE_LOWER) {
+            yMovement = 0.0f;
+        }
+        controlState.setMovementDirection(xMovement, yMovement);
 
-
-        if(bulletXAxis <  JOYSTICK_DEAD_ZONE &&
-           bulletXAxis > -JOYSTICK_DEAD_ZONE &&
-           bulletYAxis <  JOYSTICK_DEAD_ZONE &&
-           bulletYAxis > -JOYSTICK_DEAD_ZONE) {
+        if(bulletXAxis <  JOYSTICK_DEAD_ZONE_LOWER &&
+           bulletXAxis > -JOYSTICK_DEAD_ZONE_LOWER &&
+           bulletYAxis <  JOYSTICK_DEAD_ZONE_LOWER &&
+           bulletYAxis > -JOYSTICK_DEAD_ZONE_LOWER) {
             controlState.setBulletDirection(0.0f, 0.0f);
         } else {
             controlState.setBulletDirection(bulletXAxis, -bulletYAxis);
