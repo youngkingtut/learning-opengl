@@ -1,44 +1,67 @@
 #include "Player.h"
 #include <glm/gtx/projection.hpp>
 #include <glm/gtx/rotate_vector.hpp>
+#include <iostream>
 #include "../../Utils/Constants.h"
 
 
 Player::Player(const glm::vec2& position, const glm::vec2& velocity, const glm::vec2 &direction) :
 WorldObject(position, velocity, direction) {}
 
-void Player::updateXVelocity(VelocityUpdate vUpdate, double factor) {
-    velocity[0] = updateVelocity(velocity[0], vUpdate, factor);
+void Player::updateXVelocity(float targetVelocity, double deltaTime) {
+    velocity[0] = updateVelocity(velocity[0], targetVelocity, deltaTime);
 }
 
-void Player::updateYVelocity(VelocityUpdate vUpdate, double factor) {
-    velocity[1] = updateVelocity(velocity[1], vUpdate, factor);
+void Player::updateYVelocity(float targetVelocity, double deltaTime) {
+    velocity[1] = updateVelocity(velocity[1], targetVelocity, deltaTime);
 }
 
-float Player::updateVelocity(float velocity, VelocityUpdate vUpdate, double deltaTime) {
+float Player::updateVelocity(float velocity, float targetVelocity, double deltaTime) {
     float updatedVelocity = velocity;
 
-    switch(vUpdate) {
-        case VelocityUpdate::INCREASE:
-            updatedVelocity = velocity + (ACCELERATION * deltaTime);
-            break;
-        case VelocityUpdate::TO_ZERO:
-            if(velocity > 0.0f) {
-                updatedVelocity = velocity - (DECELERATION * deltaTime);
-                if(updatedVelocity < 0.0f) {
-                    updatedVelocity = 0.0f;
-                }
-            } else if (velocity < 0.0f) {
-                updatedVelocity = velocity + (DECELERATION * deltaTime);
-                if(updatedVelocity > 0.0f) {
-                    updatedVelocity = 0.0f;
-                }
-            } else {
-                updatedVelocity = 0.0f;
+    if(targetVelocity > 0) {
+        if(updatedVelocity > targetVelocity) {
+            updatedVelocity -= DECELERATION * deltaTime;
+            if(updatedVelocity < targetVelocity) {
+                updatedVelocity = targetVelocity;
             }
-            break;
+        } else {
+            updatedVelocity += ACCELERATION * deltaTime;
+            if(updatedVelocity < 0) {
+                updatedVelocity += DECELERATION * deltaTime;
+            }
+            if(updatedVelocity > targetVelocity) {
+                updatedVelocity = targetVelocity;
+            }
+        }
+    } else if (targetVelocity < 0) {
+        if(updatedVelocity < targetVelocity) {
+            updatedVelocity += DECELERATION * deltaTime;
+            if(updatedVelocity > targetVelocity) {
+                updatedVelocity = targetVelocity;
+            }
+        } else {
+            updatedVelocity -= ACCELERATION * deltaTime;
+            if(updatedVelocity > 0) {
+                updatedVelocity -= DECELERATION * deltaTime;
+            }
+            if(updatedVelocity < targetVelocity) {
+                updatedVelocity = targetVelocity;
+            }
+        }
+    } else {
+        if(updatedVelocity > 0) {
+            updatedVelocity -= DECELERATION * deltaTime;
+            if(updatedVelocity < targetVelocity) {
+                updatedVelocity = targetVelocity;
+            }
+        } else {
+            updatedVelocity += DECELERATION * deltaTime;
+            if(updatedVelocity > targetVelocity) {
+                updatedVelocity = targetVelocity;
+            }
+        }
     }
-
     return updatedVelocity;
 }
 
@@ -49,20 +72,16 @@ void Player::setNextPosition(const ControlState& controlState, const GameState& 
     // Update direction
     if(controlMagnitude > 0) {
         direction = glm::normalize(controlDirection);
-        updateXVelocity(VelocityUpdate::INCREASE, direction[0] * deltaTime);
-        updateYVelocity(VelocityUpdate::INCREASE, direction[1] * deltaTime);
+        updateXVelocity(PLAYER_MAX_VELOCITY * controlDirection[0], deltaTime);
+        updateYVelocity(PLAYER_MAX_VELOCITY * controlDirection[1], deltaTime);
     }
 
     if(controlDirection[0] == 0) {
-        updateXVelocity(VelocityUpdate::TO_ZERO, deltaTime);
+        updateXVelocity(0.0f, deltaTime);
     }
 
     if(controlDirection[1] == 0) {
-        updateYVelocity(VelocityUpdate::TO_ZERO, deltaTime);
-    }
-
-    if(glm::length(velocity) > PLAYER_MAX_VELOCITY) {
-        velocity = glm::normalize(velocity) * PLAYER_MAX_VELOCITY;
+        updateYVelocity(0.0f, deltaTime);
     }
 
     position[0] = velocity[0] * deltaTime + position[0];
