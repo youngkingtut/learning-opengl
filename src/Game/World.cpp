@@ -47,7 +47,7 @@ void World::update(const ControlState& controlState, double deltaTime) {
 
     removeObjects();
 
-    if(false) {
+    if(playerAlive) {
         // Generate Enemies
         enemyCoolDown += deltaTime;
         if (enemyCoolDown > WORLD_ENEMY_COOL_DOWN) {
