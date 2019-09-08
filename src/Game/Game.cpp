@@ -31,6 +31,7 @@ void Game::run() {
         double timeNow = glfwGetTime();
         double delta = timeNow - time;
         time = timeNow;
+        std::cout << delta << std::endl;
 
         window.ProcessInput(controlState);
 

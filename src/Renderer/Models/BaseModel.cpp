@@ -25,13 +25,22 @@ void BaseModel::loadFromFile(const char *filename, std::vector<glm::vec3> &verti
     while (getline(in, line)) {
         if (line.substr(0,2) == "v ") {
             std::istringstream s(line.substr(2));
-            glm::vec3 v; s >> v.x; s >> v.y; s >> v.z;
+            glm::vec3 v;
+            s >> v.x;
+            s >> v.y;
+            s >> v.z;
             vertices.push_back(v);
         } else if (line.substr(0,2) == "f ") {
             std::istringstream s(line.substr(2));
-            GLuint a,b,c;
-            s >> a; s >> b; s >> c;
-            a--; b--; c--;
+            GLuint a;
+            GLuint b;
+            GLuint c;
+            s >> a;
+            s >> b;
+            s >> c;
+            a--;
+            b--;
+            c--;
             elements.push_back(a); elements.push_back(b); elements.push_back(c);
         }
     }

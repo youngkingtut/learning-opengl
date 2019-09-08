@@ -12,6 +12,7 @@ void WorldModel::loadStatic() {
     std::vector<GLuint> elements;
 
     loadFromFile("Resources/Models/world.obj", vertices, elements);
+    loadFromFile("Resources/Models/grid.obj", vertices, elements);
     elementBufferSize = elements.size();
 
     glGenVertexArrays(1, &vertexArrayObject);

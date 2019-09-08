@@ -11,7 +11,7 @@
 #define JOYSTICK_DEAD_ZONE_UPPER 0.85
 
 // Game Dimensions
-#define SPAWN_ENEMIES false
+#define SPAWN_ENEMIES true
 #define FOV 0.872665f // 50 degrees in radians
 #define WORLD_SIZE_WIDTH 120.0f
 #define WORLD_SIZE_HEIGHT 90.0f
