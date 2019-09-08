@@ -11,6 +11,7 @@
 #define JOYSTICK_DEAD_ZONE_UPPER 0.85
 
 // Game Dimensions
+#define SPAWN_ENEMIES false
 #define FOV 0.872665f // 50 degrees in radians
 #define WORLD_SIZE_WIDTH 120.0f
 #define WORLD_SIZE_HEIGHT 90.0f
@@ -29,8 +30,8 @@
 #define DECELERATION 230.0f
 #define ACCELERATION 250.0f
 #define PLAYER_MAX_VELOCITY 80.0f
-#define BULLET_MAX_VELOCITY 110.0f
-#define ENEMY_MAX_VELOCITY 50.0f
+#define BULLET_MAX_VELOCITY 140.0f
+#define ENEMY_MAX_VELOCITY 40.0f
 #define PLAYER_BULLET_COOL_DOWN 0.1f
 
 

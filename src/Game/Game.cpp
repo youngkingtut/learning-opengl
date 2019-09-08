@@ -1,3 +1,4 @@
+#include <iostream>
 #include "Game.h"
 
 #include "../Interface/Window.h"
@@ -29,21 +30,18 @@ void Game::run() {
     while(window.ShouldExit()) {
         double timeNow = glfwGetTime();
         double delta = timeNow - time;
+        time = timeNow;
 
-        // Locking frame rate to 60 fps
-        if(delta > FPS_60) {
-            time = timeNow;
-            window.ProcessInput(controlState);
+        window.ProcessInput(controlState);
 
-            if(state.lives > 0) {
-                world.update(controlState, delta);
-                renderer.renderWorld(world);
-            } else {
-                renderer.renderGameOverScreen(world);
-            }
-
-            window.SwapBuffersAndPollEvents();
+        if(state.lives > 0) {
+            world.update(controlState, delta);
+            renderer.renderWorld(world);
+        } else {
+            renderer.renderGameOverScreen(world);
         }
+
+        window.SwapBuffersAndPollEvents();
     }
 }
 

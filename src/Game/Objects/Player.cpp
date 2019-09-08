@@ -72,8 +72,9 @@ void Player::setNextPosition(const ControlState& controlState, const GameState& 
     // Update direction
     if(controlMagnitude > 0) {
         direction = glm::normalize(controlDirection);
-        updateXVelocity(PLAYER_MAX_VELOCITY * controlDirection[0], deltaTime);
-        updateYVelocity(PLAYER_MAX_VELOCITY * controlDirection[1], deltaTime);
+        glm::vec2 maxVelocity = (glm::length(controlDirection) > 1.0f)? PLAYER_MAX_VELOCITY * direction : PLAYER_MAX_VELOCITY * controlDirection;
+        updateXVelocity(maxVelocity[0], deltaTime);
+        updateYVelocity(maxVelocity[1], deltaTime);
     }
 
     if(controlDirection[0] == 0) {
