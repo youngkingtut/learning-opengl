@@ -43,9 +43,9 @@ if __name__ == "__main__":
         elements.append(ELEMENT(offset + 0, offset + 2, offset + 1))
         elements.append(ELEMENT(offset + 3, offset + 1, offset + 2))
 
-    with open("C:\Users\Tristan\Documents\Personal\Coding\Opengl\learning-opengl\src\Resources\Models\grid.obj", "w") as file:
+    with open("..\\src\\Resources\\Models\\grid.obj", "w") as f:
         for vertex in vertices:
-            file.write("v {} {} {}\n".format(vertex.x, vertex.y, vertex.z))
+            f.write("v {} {} {}\n".format(vertex.x, vertex.y, vertex.z))
 
         for element in elements:
-            file.write("f {} {} {}\n".format(element.uno, element.dos, element.tres))
+            f.write("f {} {} {}\n".format(element.uno, element.dos, element.tres))
