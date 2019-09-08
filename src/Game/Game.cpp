@@ -25,13 +25,15 @@ void Game::run() {
     renderer.initialize();
 
     ControlState controlState;
+    std::vector<double> loopTime;
     double time = glfwGetTime();
 
     while(window.ShouldExit()) {
         double timeNow = glfwGetTime();
         double delta = timeNow - time;
         time = timeNow;
-        std::cout << delta << std::endl;
+
+        loopTime.emplace_back(delta);
 
         window.ProcessInput(controlState);
 
@@ -44,6 +46,16 @@ void Game::run() {
 
         window.SwapBuffersAndPollEvents();
     }
+
+    double totalTime = 0.0f;
+    for(double t : loopTime) {
+        totalTime += t;
+    }
+    double averageTime = loopTime.empty() ? 0.0f : totalTime / loopTime.size();
+    double averageFps = averageTime == 0.0f ? 0.0f : 1 / averageTime;
+
+    std::cout << "Average loop time: " << averageTime << std::endl;
+    std::cout << "Average frames per second: " << averageFps << std::endl;
 }
 
 

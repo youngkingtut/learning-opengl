@@ -2,12 +2,13 @@
 * ~~Camera bound to player~~
 * Camera stationary when player reaches edges
 * Colors for player
-* Draw instanced
+* Draw instanced 
+    * Pack color and position information in separate buffer.
 
 ### Animation
 * Event queue
     * Spawning enemies
-    * Despawning particles
+    * Despawning particles and enemies
 
 ## Models
 * ~~Enemy~~
@@ -15,11 +16,13 @@
 * ~~World~~
 
 ## Mechanics
-* New enemy type
-* Rate of acceleration and max speed dependent on tilt of joystick.
+* ~~Rate of acceleration and max speed dependent on tilt of joystick.~~
 * Shield.
 * Shield on spawn.
 * Mark enemy that killed player.
+
+### Enemy types
+* Random movement enemy.
 
 ### Enemy Spawn
 * Spawn system with scaling options.

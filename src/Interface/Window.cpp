@@ -70,22 +70,8 @@ void Window::ProcessInput(ControlState& controlState) {
         // Account for dead zone to prevent drift from stationary stick
         float xMovement = movementXAxis;
         float yMovement = movementYAxis;
-        if(glm::abs(movementXAxis) > JOYSTICK_DEAD_ZONE_UPPER) {
-            if(movementXAxis > 0.0f) {
-                xMovement = 1.0f;
-            } else {
-                xMovement = -1.0f;
-            }
-        } else if (glm::abs(movementXAxis) < JOYSTICK_DEAD_ZONE_LOWER) {
+        if (glm::abs(movementXAxis) < JOYSTICK_DEAD_ZONE_LOWER && glm::abs(movementYAxis) < JOYSTICK_DEAD_ZONE_LOWER) {
             xMovement = 0.0f;
-        }
-        if(glm::abs(movementYAxis) > JOYSTICK_DEAD_ZONE_UPPER) {
-            if(movementYAxis > 0.0f) {
-                yMovement = 1.0f;
-            } else {
-                yMovement = -1.0f;
-            }
-        } else if (glm::abs(movementYAxis) < JOYSTICK_DEAD_ZONE_LOWER) {
             yMovement = 0.0f;
         }
         controlState.setMovementDirection(xMovement, yMovement);
