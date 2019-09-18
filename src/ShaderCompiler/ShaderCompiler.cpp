@@ -44,7 +44,7 @@ GLuint CompileShader(const char* code, GLenum type) {
 
     GLint result = 0;
     int infoLogLength = 512;
-    char infoLog[infoLogLength];
+    std::array<char, 512> infoLog = {};
 
     // Compile Vertex Shader
     glShaderSource(shaderId, 1, &code , nullptr);
@@ -54,8 +54,8 @@ GLuint CompileShader(const char* code, GLenum type) {
     glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
     if(!result){
         glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &infoLogLength);
-        glGetShaderInfoLog(shaderId, infoLogLength, nullptr, infoLog);
-        std::cout << "ERROR::SHADER::COMPILATION_FAILED: " << infoLog;
+        glGetShaderInfoLog(shaderId, infoLogLength, nullptr, infoLog.data());
+        std::cout << "ERROR::SHADER::COMPILATION_FAILED: " << infoLog.data() << std::endl;
         exit(-1);
     }
 
@@ -66,7 +66,7 @@ GLuint CreateProgram(GLuint vertexShaderID, GLuint fragmentShaderID) {
     GLuint programID = glCreateProgram();
     GLint result = 0;
     int infoLogLength = 512;
-    char infoLog[infoLogLength];
+    std::array<char, 512> infoLog = {};
 
     glAttachShader(programID, vertexShaderID);
     glAttachShader(programID, fragmentShaderID);
@@ -78,8 +78,8 @@ GLuint CreateProgram(GLuint vertexShaderID, GLuint fragmentShaderID) {
     glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
     if(!result){
         std::vector<char> programErrorMessage(infoLogLength + 1);
-        glGetProgramInfoLog(programID, infoLogLength, nullptr, infoLog);
-        std::cout << "ERROR::PROGRAM::LINKING_FAILED: " << infoLog;
+        glGetProgramInfoLog(programID, infoLogLength, nullptr, infoLog.data());
+        std::cout << "ERROR::PROGRAM::LINKING_FAILED: " << infoLog.data() << std::endl;
         exit(-1);
     }
 

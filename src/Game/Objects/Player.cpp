@@ -81,11 +81,11 @@ void Player::setNextPosition(const ControlState& controlState, const GameState& 
     }
 
     if(controlDirection[0] == 0) {
-        updateXVelocity(0.0f, deltaTime);
+        updateXVelocity(0.0F, deltaTime);
     }
 
     if(controlDirection[1] == 0) {
-        updateYVelocity(0.0f, deltaTime);
+        updateYVelocity(0.0F, deltaTime);
     }
 
     position[0] = velocity[0] * deltaTime + position[0];
@@ -110,7 +110,7 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
     if(coolDown > PLAYER_BULLET_COOL_DOWN) {
         glm::vec2 bulletDirection = controlState.getBulletDirection();
         if(glm::length(bulletDirection) > 0) {
-            coolDown = 0.0f;
+            coolDown = 0.0F;
             glm::vec2 bulletVelocity;
             glm::vec2 normalizedBulletDirection = glm::normalize(bulletDirection);
             if(glm::length(velocity) == 0) {

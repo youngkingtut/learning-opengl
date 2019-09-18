@@ -16,5 +16,5 @@ protected:
     GLuint elementBufferObject{0};
     GLuint elementBufferSize{0};
 
-    void loadFromFile(const char* filename, std::vector<glm::vec3> &vertices, std::vector<GLuint> &elements);
+    static void loadFromFile(const char* filename, std::vector<glm::vec3> &vertices, std::vector<GLuint> &elements);
 };

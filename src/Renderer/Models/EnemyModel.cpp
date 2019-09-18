@@ -4,8 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../../Utils/Constants.h"
-
 
 void EnemyModel::loadStatic() {
     std::vector<glm::vec3> vertices;
@@ -32,8 +30,8 @@ void EnemyModel::draw(const Enemy &enemy, const GLuint &modelViewMatrixLocation)
     glBindVertexArray(vertexArrayObject);
     glm::vec2 position = enemy.getPosition();
     float angle = enemy.getAngle();
-    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(position[0], position[1], 0.0f)) *
-                                glm::rotate(glm::mat4(), angle, glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(position[0], position[1], 0.0F)) *
+                                glm::rotate(glm::mat4(), angle, glm::vec3(0.0F, 0.0F, 1.0F));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
     glDrawElements(GL_TRIANGLES, elementBufferSize, GL_UNSIGNED_INT, nullptr);
 }

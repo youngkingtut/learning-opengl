@@ -71,8 +71,8 @@ void Window::ProcessInput(ControlState& controlState) {
         float xMovement = movementXAxis;
         float yMovement = movementYAxis;
         if (glm::abs(movementXAxis) < JOYSTICK_DEAD_ZONE_LOWER && glm::abs(movementYAxis) < JOYSTICK_DEAD_ZONE_LOWER) {
-            xMovement = 0.0f;
-            yMovement = 0.0f;
+            xMovement = 0.0F;
+            yMovement = 0.0F;
         }
         controlState.setMovementDirection(xMovement, yMovement);
 
@@ -80,7 +80,7 @@ void Window::ProcessInput(ControlState& controlState) {
            bulletXAxis > -JOYSTICK_DEAD_ZONE_LOWER &&
            bulletYAxis <  JOYSTICK_DEAD_ZONE_LOWER &&
            bulletYAxis > -JOYSTICK_DEAD_ZONE_LOWER) {
-            controlState.setBulletDirection(0.0f, 0.0f);
+            controlState.setBulletDirection(0.0F, 0.0F);
         } else {
             controlState.setBulletDirection(bulletXAxis, -bulletYAxis);
         }
@@ -95,40 +95,40 @@ void Window::ProcessInput(ControlState& controlState) {
         int right_state = glfwGetKey(window, GLFW_KEY_RIGHT);
 
 
-        float x = 0.0f;
-        float y = 0.0f;
+        float x = 0.0F;
+        float y = 0.0F;
 
         if(d_state == GLFW_PRESS && a_state != GLFW_PRESS) {
-            x = 1.0f;
+            x = 1.0F;
         }
         if(a_state == GLFW_PRESS && d_state != GLFW_PRESS) {
-            x = -1.0f;
+            x = -1.0F;
         }
 
         if(w_state == GLFW_PRESS && s_state != GLFW_PRESS) {
-            y = -1.0f;
+            y = -1.0F;
         }
         if(s_state == GLFW_PRESS && w_state != GLFW_PRESS) {
-            y = 1.0f;
+            y = 1.0F;
         }
 
         controlState.setMovementDirection(x, y);
 
-        x = 0.0f;
-        y = 0.0f;
+        x = 0.0F;
+        y = 0.0F;
 
         if(right_state == GLFW_PRESS && left_state != GLFW_PRESS) {
-            x = 1.0f;
+            x = 1.0F;
         }
         if(left_state == GLFW_PRESS && right_state != GLFW_PRESS) {
-            x = -1.0f;
+            x = -1.0F;
         }
 
         if(up_state == GLFW_PRESS && down_state != GLFW_PRESS) {
-            y = 1.0f;
+            y = 1.0F;
         }
         if(down_state == GLFW_PRESS && up_state != GLFW_PRESS) {
-            y = -1.0f;
+            y = -1.0F;
         }
 
         controlState.setBulletDirection(x, y);

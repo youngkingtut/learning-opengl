@@ -4,8 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../../Utils/Constants.h"
-
 
 void WorldModel::loadStatic() {
     std::vector<glm::vec3> vertices;

@@ -4,8 +4,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../../Utils/Constants.h"
-
 
 void PlayerModel::loadStatic() {
     std::vector<glm::vec3> vertices;
@@ -32,10 +30,8 @@ void PlayerModel::draw(const Player &player, const GLuint &modelViewMatrixLocati
     glBindVertexArray(vertexArrayObject);
     glm::vec2 playerPosition = player.getPosition();
     float playerAngle = player.getAngle();
-    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0f)) *
-                                glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0f, 0.0f, 1.0f));
+    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(playerPosition[0], playerPosition[1], 0.0F)) *
+                                glm::rotate(glm::mat4(), playerAngle, glm::vec3(0.0F, 0.0F, 1.0F));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
-    glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
     glDrawElements(GL_TRIANGLES, elementBufferSize, GL_UNSIGNED_INT, nullptr);
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }

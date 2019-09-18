@@ -55,6 +55,7 @@ private:
     glm::mat4 projectionMatrix{};
     std::map<GLchar, Character> characters{};
 
+    void initializeText();
     void renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color);
     static void clearScreen();
 };

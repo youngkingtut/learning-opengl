@@ -40,7 +40,7 @@ void World::update(const ControlState& controlState, double deltaTime) {
         deathCoolDown += deltaTime;
 
         if(deathCoolDown > WORLD_DEATH_COOL_DOWN) {
-            deathCoolDown = 0.0f;
+            deathCoolDown = 0.0F;
             playerAlive = true;
         }
     }
@@ -51,7 +51,7 @@ void World::update(const ControlState& controlState, double deltaTime) {
         // Generate Enemies
         enemyCoolDown += deltaTime;
         if (enemyCoolDown > WORLD_ENEMY_COOL_DOWN) {
-            enemyCoolDown = 0.0f;
+            enemyCoolDown = 0.0F;
             float upperX = gameState.worldUpperX - ENEMY_RADIUS;
             float lowerX = gameState.worldLowerX + ENEMY_RADIUS;
 

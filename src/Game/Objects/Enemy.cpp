@@ -4,7 +4,7 @@
 
 
 Enemy::Enemy(const glm::vec2& position) :
-WorldObject(position, glm::vec2(0.0f, 0.0f), glm::vec2(0.0f, 1.0f)){}
+WorldObject(position, glm::vec2(0.0F, 0.0F), glm::vec2(0.0F, 1.0F)){}
 
 void Enemy::setNextPosition(const ControlState &controlState, const GameState &worldState, const float &deltaTime) {
     glm::vec2 velocity = ENEMY_MAX_VELOCITY * (glm::normalize(glm::vec2(worldState.playerX - position[0], worldState.playerY - position[1])));

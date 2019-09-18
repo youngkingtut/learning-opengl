@@ -7,7 +7,7 @@ struct GameState {
     float worldUpperY;
     float playerX;
     float playerY;
-    float score;
+    long score;
     int multiplier;
     int lives;
 };

@@ -34,6 +34,6 @@ bool WorldObject::collision(const WorldObject &object, float radiusSelf, float r
 }
 
 void WorldObject::zeroVelocity() {
-    velocity[0] = 0.0f;
-    velocity[1] = 0.0f;
+    velocity[0] = 0.0F;
+    velocity[1] = 0.0F;
 }

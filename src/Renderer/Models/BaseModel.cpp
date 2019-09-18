@@ -4,8 +4,7 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-#include <glm/geometric.hpp>
-#include <stdlib.h>
+#include <cstdlib>
 
 
 BaseModel::~BaseModel() {

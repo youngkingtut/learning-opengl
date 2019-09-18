@@ -14,10 +14,10 @@ world(state){
     state.worldLowerY = -WORLD_SIZE_HEIGHT;
     state.worldUpperX = WORLD_SIZE_WIDTH;
     state.worldUpperY = WORLD_SIZE_HEIGHT;
-    state.playerX = 0.0f;
-    state.playerY = 0.0f;
+    state.playerX = 0.0F;
+    state.playerY = 0.0F;
     state.multiplier = 1;
-    state.lives = 99;
+    state.lives = 3;
 }
 
 void Game::run() {
@@ -47,12 +47,12 @@ void Game::run() {
         window.SwapBuffersAndPollEvents();
     }
 
-    double totalTime = 0.0f;
+    double totalTime = 0.0F;
     for(double t : loopTime) {
         totalTime += t;
     }
-    double averageTime = loopTime.empty() ? 0.0f : totalTime / loopTime.size();
-    double averageFps = averageTime == 0.0f ? 0.0f : 1 / averageTime;
+    double averageTime = loopTime.empty() ? 0.0F : totalTime / loopTime.size();
+    double averageFps = averageTime == 0.0F ? 0.0F : 1 / averageTime;
 
     std::cout << "Average loop time: " << averageTime << std::endl;
     std::cout << "Average frames per second: " << averageFps << std::endl;
