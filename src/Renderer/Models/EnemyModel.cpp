@@ -26,12 +26,13 @@ void EnemyModel::loadStatic() {
     glEnableVertexAttribArray(0);
 }
 
-void EnemyModel::draw(const Enemy &enemy, const GLuint &modelViewMatrixLocation) {
+void EnemyModel::draw(const Enemy &enemy, const GLuint& modelViewMatrixLocation, const GLuint& colorLocation) {
     glBindVertexArray(vertexArrayObject);
     glm::vec2 position = enemy.getPosition();
     float angle = enemy.getAngle();
     glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(position[0], position[1], 0.0F)) *
                                 glm::rotate(glm::mat4(), angle, glm::vec3(0.0F, 0.0F, 1.0F));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
+    glUniform4f(colorLocation, color.r, color.g, color.b, color.a);
     glDrawElements(GL_TRIANGLES, elementBufferSize, GL_UNSIGNED_INT, nullptr);
 }

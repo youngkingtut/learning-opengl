@@ -41,6 +41,7 @@ void Renderer::initialize() {
     worldShaderProgram = LoadShaders("Resources/Shaders/shader.vert", "Resources/Shaders/shader.frag");
     modelLocation = glGetUniformLocation(worldShaderProgram, MODEL_MATRIX);
     viewLocation = glGetUniformLocation(worldShaderProgram, VIEW_MATRIX);
+    colorLocation = glGetUniformLocation(worldShaderProgram, OBJECT_COLOR);
     viewMatrix = glm::lookAt(glm::vec3(0.0F, 0.0F, 150.0F), glm::vec3(0.0F, 0.0F, -1.0F), glm::vec3(0.0F, 1.0F, 0.0F));
     projectionLocation = glGetUniformLocation(worldShaderProgram, PROJECTION_MATRIX);
     projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1F, 200.0F);
@@ -63,19 +64,19 @@ void Renderer::renderWorld(const World &world) {
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
     // draw world
-    worldModel.draw(modelLocation);
+    worldModel.draw(modelLocation, colorLocation);
 
     // draw player
-    playerModel.draw(player, modelLocation);
+    playerModel.draw(player, modelLocation, colorLocation);
 
     // draw bullets
     for(auto & bullet : world.getBullets()) {
-        bulletModel.draw(bullet, modelLocation);
+        bulletModel.draw(bullet, modelLocation, colorLocation);
     }
 
     // draw enemies
     for(auto & enemy : world.getEnemies()) {
-        enemyModel.draw(enemy, modelLocation);
+        enemyModel.draw(enemy, modelLocation, colorLocation);
     }
 
     glUseProgram(textShaderProgram);
@@ -95,7 +96,7 @@ void Renderer::renderGameOverScreen(const World& world) {
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
     // draw world
-    worldModel.draw(modelLocation);
+    worldModel.draw(modelLocation, colorLocation);
 
     glUseProgram(textShaderProgram);
     std::string gameOver = "GAME OVER";

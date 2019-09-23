@@ -45,6 +45,7 @@ private:
     GLint modelLocation{0};
     GLint viewLocation{0};
     GLint projectionLocation{0};
+    GLint colorLocation{0};
 
     // buffers
     GLuint textVAO{0};

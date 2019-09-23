@@ -16,13 +16,10 @@
 #define WORLD_SIZE_HEIGHT 90.0F
 #define WORLD_ENEMY_COOL_DOWN 1.0F
 #define WORLD_DEATH_COOL_DOWN 2.0F
-
 #define PLAYER_RADIUS 2.0F
 #define PLAYER_BOUNDARY 0.5f
-
 #define BULLET_SPREAD 0.3f
 #define BULLET_RADIUS 1.6f
-
 #define ENEMY_RADIUS 3.5f
 
 // Game mechanics
@@ -34,8 +31,8 @@
 #define ENEMY_MAX_VELOCITY 40.0F
 #define PLAYER_BULLET_COOL_DOWN 0.1f
 
-
 // Shader Uniforms
 #define PROJECTION_MATRIX "projectionMatrix"
 #define VIEW_MATRIX "viewMatrix"
 #define MODEL_MATRIX "modelMatrix"
+#define OBJECT_COLOR "objectColor"

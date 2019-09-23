@@ -27,9 +27,10 @@ void WorldModel::loadStatic() {
     glEnableVertexAttribArray(0);
 }
 
-void WorldModel::draw(const GLuint &modelViewMatrixLocation) {
+void WorldModel::draw(const GLuint& modelViewMatrixLocation, const GLuint& colorLocation) {
     glBindVertexArray(vertexArrayObject);
-    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0f, 0.0f, 0.0f));
+    glm::mat4 modelViewMatrix = glm::translate(glm::mat4(), glm::vec3(0.0F, 0.0F, 0.0F));
     glUniformMatrix4fv(modelViewMatrixLocation, 1, GL_FALSE, glm::value_ptr(modelViewMatrix));
+    glUniform4f(colorLocation, color.r, color.g, color.b, color.a);
     glDrawElements(GL_TRIANGLES, elementBufferSize, GL_UNSIGNED_INT, nullptr);
 }

@@ -1,7 +1,7 @@
 ## Renderer
 * ~~Camera bound to player~~
 * Camera stationary when player reaches edges
-* Colors for player
+* ~~Colors for player~~
 * Draw instanced 
     * Pack color and position information in separate buffer.
 

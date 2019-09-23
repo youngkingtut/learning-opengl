@@ -3,9 +3,10 @@ from collections import namedtuple
 WORLD_SIZE_WIDTH = 120
 WORLD_SIZE_HEIGHT = 90
 Z_DEPTH = 0.0
+
 LINE_THICKNESS = 0.2
 
-VERTEX = namedtuple("VERTEX", "x y z")
+VERTEX = namedtuple("VERTEX", "x y z a")
 ELEMENT = namedtuple("ELEMENT", "uno dos tres")
 
 
