@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <map>
+#include <array>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
