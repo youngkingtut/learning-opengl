@@ -28,6 +28,7 @@ void Window::initialize() {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
+    glfwWindowHint(GLFW_SAMPLES, 4);
 
     window = glfwCreateWindow(WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT, GAME_TITLE, nullptr, nullptr);
 
@@ -141,6 +142,7 @@ bool Window::ShouldExit() {
 
 void Window::SwapBuffersAndPollEvents() {
     glFlush();
+    glfwSwapInterval(1);
     glfwSwapBuffers(window);
     glfwPollEvents();
 }

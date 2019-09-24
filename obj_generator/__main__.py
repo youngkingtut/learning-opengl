@@ -1,4 +1,5 @@
 from collections import namedtuple
+from pathlib import Path
 
 WORLD_SIZE_WIDTH = 120
 WORLD_SIZE_HEIGHT = 90
@@ -6,7 +7,7 @@ Z_DEPTH = 0.0
 
 LINE_THICKNESS = 0.2
 
-VERTEX = namedtuple("VERTEX", "x y z a")
+VERTEX = namedtuple("VERTEX", "x y z")
 ELEMENT = namedtuple("ELEMENT", "uno dos tres")
 
 
@@ -14,7 +15,7 @@ if __name__ == "__main__":
     vertices = []
     elements = []
 
-    for line in xrange(-WORLD_SIZE_WIDTH, WORLD_SIZE_WIDTH, 10):
+    for line in range(-WORLD_SIZE_WIDTH, WORLD_SIZE_WIDTH, 10):
         upper_left = VERTEX(line - LINE_THICKNESS, WORLD_SIZE_HEIGHT, Z_DEPTH)
         upper_right = VERTEX(line + LINE_THICKNESS, WORLD_SIZE_HEIGHT, Z_DEPTH)
         lower_left = VERTEX(line - LINE_THICKNESS, -WORLD_SIZE_HEIGHT, Z_DEPTH)
@@ -29,7 +30,7 @@ if __name__ == "__main__":
         elements.append(ELEMENT(offset + 0, offset + 2, offset + 1))
         elements.append(ELEMENT(offset + 3, offset + 1, offset + 2))
 
-    for line in xrange(-WORLD_SIZE_HEIGHT, WORLD_SIZE_HEIGHT, 10):
+    for line in range(-WORLD_SIZE_HEIGHT, WORLD_SIZE_HEIGHT, 10):
         upper_left = VERTEX(-WORLD_SIZE_WIDTH, line + LINE_THICKNESS, Z_DEPTH)
         upper_right = VERTEX(WORLD_SIZE_WIDTH, line + LINE_THICKNESS, Z_DEPTH)
         lower_left = VERTEX(-WORLD_SIZE_WIDTH, line - LINE_THICKNESS, Z_DEPTH)
@@ -44,7 +45,7 @@ if __name__ == "__main__":
         elements.append(ELEMENT(offset + 0, offset + 2, offset + 1))
         elements.append(ELEMENT(offset + 3, offset + 1, offset + 2))
 
-    with open("..\\src\\Resources\\Models\\grid.obj", "w") as f:
+    with open(Path("../src/Resources/Models/grid.obj").resolve().as_posix(), "w") as f:
         for vertex in vertices:
             f.write("v {} {} {}\n".format(vertex.x, vertex.y, vertex.z))
 

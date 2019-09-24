@@ -25,6 +25,7 @@ Renderer::~Renderer() {
 
 void Renderer::initialize() {
     // Set OpenGL options
+    glEnable(GL_MULTISAMPLE);
     glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
     glEnable(GL_DEPTH);
