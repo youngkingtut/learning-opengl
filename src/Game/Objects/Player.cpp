@@ -130,6 +130,6 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
     }
 }
 
-bool Player::enemyCollision(const Enemy &enemy) {
+bool Player::enemyCollision(const ChaserEnemy &enemy) {
     return collision(enemy, PLAYER_RADIUS, ENEMY_RADIUS);
 }

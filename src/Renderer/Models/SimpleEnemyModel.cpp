@@ -1,11 +1,11 @@
-#include "EnemyModel.h"
+#include "SimpleEnemyModel.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 
-void EnemyModel::loadStatic() {
+void SimpleEnemyModel::loadStatic() {
     std::vector<glm::vec3> vertices;
     std::vector<GLuint> elements;
 
@@ -26,7 +26,7 @@ void EnemyModel::loadStatic() {
     glEnableVertexAttribArray(0);
 }
 
-void EnemyModel::draw(const Enemy &enemy, const GLuint& modelViewMatrixLocation, const GLuint& colorLocation) {
+void SimpleEnemyModel::draw(const SimpleEnemy &enemy, const GLuint& modelViewMatrixLocation, const GLuint& colorLocation) {
     glBindVertexArray(vertexArrayObject);
     glm::vec2 position = enemy.getPosition();
     float angle = enemy.getAngle();

@@ -6,7 +6,8 @@
 #include "GameState.h"
 #include "Objects/Player.h"
 #include "Objects/Bullet.h"
-#include "Objects/Enemy.h"
+#include "Objects/ChaserEnemy.h"
+#include "Objects/SimpleEnemy.h"
 
 
 class World {
@@ -16,14 +17,16 @@ public:
     void update(const ControlState& controlState, double deltaTime);
     Player getPlayer() const;
     std::vector<Bullet> getBullets() const;
-    std::vector<Enemy> getEnemies() const;
+    std::vector<ChaserEnemy> getMoverEnemies() const;
+    std::vector<SimpleEnemy> getSimpleEnemies() const;
     GameState getState() const;
 
 private:
     GameState &gameState;
     Player player;
     std::vector<Bullet> bullets;
-    std::vector<Enemy> enemies;
+    std::vector<ChaserEnemy> moverEnemies;
+    std::vector<SimpleEnemy> simpleEnemies;
 
     double enemyCoolDown{0.0F};
     double deathCoolDown{0.0F};

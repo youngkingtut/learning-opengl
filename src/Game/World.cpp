@@ -7,10 +7,10 @@
 
 
 World::World(GameState &state) :
-    bullets(),
-    enemies(),
-    gameState(state),
-    player(glm::vec2(state.playerX, state.playerY), glm::vec2(0, 0), glm::vec2(0, 1)){}
+        bullets(),
+        moverEnemies(),
+        gameState(state),
+        player(glm::vec2(state.playerX, state.playerY), glm::vec2(0, 0), glm::vec2(0, 1)){}
 
 Player World::getPlayer() const {
     return player;
@@ -20,8 +20,12 @@ std::vector<Bullet> World::getBullets() const {
     return bullets;
 }
 
-std::vector<Enemy> World::getEnemies() const {
-    return enemies;
+std::vector<ChaserEnemy> World::getMoverEnemies() const {
+    return moverEnemies;
+}
+
+std::vector<SimpleEnemy> World::getSimpleEnemies() const {
+    return simpleEnemies;
 }
 
 GameState World::getState() const {
@@ -58,10 +62,10 @@ void World::update(const ControlState& controlState, double deltaTime) {
             float upperY = gameState.worldUpperY - ENEMY_RADIUS;
             float lowerY = gameState.worldLowerY + ENEMY_RADIUS;
 
-            enemies.emplace_back(Enemy(glm::vec2(upperX, upperY)));
-            enemies.emplace_back(Enemy(glm::vec2(upperX, lowerY)));
-            enemies.emplace_back(Enemy(glm::vec2(lowerX, upperY)));
-            enemies.emplace_back(Enemy(glm::vec2(lowerX, lowerY)));
+            moverEnemies.emplace_back(ChaserEnemy(glm::vec2(upperX, upperY)));
+            moverEnemies.emplace_back(ChaserEnemy(glm::vec2(upperX, lowerY)));
+            moverEnemies.emplace_back(ChaserEnemy(glm::vec2(lowerX, upperY)));
+            moverEnemies.emplace_back(ChaserEnemy(glm::vec2(lowerX, lowerY)));
         }
     }
 }
@@ -71,7 +75,7 @@ void World::updateScore(int value) {
 }
 
 void World::markAllObjectsForRemoval() {
-    for(auto & enemy : enemies) {
+    for(auto & enemy : moverEnemies) {
         enemy.removeObject();
     }
     for(auto & bullet : bullets) {
@@ -85,17 +89,17 @@ void World::removeObjects() {
     bullets.erase(new_end, bullets.end());
 
     // Remove Enemies, update score
-    auto head = enemies.begin();
-    for(auto enemy = enemies.begin(); enemy != enemies.end(); enemy++) {
+    auto head = moverEnemies.begin();
+    for(auto enemy = moverEnemies.begin(); enemy != moverEnemies.end(); enemy++) {
         if(enemy->shouldRemove()) {
             if(playerAlive) {
-                updateScore(Enemy::value);
+                updateScore(ChaserEnemy::value);
             }
             std::iter_swap(head, enemy);
             head++;
         }
     }
-    enemies.erase(enemies.begin(), head);
+    moverEnemies.erase(moverEnemies.begin(), head);
 }
 
 void World::updatePlayer(const ControlState& controlState, double deltaTime) {
@@ -107,7 +111,7 @@ void World::updatePlayer(const ControlState& controlState, double deltaTime) {
 }
 
 void World::updateEnemies(const ControlState& controlState, double deltaTime) {
-    for(Enemy &enemy: enemies) {
+    for(ChaserEnemy &enemy: moverEnemies) {
         enemy.setNextPosition(controlState, gameState, deltaTime);
         if(player.enemyCollision(enemy)) {
             playerDied();
@@ -118,7 +122,7 @@ void World::updateEnemies(const ControlState& controlState, double deltaTime) {
 void World::updateBullets(const ControlState& controlState, double deltaTime) {
     for(auto &bullet : bullets) {
         bullet.setNextPosition(controlState, gameState, deltaTime);
-        for(auto &enemy: enemies) {
+        for(auto &enemy: moverEnemies) {
             if(!bullet.shouldRemove()) {
                 if(enemy.bulletCollision(bullet)) {
                     enemy.removeObject();
@@ -136,4 +140,3 @@ void World::playerDied() {
         gameState.lives -= 1;
     }
 }
-

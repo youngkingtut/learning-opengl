@@ -1,6 +1,4 @@
 #include <iostream>
-#include <ctime>
-#include <map>
 #include <array>
 
 #include <glm/glm.hpp>
@@ -36,7 +34,8 @@ void Renderer::initialize() {
     // Load Models
     worldModel.loadStatic();
     playerModel.loadStatic();
-    enemyModel.loadStatic();
+    chaserEnemyModel.loadStatic();
+    simpleEnemyModel.loadStatic();
     bulletModel.loadStatic();
 
     // Initialize World Shader
@@ -77,8 +76,11 @@ void Renderer::renderWorld(const World &world) {
     }
 
     // draw enemies
-    for(auto & enemy : world.getEnemies()) {
-        enemyModel.draw(enemy, modelLocation, colorLocation);
+    for(auto & enemy : world.getMoverEnemies()) {
+        chaserEnemyModel.draw(enemy, modelLocation, colorLocation);
+    }
+    for(auto& enemy : world.getSimpleEnemies()) {
+        simpleEnemyModel.draw(enemy, modelLocation, colorLocation);
     }
 
     glUseProgram(textShaderProgram);

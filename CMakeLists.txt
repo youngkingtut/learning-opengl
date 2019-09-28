@@ -44,8 +44,8 @@ add_executable(${PROJECT_NAME}
         src/Game/Objects/WorldObject.h
         src/Game/Objects/Bullet.cpp
         src/Game/Objects/Bullet.h
-        src/Game/Objects/Enemy.cpp
-        src/Game/Objects/Enemy.h
+        src/Game/Objects/ChaserEnemy.cpp
+        src/Game/Objects/ChaserEnemy.h
         src/Interface/ControlState.cpp
         src/Interface/ControlState.h
         src/Interface/Window.cpp
@@ -54,8 +54,8 @@ add_executable(${PROJECT_NAME}
         src/Renderer/Models/BaseModel.h
         src/Renderer/Models/BulletModel.cpp
         src/Renderer/Models/BulletModel.h
-        src/Renderer/Models/EnemyModel.cpp
-        src/Renderer/Models/EnemyModel.h
+        src/Renderer/Models/ChaserEnemyModel.cpp
+        src/Renderer/Models/ChaserEnemyModel.h
         src/Renderer/Models/PlayerModel.cpp
         src/Renderer/Models/PlayerModel.h
         src/Renderer/Models/WorldModel.cpp
@@ -64,7 +64,7 @@ add_executable(${PROJECT_NAME}
         src/Renderer/Renderer.h
         src/ShaderCompiler/ShaderCompiler.cpp
         src/ShaderCompiler/ShaderCompiler.hpp
-        src/Utils/Constants.h)
+        src/Utils/Constants.h src/Game/Objects/SimpleEnemy.cpp src/Game/Objects/SimpleEnemy.h src/Renderer/Models/SimpleEnemyModel.cpp src/Renderer/Models/SimpleEnemyModel.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

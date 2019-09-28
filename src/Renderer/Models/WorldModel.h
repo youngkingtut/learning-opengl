@@ -1,7 +1,7 @@
 #pragma once
 
 #include <glad/glad.h>
-#include "../../Game/Objects/Enemy.h"
+#include "../../Game/Objects/ChaserEnemy.h"
 #include "BaseModel.h"
 
 

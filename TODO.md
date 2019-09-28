@@ -3,7 +3,7 @@
 * Camera stationary when player reaches edges
 * ~~Colors for player~~
 * Draw instanced 
-    * Pack color and position information in separate buffer.
+    * Pack direction and position information in separate buffer.
 
 ### Animation
 * Event queue
@@ -12,6 +12,7 @@
 
 ## Models
 * ~~Enemy~~
+* Enemy 2
 * ~~Bullet~~
 * ~~World~~
 
@@ -29,3 +30,5 @@
 
 ## Interface
 * Dynamic resolution
+* Menu
+* Option to restart on death
