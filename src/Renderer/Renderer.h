@@ -7,9 +7,10 @@
 #include "../Game/World.h"
 #include "Models/BaseModel.h"
 #include "Models/PlayerModel.h"
-#include "Models/EnemyModel.h"
+#include "Models/ChaserEnemyModel.h"
 #include "Models/WorldModel.h"
 #include "Models/BulletModel.h"
+#include "Models/SimpleEnemyModel.h"
 
 
 // Text Rendering using this guide: https://learnopengl.com/In-Practice/Text-Rendering
@@ -34,7 +35,8 @@ private:
     // models
     WorldModel worldModel{};
     PlayerModel playerModel{};
-    EnemyModel enemyModel{};
+    ChaserEnemyModel chaserEnemyModel{};
+    SimpleEnemyModel simpleEnemyModel{};
     BulletModel bulletModel{};
 
     // shaders

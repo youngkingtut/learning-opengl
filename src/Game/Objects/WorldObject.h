@@ -11,10 +11,11 @@ public:
     float getAngle() const;
     glm::vec2 getPosition() const;
     void removeObject();
-    bool collision(const WorldObject &object, float radiusSelf, float radiusOther);
+    bool collision(const WorldObject &object);
     void zeroVelocity();
 
-    virtual void setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) = 0;
+    virtual float getRadius() const = 0;
+    virtual void setNextPosition(const ControlState& controlState, const GameState& worldState, const double& deltaTime) = 0;
 
 protected:
     glm::vec2 position;

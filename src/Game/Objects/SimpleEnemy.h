@@ -1,12 +1,14 @@
 #pragma once
 
-#include "../../Interface/ControlState.h"
 #include "WorldObject.h"
+#include "Bullet.h"
 
 
-class Bullet : public WorldObject {
+class SimpleEnemy : public WorldObject {
 public:
-    Bullet(const glm::vec2 &position, const glm::vec2 &velocity, const glm::vec2 &direction);
+    const static int value = 5;
+    explicit SimpleEnemy(const glm::vec2 &position);
     void setNextPosition(const ControlState& controlState, const GameState& worldState, const double& deltaTime) override;
     float getRadius() const override;
 };
+
