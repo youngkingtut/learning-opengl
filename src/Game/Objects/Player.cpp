@@ -65,7 +65,7 @@ float Player::updateVelocity(float velocity, float targetVelocity, double deltaT
     return updatedVelocity;
 }
 
-void Player::setNextPosition(const ControlState& controlState, const GameState& worldState, const float& deltaTime) {
+void Player::setNextPosition(const ControlState& controlState, const GameState& worldState, const double& deltaTime) {
     glm::vec2 controlDirection = controlState.getMovementDirection();
     float controlMagnitude = controlState.getMovementMagnitude();
 
@@ -105,7 +105,7 @@ void Player::setNextPosition(const ControlState& controlState, const GameState& 
     }
 }
 
-void Player::generateBullet(const ControlState& controlState, const float& deltaTime, std::vector<Bullet>& bullets) {
+void Player::generateBullet(const ControlState& controlState, const double& deltaTime, std::vector<Bullet>& bullets) {
     coolDown += deltaTime;
     if(coolDown > PLAYER_BULLET_COOL_DOWN) {
         glm::vec2 bulletDirection = controlState.getBulletDirection();
@@ -130,6 +130,7 @@ void Player::generateBullet(const ControlState& controlState, const float& delta
     }
 }
 
-bool Player::enemyCollision(const ChaserEnemy &enemy) {
-    return collision(enemy, PLAYER_RADIUS, ENEMY_RADIUS);
+
+float Player::getRadius() const {
+    return PLAYER_RADIUS;
 }

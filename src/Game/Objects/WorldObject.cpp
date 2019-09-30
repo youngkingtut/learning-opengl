@@ -29,8 +29,8 @@ float WorldObject::getAngle() const {
     return angle;
 }
 
-bool WorldObject::collision(const WorldObject &object, float radiusSelf, float radiusOther) {
-    return glm::distance(position, object.getPosition()) <= radiusSelf + radiusOther;
+bool WorldObject::collision(const WorldObject& object) {
+    return glm::distance(position, object.getPosition()) <= object.getRadius() + this->getRadius();
 }
 
 void WorldObject::zeroVelocity() {
