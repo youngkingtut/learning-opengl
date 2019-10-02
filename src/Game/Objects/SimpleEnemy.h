@@ -10,5 +10,8 @@ public:
     explicit SimpleEnemy(const glm::vec2 &position);
     void setNextPosition(const ControlState& controlState, const GameState& worldState, const double& deltaTime) override;
     float getRadius() const override;
+
+private:
+    float rotationSpeed;
 };
 

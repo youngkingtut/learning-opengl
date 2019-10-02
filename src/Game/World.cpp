@@ -3,6 +3,8 @@
 #include <algorithm>
 #include <iostream>
 
+#include "../Utils/Random.h"
+
 
 World::World(GameState &state) :
         bullets(),
@@ -163,7 +165,7 @@ void World::spawnEnemies(const ControlState& controlState, const double &deltaTi
             glm::vec2 spawnPoint = getRandomPoint();
             if (glm::distance(spawnPoint, player.getPosition()) > RANDOM_SPAWN_PLAYER_SAFE_ZONE_RADIUS) {
                 enemyCoolDown = 0.0F;
-                switch(enemyDistribution(randomGenerator)) {
+                switch((Random::getRandomInt(0, 1))) {
                     case 0:
                         simpleEnemies.emplace_back(SimpleEnemy(spawnPoint));
                         break;
@@ -198,5 +200,5 @@ void World::spawnEnemies(const ControlState& controlState, const double &deltaTi
 }
 
 glm::vec2 World::getRandomPoint() {
-    return glm::vec2(worldWidthDistribution(randomGenerator), worldHeightDistribution(randomGenerator));
+    return glm::vec2(Random::getRandomFloat(-WORLD_SIZE_WIDTH, WORLD_SIZE_WIDTH),Random::getRandomFloat(-WORLD_SIZE_HEIGHT, WORLD_SIZE_HEIGHT));
 }
