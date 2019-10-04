@@ -1,6 +1,8 @@
 ## Renderer
 * ~~Camera bound to player~~
 * Camera stationary when player reaches edges
+    * Implemented a sudden stop when player gets near edge, the effect is a bit jarring. Should instead
+    slow to a stop.
 * ~~Colors for player~~
 * Draw instanced 
     * Pack direction and position information in separate buffer.
@@ -12,8 +14,10 @@
 
 ## Models
 * ~~Enemy~~
-* Enemy 2
+* ~~Enemy 2~~
+* Enemy 3 (Dodger)
 * ~~Bullet~~
+* Bullet 2 (Spray)
 * ~~World~~
 
 ## Mechanics
@@ -27,6 +31,10 @@
 
 ### Enemy Spawn
 * Spawn system with scaling options.
+    * Enemy type and weighting
+    * Scaling enemy cooldown
+    * Can have multiple systems going at once
+    * Time based progression? Score based progression? All enemies are dead?
 
 ## Interface
 * Dynamic resolution

@@ -58,7 +58,16 @@ void Renderer::renderWorld(const World &world) {
     Player player = world.getPlayer();
     glm::vec2 playerPosition = player.getPosition();
 
-    glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(-playerPosition[0], -playerPosition[1], 0.0F));
+    // Translate everything in the opposite direction of the player and bound it
+    float translateX = -playerPosition[0];
+    float translateY = -playerPosition[1];
+    if(translateX > CAMERA_MAX_TRUCK || translateX < -CAMERA_MAX_TRUCK) {
+        translateX = (translateX > 0 ? CAMERA_MAX_TRUCK : -CAMERA_MAX_TRUCK);
+    }
+    if(translateY > CAMERA_MAX_PEDESTAL || translateY < -CAMERA_MAX_PEDESTAL) {
+        translateY = (translateY > 0 ? CAMERA_MAX_PEDESTAL : -CAMERA_MAX_PEDESTAL);
+    }
+    glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(translateX, translateY, 0.0F));
 
     glUseProgram(worldShaderProgram);
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(translatedViewMatrix));
