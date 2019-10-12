@@ -45,3 +45,5 @@
 ## Bugs
 * Some buttons are not registering with movement and bullets when using the keyboard. 
 Specifically, holding down on movement does not allow for diagonal down right shooting.
+    * This bug seems to only effect on s key on my keyboard. Think I'll add key bindings
+    to absolve this issue. 
