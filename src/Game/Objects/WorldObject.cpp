@@ -37,3 +37,10 @@ void WorldObject::zeroVelocity() {
     velocity[0] = 0.0F;
     velocity[1] = 0.0F;
 }
+
+WorldObject::WorldObject() {
+    position = glm::vec2(0, 0);
+    velocity = glm::vec2(0, 0);
+    direction = glm::vec2(0, 0);
+    remove = false;
+}

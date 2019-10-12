@@ -30,7 +30,7 @@ SimpleEnemy::SimpleEnemy(const glm::vec2& position) :
     }
 }
 
-void SimpleEnemy::setNextPosition(const ControlState &controlState, const GameState &worldState, const double& deltaTime) {
+void SimpleEnemy::setNextPosition(const ControlState &controlState, const WorldState &worldState, const double& deltaTime) {
     direction = glm::rotate(direction, rotationSpeed * static_cast<float>(deltaTime));
     position[0] = velocity[0] * deltaTime + position[0];
     position[1] = velocity[1] * deltaTime + position[1];

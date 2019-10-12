@@ -7,12 +7,5 @@
 
 class Game {
 public:
-    explicit Game();
-    void run();
-
-private:
-    GameState state;
-    Window window;
-    Renderer renderer;
-    World world;
+    static void run();
 };

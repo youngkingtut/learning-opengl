@@ -2,28 +2,17 @@
 #include "Game.h"
 
 #include "../Interface/Window.h"
-#include "../Utils/Constants.h"
 
-
-Game::Game():
-state(),
-window(),
-renderer(),
-world(state){
-    state.worldLowerX = -WORLD_SIZE_WIDTH;
-    state.worldLowerY = -WORLD_SIZE_HEIGHT;
-    state.worldUpperX = WORLD_SIZE_WIDTH;
-    state.worldUpperY = WORLD_SIZE_HEIGHT;
-    state.playerX = 0.0F;
-    state.playerY = 0.0F;
-    state.multiplier = 1;
-    state.lives = 3;
-}
 
 void Game::run() {
+    World world = World();
+    Window window = Window();
+    Renderer renderer = Renderer();
+
     window.initialize();
     renderer.initialize();
 
+    GameState gameState = GameState::GAME_RUNNING;
     ControlState controlState;
     std::vector<double> loopTime;
     double time = glfwGetTime();
@@ -34,15 +23,22 @@ void Game::run() {
         time = timeNow;
 
         loopTime.emplace_back(delta);
-
         window.ProcessInput(controlState);
 
-        if(state.lives > 0) {
-            world.update(controlState, delta);
-            renderer.renderWorld(world);
-        } else {
-            renderer.renderGameOverScreen(world);
+        switch(gameState){
+            case GameState::GAME_RUNNING:
+                gameState = world.update(controlState, delta);
+                renderer.renderWorld(world);
+                break;
+            case GameState::GAME_OVER:
+                renderer.renderGameOverScreen(world);
+                break;
+            case GameState::GAME_PAUSE:
+                break;
+            case GameState::MENU:
+                break;
         }
+
 
         window.SwapBuffersAndPollEvents();
     }
@@ -57,5 +53,3 @@ void Game::run() {
     std::cout << "Average loop time: " << averageTime << std::endl;
     std::cout << "Average frames per second: " << averageFps << std::endl;
 }
-
-

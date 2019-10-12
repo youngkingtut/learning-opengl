@@ -1,13 +1,3 @@
 #pragma once
 
-struct GameState {
-    float worldLowerX;
-    float worldLowerY;
-    float worldUpperX;
-    float worldUpperY;
-    float playerX;
-    float playerY;
-    long score;
-    int multiplier;
-    int lives;
-};
+enum GameState{ MENU, GAME_PAUSE, GAME_OVER, GAME_RUNNING };

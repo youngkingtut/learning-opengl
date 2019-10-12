@@ -4,26 +4,27 @@
 
 #include "../Utils/Constants.h"
 #include "../Interface/ControlState.h"
-#include "GameState.h"
+#include "WorldState.h"
 #include "Objects/Player.h"
 #include "Objects/Bullet.h"
 #include "Objects/ChaserEnemy.h"
 #include "Objects/SimpleEnemy.h"
+#include "GameState.h"
 
 
 class World {
 public:
-    explicit World(GameState &state);
+    explicit World();
 
-    void update(const ControlState& controlState, double deltaTime);
+    GameState update(const ControlState& controlState, double deltaTime);
     Player getPlayer() const;
     std::vector<Bullet> getBullets() const;
     std::vector<ChaserEnemy> getMoverEnemies() const;
     std::vector<SimpleEnemy> getSimpleEnemies() const;
-    GameState getState() const;
+    WorldState getState() const;
 
 private:
-    GameState &gameState;
+    WorldState worldState;
     Player player;
     std::vector<Bullet> bullets;
     std::vector<ChaserEnemy> moverEnemies;

@@ -6,11 +6,20 @@
 #include "../Utils/Random.h"
 
 
-World::World(GameState &state) :
+World::World() :
         bullets(),
-        moverEnemies(),
-        gameState(state),
-        player(glm::vec2(state.playerX, state.playerY), glm::vec2(0, 0), glm::vec2(0, 1)){}
+        moverEnemies(){
+    worldState.worldLowerX = -WORLD_SIZE_WIDTH;
+    worldState.worldLowerY = -WORLD_SIZE_HEIGHT;
+    worldState.worldUpperX = WORLD_SIZE_WIDTH;
+    worldState.worldUpperY = WORLD_SIZE_HEIGHT;
+    worldState.playerX = 0.0F;
+    worldState.playerY = 0.0F;
+    worldState.score = 0;
+    worldState.multiplier = 1;
+    worldState.lives = 3;
+    player = Player(glm::vec2(worldState.playerX, worldState.playerY), glm::vec2(0, 0), glm::vec2(0, 1));
+}
 
 Player World::getPlayer() const {
     return player;
@@ -28,11 +37,11 @@ std::vector<SimpleEnemy> World::getSimpleEnemies() const {
     return simpleEnemies;
 }
 
-GameState World::getState() const {
-    return gameState;
+WorldState World::getState() const {
+    return worldState;
 }
 
-void World::update(const ControlState& controlState, double deltaTime) {
+GameState World::update(const ControlState& controlState, double deltaTime) {
     if(playerAlive) {
         updatePlayer(controlState, deltaTime);
         updateEnemies(controlState, deltaTime);
@@ -51,11 +60,16 @@ void World::update(const ControlState& controlState, double deltaTime) {
 
     removeObjects();
 
-    spawnEnemies(controlState, deltaTime);
+    if(worldState.lives > 0) {
+        spawnEnemies(controlState, deltaTime);
+        return GameState::GAME_RUNNING;
+    } else {
+        return GameState::GAME_OVER;
+    }
 }
 
 void World::updateScore(int value) {
-    gameState.score += gameState.multiplier * value;
+    worldState.score += worldState.multiplier * value;
 }
 
 void World::markAllObjectsForRemoval() {
@@ -102,22 +116,22 @@ void World::removeObjects() {
 }
 
 void World::updatePlayer(const ControlState& controlState, const double& deltaTime) {
-    player.setNextPosition(controlState, gameState, deltaTime);
+    player.setNextPosition(controlState, worldState, deltaTime);
     glm::vec2 playerPosition = player.getPosition();
-    gameState.playerX = playerPosition[0];
-    gameState.playerY = playerPosition[1];
+    worldState.playerX = playerPosition[0];
+    worldState.playerY = playerPosition[1];
     player.generateBullet(controlState, deltaTime, bullets);
 }
 
 void World::updateEnemies(const ControlState& controlState, const double& deltaTime) {
     for(ChaserEnemy &enemy: moverEnemies) {
-        enemy.setNextPosition(controlState, gameState, deltaTime);
+        enemy.setNextPosition(controlState, worldState, deltaTime);
         if(player.collision(enemy)) {
             playerDied();
         }
     }
     for(SimpleEnemy& enemy: simpleEnemies) {
-        enemy.setNextPosition(controlState, gameState, deltaTime);
+        enemy.setNextPosition(controlState, worldState, deltaTime);
         if(player.collision(enemy)) {
             playerDied();
         }
@@ -126,7 +140,7 @@ void World::updateEnemies(const ControlState& controlState, const double& deltaT
 
 void World::updateBullets(const ControlState& controlState, const double& deltaTime) {
     for(auto &bullet : bullets) {
-        bullet.setNextPosition(controlState, gameState, deltaTime);
+        bullet.setNextPosition(controlState, worldState, deltaTime);
         for(auto &enemy: moverEnemies) {
             if(!bullet.shouldRemove()) {
                 if(enemy.collision(bullet)) {
@@ -150,7 +164,7 @@ void World::playerDied() {
     if(playerAlive) {
         player.zeroVelocity();
         playerAlive = false;
-        gameState.lives -= 1;
+        worldState.lives -= 1;
     }
 }
 
@@ -184,11 +198,11 @@ void World::spawnEnemies(const ControlState& controlState, const double &deltaTi
 //        enemyCoolDown += deltaTime;
 //        if (enemyCoolDown > WORLD_ENEMY_COOL_DOWN) {
 //            enemyCoolDown = 0.0F;
-//            float upperX = gameState.worldUpperX - CHASER_ENEMY_RADIUS;
-//            float lowerX = gameState.worldLowerX + CHASER_ENEMY_RADIUS;
+//            float upperX = worldState.worldUpperX - CHASER_ENEMY_RADIUS;
+//            float lowerX = worldState.worldLowerX + CHASER_ENEMY_RADIUS;
 //
-//            float upperY = gameState.worldUpperY - CHASER_ENEMY_RADIUS;
-//            float lowerY = gameState.worldLowerY + CHASER_ENEMY_RADIUS;
+//            float upperY = worldState.worldUpperY - CHASER_ENEMY_RADIUS;
+//            float lowerY = worldState.worldLowerY + CHASER_ENEMY_RADIUS;
 //
 //            moverEnemies.emplace_back(ChaserEnemy(glm::vec2(upperX, upperY)));
 //            moverEnemies.emplace_back(ChaserEnemy(glm::vec2(upperX, lowerY)));

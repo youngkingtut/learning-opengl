@@ -35,7 +35,7 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Game/Game.cpp
         src/Game/Game.h
-        src/Game/GameState.h
+        src/Game/WorldState.h
         src/Game/World.cpp
         src/Game/World.h
         src/Game/Objects/Player.cpp
@@ -64,7 +64,7 @@ add_executable(${PROJECT_NAME}
         src/Renderer/Renderer.h
         src/ShaderCompiler/ShaderCompiler.cpp
         src/ShaderCompiler/ShaderCompiler.hpp
-        src/Utils/Constants.h src/Game/Objects/SimpleEnemy.cpp src/Game/Objects/SimpleEnemy.h src/Renderer/Models/SimpleEnemyModel.cpp src/Renderer/Models/SimpleEnemyModel.h src/Utils/Random.h src/Utils/Random.cpp)
+        src/Utils/Constants.h src/Game/Objects/SimpleEnemy.cpp src/Game/Objects/SimpleEnemy.h src/Renderer/Models/SimpleEnemyModel.cpp src/Renderer/Models/SimpleEnemyModel.h src/Utils/Random.h src/Utils/Random.cpp src/Game/GameState.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

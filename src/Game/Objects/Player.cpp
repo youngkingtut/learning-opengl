@@ -1,7 +1,6 @@
 #include "Player.h"
 #include <glm/gtx/projection.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include <iostream>
 #include "../../Utils/Constants.h"
 
 
@@ -65,7 +64,7 @@ float Player::updateVelocity(float velocity, float targetVelocity, double deltaT
     return updatedVelocity;
 }
 
-void Player::setNextPosition(const ControlState& controlState, const GameState& worldState, const double& deltaTime) {
+void Player::setNextPosition(const ControlState& controlState, const WorldState& worldState, const double& deltaTime) {
     glm::vec2 controlDirection = controlState.getMovementDirection();
     float controlMagnitude = controlState.getMovementMagnitude();
 
