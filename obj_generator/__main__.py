@@ -1,5 +1,4 @@
 from collections import namedtuple
-from pathlib import Path
 
 WORLD_SIZE_WIDTH = 120
 WORLD_SIZE_HEIGHT = 90
@@ -45,7 +44,7 @@ if __name__ == "__main__":
         elements.append(ELEMENT(offset + 0, offset + 2, offset + 1))
         elements.append(ELEMENT(offset + 3, offset + 1, offset + 2))
 
-    with open(Path("../src/Resources/Models/grid.obj").resolve().as_posix(), "w") as f:
+    with open("../src/Resources/Models/grid.obj", "w") as f:
         for vertex in vertices:
             f.write("v {} {} {}\n".format(vertex.x, vertex.y, vertex.z))
 
