@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../Interface/ControlState.h"
+#include "../../Interface/GameControlState.h"
 #include "../WorldState.h"
 
 
@@ -16,7 +16,7 @@ public:
     void zeroVelocity();
 
     virtual float getRadius() const = 0;
-    virtual void setNextPosition(const ControlState& controlState, const WorldState& worldState, const double& deltaTime) = 0;
+    virtual void setNextPosition(const GameControlState& controlState, const WorldState& worldState, const double& deltaTime) = 0;
 
 protected:
     glm::vec2 position;

@@ -13,7 +13,8 @@ void Game::run() {
     renderer.initialize();
 
     GameState gameState = GameState::GAME_RUNNING;
-    ControlState controlState;
+    GameControlState gameControlState;
+    PausedControlState pausedControlState;
     std::vector<double> loopTime;
     double time = glfwGetTime();
 
@@ -21,24 +22,27 @@ void Game::run() {
         double timeNow = glfwGetTime();
         double delta = timeNow - time;
         time = timeNow;
-
         loopTime.emplace_back(delta);
-        window.ProcessInput(controlState);
 
         switch(gameState){
             case GameState::GAME_RUNNING:
-                gameState = world.update(controlState, delta);
+                window.ProcessGameControlState(gameControlState);
+                gameState = world.update(gameControlState, delta);
                 renderer.renderWorld(world);
                 break;
             case GameState::GAME_OVER:
                 renderer.renderGameOverScreen(world);
                 break;
             case GameState::GAME_PAUSE:
+                window.ProcessGamePausedState(pausedControlState);
+                if(pausedControlState.getPauseRelease()) {
+                    gameState = GAME_RUNNING;
+                }
+                renderer.renderGamePaused(world);
                 break;
             case GameState::MENU:
                 break;
         }
-
 
         window.SwapBuffersAndPollEvents();
     }

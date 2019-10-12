@@ -1,7 +1,8 @@
 #pragma once
 
 #include <GLFW/glfw3.h>
-#include "ControlState.h"
+#include "GameControlState.h"
+#include "PausedControlState.h"
 
 class Window {
 public:
@@ -9,7 +10,8 @@ public:
     ~Window();
 
     void initialize();
-    void ProcessInput(ControlState& controlState);
+    void ProcessGameControlState(GameControlState& controlState);
+    void ProcessGamePausedState(PausedControlState& controlState);
     bool ShouldExit();
     void SwapBuffersAndPollEvents();
 

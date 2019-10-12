@@ -3,7 +3,7 @@
 #include <vector>
 
 #include "../Utils/Constants.h"
-#include "../Interface/ControlState.h"
+#include "../Interface/GameControlState.h"
 #include "WorldState.h"
 #include "Objects/Player.h"
 #include "Objects/Bullet.h"
@@ -16,7 +16,7 @@ class World {
 public:
     explicit World();
 
-    GameState update(const ControlState& controlState, double deltaTime);
+    GameState update(const GameControlState& gameControlState, double deltaTime);
     Player getPlayer() const;
     std::vector<Bullet> getBullets() const;
     std::vector<ChaserEnemy> getMoverEnemies() const;
@@ -37,11 +37,11 @@ private:
     void removeObjects();
     void markAllObjectsForRemoval();
     void updateScore(int value);
-    void updatePlayer(const ControlState& controlState, const double& deltaTime);
-    void updateEnemies(const ControlState& controlState, const double& deltaTime);
-    void updateBullets(const ControlState& controlState, const double& deltaTime);
+    void updatePlayer(const GameControlState& controlState, const double& deltaTime);
+    void updateEnemies(const GameControlState& controlState, const double& deltaTime);
+    void updateBullets(const GameControlState& controlState, const double& deltaTime);
 
-    void spawnEnemies(const ControlState& controlState, const double& deltaTime);
+    void spawnEnemies(const GameControlState& controlState, const double& deltaTime);
 
     void playerDied();
 

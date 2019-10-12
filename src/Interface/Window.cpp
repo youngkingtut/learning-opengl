@@ -50,13 +50,38 @@ void Window::initialize() {
 
     // Trying sticky keys for event based processing with the keyboard
     // https://www.glfw.org/docs/latest/input_guide.html#input_key
-    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_TRUE);
+    glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_FALSE);
 }
 
-void Window::ProcessInput(ControlState& controlState) {
+void Window::ProcessGamePausedState(PausedControlState &controlState) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);
         return;
+    }
+
+    int pKeyStatus = glfwGetKey(window, GLFW_KEY_P);
+    if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+        controlState.setPausePress(true);
+        controlState.setPauseRelease(false);
+    } else if(pKeyStatus == GLFW_RELEASE) {
+        controlState.setPauseRelease(controlState.getPausePress());
+        controlState.setPausePress(false);
+    }
+}
+
+void Window::ProcessGameControlState(GameControlState& controlState) {
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+        return;
+    }
+
+    int pKeyStatus = glfwGetKey(window, GLFW_KEY_P);
+    if(glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS) {
+        controlState.setPausePress(true);
+        controlState.setPauseRelease(false);
+    } else if(pKeyStatus == GLFW_RELEASE) {
+        controlState.setPauseRelease(controlState.getPausePress());
+        controlState.setPausePress(false);
     }
 
     int present = glfwJoystickPresent(GLFW_JOYSTICK_1);
@@ -146,3 +171,4 @@ void Window::SwapBuffersAndPollEvents() {
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
+

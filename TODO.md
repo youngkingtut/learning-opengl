@@ -37,6 +37,11 @@
     * Time based progression? Score based progression? All enemies are dead?
 
 ## Interface
+* ~~Pause during game~~
 * Dynamic resolution
 * Menu
 * Option to restart on death
+
+## Bugs
+* Some buttons are not registering with movement and bullets when using the keyboard. 
+Specifically, holding down on movement does not allow for diagonal down right shooting.

@@ -41,11 +41,11 @@ WorldState World::getState() const {
     return worldState;
 }
 
-GameState World::update(const ControlState& controlState, double deltaTime) {
+GameState World::update(const GameControlState& gameControlState, double deltaTime) {
     if(playerAlive) {
-        updatePlayer(controlState, deltaTime);
-        updateEnemies(controlState, deltaTime);
-        updateBullets(controlState, deltaTime);
+        updatePlayer(gameControlState, deltaTime);
+        updateEnemies(gameControlState, deltaTime);
+        updateBullets(gameControlState, deltaTime);
     }
 
     if(!playerAlive) {
@@ -60,12 +60,16 @@ GameState World::update(const ControlState& controlState, double deltaTime) {
 
     removeObjects();
 
-    if(worldState.lives > 0) {
-        spawnEnemies(controlState, deltaTime);
-        return GameState::GAME_RUNNING;
-    } else {
-        return GameState::GAME_OVER;
+    if(gameControlState.getPauseRelease()) {
+        return GameState::GAME_PAUSE;
     }
+
+    if(worldState.lives > 0) {
+        spawnEnemies(gameControlState, deltaTime);
+        return GameState::GAME_RUNNING;
+    }
+
+    return GameState::GAME_OVER;
 }
 
 void World::updateScore(int value) {
@@ -115,7 +119,7 @@ void World::removeObjects() {
     simpleEnemies.erase(simpleEnemies.begin(), simpleEnemyHead);
 }
 
-void World::updatePlayer(const ControlState& controlState, const double& deltaTime) {
+void World::updatePlayer(const GameControlState& controlState, const double& deltaTime) {
     player.setNextPosition(controlState, worldState, deltaTime);
     glm::vec2 playerPosition = player.getPosition();
     worldState.playerX = playerPosition[0];
@@ -123,7 +127,7 @@ void World::updatePlayer(const ControlState& controlState, const double& deltaTi
     player.generateBullet(controlState, deltaTime, bullets);
 }
 
-void World::updateEnemies(const ControlState& controlState, const double& deltaTime) {
+void World::updateEnemies(const GameControlState& controlState, const double& deltaTime) {
     for(ChaserEnemy &enemy: moverEnemies) {
         enemy.setNextPosition(controlState, worldState, deltaTime);
         if(player.collision(enemy)) {
@@ -138,7 +142,7 @@ void World::updateEnemies(const ControlState& controlState, const double& deltaT
     }
 }
 
-void World::updateBullets(const ControlState& controlState, const double& deltaTime) {
+void World::updateBullets(const GameControlState& controlState, const double& deltaTime) {
     for(auto &bullet : bullets) {
         bullet.setNextPosition(controlState, worldState, deltaTime);
         for(auto &enemy: moverEnemies) {
@@ -168,7 +172,7 @@ void World::playerDied() {
     }
 }
 
-void World::spawnEnemies(const ControlState& controlState, const double &deltaTime) {
+void World::spawnEnemies(const GameControlState& controlState, const double &deltaTime) {
     if(SPAWN_ENEMIES && playerAlive) {
         enemyCoolDown += deltaTime;
 

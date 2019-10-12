@@ -122,6 +122,40 @@ void Renderer::renderGameOverScreen(const World& world) {
     renderText(gameOver, 210.0F, WINDOW_SIZE_HEIGHT - 310.0F, 2.0F, glm::vec3(1.0F, 1.0F, 1.0F));
 }
 
+void Renderer::renderGamePaused(const World &world) {
+    clearScreen();
+
+    Player player = world.getPlayer();
+    glm::vec2 playerPosition = player.getPosition();
+
+    // Translate everything in the opposite direction of the player and bound it
+    float translateX = -playerPosition[0];
+    float translateY = -playerPosition[1];
+    if(translateX > CAMERA_MAX_TRUCK || translateX < -CAMERA_MAX_TRUCK) {
+        translateX = (translateX > 0 ? CAMERA_MAX_TRUCK : -CAMERA_MAX_TRUCK);
+    }
+    if(translateY > CAMERA_MAX_PEDESTAL || translateY < -CAMERA_MAX_PEDESTAL) {
+        translateY = (translateY > 0 ? CAMERA_MAX_PEDESTAL : -CAMERA_MAX_PEDESTAL);
+    }
+    glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(translateX, translateY, 0.0F));
+
+    glUseProgram(worldShaderProgram);
+    glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(translatedViewMatrix));
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+
+    // draw world
+    worldModel.draw(modelLocation, colorLocation);
+
+    glUseProgram(textShaderProgram);
+    std::string paused = "Paused";
+    std::stringstream score;
+    std::stringstream lives;
+    score << "Score " << world.getState().score;
+    lives << "Lives " << world.getState().lives;
+    renderText(score.str(), 45.0F, WINDOW_SIZE_HEIGHT - 33.0F, 1.0F, glm::vec3(0.2F, 1.0F, 1.0F));
+    renderText(lives.str(), WINDOW_SIZE_WIDTH - 200.0F, WINDOW_SIZE_HEIGHT - 33.0F, 1.0F, glm::vec3(1.0F, 1.0F, 1.0F));
+    renderText(paused, 250.0F, WINDOW_SIZE_HEIGHT - 310.0F, 2.0F, glm::vec3(1.0F, 1.0F, 1.0F));
+}
 
 void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color) {
     // Activate corresponding render state
