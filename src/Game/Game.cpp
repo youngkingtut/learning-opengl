@@ -31,6 +31,7 @@ void Game::run() {
                 renderer.renderWorld(world);
                 break;
             case GameState::GAME_OVER:
+                window.ProcessGameControlState(gameControlState);
                 renderer.renderGameOverScreen(world);
                 break;
             case GameState::GAME_PAUSE:

@@ -1,6 +1,6 @@
 #pragma once
 
-#define GAME_TITLE "InsertGameTitle"
+#define GAME_TITLE "Game"
 #define FPS_60 0.016F
 
 // Window settings
@@ -37,7 +37,7 @@
 
 // Enemy Spawn Constants
 #define SPAWN_ENEMIES true
-#define WORLD_ENEMY_COOL_DOWN 0.4F
+#define WORLD_ENEMY_COOL_DOWN 0.2F
 #define RANDOM_SPAWN_PLAYER_SAFE_ZONE_RADIUS 40.0F
 
 // Shader UniForms

@@ -17,5 +17,7 @@ public:
 
 private:
     GLFWwindow* window;
+    double aspectRatio;
+    double scale;
 };
 

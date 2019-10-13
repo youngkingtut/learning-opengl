@@ -27,6 +27,7 @@ include_directories("${EXTERNAL_LIBRARIES}/glfw/include")
 include_directories("${EXTERNAL_LIBRARIES}/glad/include")
 include_directories("${EXTERNAL_LIBRARIES}/glm")
 include_directories("${EXTERNAL_LIBRARIES}/freetype/include")
+include_directories("${EXTERNAL_LIBRARIES}/stb")
 
 ##############################################################
 # Build
@@ -64,7 +65,16 @@ add_executable(${PROJECT_NAME}
         src/Renderer/Renderer.h
         src/ShaderCompiler/ShaderCompiler.cpp
         src/ShaderCompiler/ShaderCompiler.hpp
-        src/Utils/Constants.h src/Game/Objects/SimpleEnemy.cpp src/Game/Objects/SimpleEnemy.h src/Renderer/Models/SimpleEnemyModel.cpp src/Renderer/Models/SimpleEnemyModel.h src/Utils/Random.h src/Utils/Random.cpp src/Game/GameState.h src/Interface/PausedControlState.cpp src/Interface/PausedControlState.h)
+        src/Utils/Constants.h
+        src/Game/Objects/SimpleEnemy.cpp
+        src/Game/Objects/SimpleEnemy.h
+        src/Renderer/Models/SimpleEnemyModel.cpp
+        src/Renderer/Models/SimpleEnemyModel.h
+        src/Utils/Random.h
+        src/Utils/Random.cpp
+        src/Game/GameState.h
+        src/Interface/PausedControlState.cpp
+        src/Interface/PausedControlState.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

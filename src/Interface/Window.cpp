@@ -4,6 +4,9 @@
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include "../Utils/Constants.h"
 
 
@@ -27,7 +30,9 @@ void Window::initialize() {
 #endif
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
+    glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
+    glfwWindowHint(GLFW_MAXIMIZED, GL_TRUE);
+    glfwWindowHint(GLFW_CENTER_CURSOR, GL_TRUE);
     glfwWindowHint(GLFW_SAMPLES, 4);
 
     window = glfwCreateWindow(WINDOW_SIZE_WIDTH, WINDOW_SIZE_HEIGHT, GAME_TITLE, nullptr, nullptr);
@@ -40,6 +45,12 @@ void Window::initialize() {
 
     glfwMakeContextCurrent(window);
 
+    // Load Icon for Window
+    GLFWimage image;
+    image.pixels = stbi_load("Resources/Icons/32x32.png", &image.width, &image.height, nullptr, 0);
+    glfwSetWindowIcon(window, 1, &image);
+    stbi_image_free(image.pixels);
+
     // Must initialize Glad after
     // https://www.glfw.org/docs/latest/quick.html#quick_context_current
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -47,6 +58,9 @@ void Window::initialize() {
         // todo create exceptions
         throw std::exception();
     }
+
+    // Hiding cursor
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Trying sticky keys for event based processing with the keyboard
     // https://www.glfw.org/docs/latest/input_guide.html#input_key

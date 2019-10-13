@@ -12,7 +12,6 @@
 #include "Renderer.h"
 
 #include "../ShaderCompiler/ShaderCompiler.hpp"
-#include "../Utils/Constants.h"
 
 
 Renderer::~Renderer() {
@@ -169,20 +168,20 @@ void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat
     {
         Character ch = characters[*c];
 
-        GLfloat xpos = x + ch.bearing.x * scale;
-        GLfloat ypos = y - static_cast<float>(ch.size.y - ch.bearing.y) * scale;
+        GLfloat xPosition = x + ch.bearing.x * scale;
+        GLfloat yPosition = y - static_cast<float>(ch.size.y - ch.bearing.y) * scale;
 
         GLfloat w = ch.size.x * scale;
         GLfloat h = ch.size.y * scale;
         // Update VBO for each character
         std::array<std::array<GLfloat, 4>, 6> vertices = {{
-                { xpos,     ypos + h,   0.0, 0.0 },
-                { xpos,     ypos,       0.0, 1.0 },
-                { xpos + w, ypos,       1.0, 1.0 },
+                {xPosition, yPosition + h, 0.0, 0.0 },
+                {xPosition, yPosition, 0.0, 1.0 },
+                {xPosition + w, yPosition, 1.0, 1.0 },
 
-                { xpos,     ypos + h,   0.0, 0.0 },
-                { xpos + w, ypos,       1.0, 1.0 },
-                { xpos + w, ypos + h,   1.0, 0.0 }
+                {xPosition, yPosition + h, 0.0, 0.0 },
+                {xPosition + w, yPosition, 1.0, 1.0 },
+                {xPosition + w, yPosition + h, 1.0, 0.0 }
         }};
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.textureId);
@@ -239,7 +238,7 @@ void Renderer::initializeText() {
         // Load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
-            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+            std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
             continue;
         }
         // Generate texture
