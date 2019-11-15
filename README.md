@@ -24,12 +24,12 @@ I'm using clion which seamlessly integrates with cmake, making it a one click bu
 If you're using cmake on the command line, I believe you can run the following to build and compile
 
 ```bash
-cmake -DCMAKE_BUILD_TYPE=Debug /path/to/folder/with/CmakeList.txt/leraning-opengl
+cmake -DCMAKE_BUILD_TYPE=Debug /path/to/folder/with/CmakeList.txt/learning-opengl
 cmake -build /path/to/cmake/build/folder
 ```
 
 and then run the program
 
 ```bash
-/path/to/cmake/build/folder/bin/LeraningOpenGl
+/path/to/cmake/build/folder/bin/LearningOpenGl
 ```
