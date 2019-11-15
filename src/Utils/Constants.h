@@ -1,6 +1,6 @@
 #pragma once
 
-#define GAME_TITLE "InsertGameTitle"
+#define GAME_TITLE "Game"
 #define FPS_60 0.016F
 
 // Window settings
@@ -11,6 +11,8 @@
 
 // Game Dimensions
 #define FOV 0.872665F // 50 degrees in radians
+#define CAMERA_MAX_TRUCK 40.0F
+#define CAMERA_MAX_PEDESTAL 35.0F
 #define WORLD_SIZE_WIDTH 120.0F
 #define WORLD_SIZE_HEIGHT 90.0F
 #define WORLD_DEATH_COOL_DOWN 2.0F
@@ -35,7 +37,7 @@
 
 // Enemy Spawn Constants
 #define SPAWN_ENEMIES true
-#define WORLD_ENEMY_COOL_DOWN 0.1F
+#define WORLD_ENEMY_COOL_DOWN 0.2F
 #define RANDOM_SPAWN_PLAYER_SAFE_ZONE_RADIUS 40.0F
 
 // Shader UniForms

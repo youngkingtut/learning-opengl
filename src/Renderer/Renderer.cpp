@@ -12,7 +12,6 @@
 #include "Renderer.h"
 
 #include "../ShaderCompiler/ShaderCompiler.hpp"
-#include "../Utils/Constants.h"
 
 
 Renderer::~Renderer() {
@@ -58,7 +57,16 @@ void Renderer::renderWorld(const World &world) {
     Player player = world.getPlayer();
     glm::vec2 playerPosition = player.getPosition();
 
-    glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(-playerPosition[0], -playerPosition[1], 0.0F));
+    // Translate everything in the opposite direction of the player and bound it
+    float translateX = -playerPosition[0];
+    float translateY = -playerPosition[1];
+    if(translateX > CAMERA_MAX_TRUCK || translateX < -CAMERA_MAX_TRUCK) {
+        translateX = (translateX > 0 ? CAMERA_MAX_TRUCK : -CAMERA_MAX_TRUCK);
+    }
+    if(translateY > CAMERA_MAX_PEDESTAL || translateY < -CAMERA_MAX_PEDESTAL) {
+        translateY = (translateY > 0 ? CAMERA_MAX_PEDESTAL : -CAMERA_MAX_PEDESTAL);
+    }
+    glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(translateX, translateY, 0.0F));
 
     glUseProgram(worldShaderProgram);
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(translatedViewMatrix));
@@ -113,6 +121,40 @@ void Renderer::renderGameOverScreen(const World& world) {
     renderText(gameOver, 210.0F, WINDOW_SIZE_HEIGHT - 310.0F, 2.0F, glm::vec3(1.0F, 1.0F, 1.0F));
 }
 
+void Renderer::renderGamePaused(const World &world) {
+    clearScreen();
+
+    Player player = world.getPlayer();
+    glm::vec2 playerPosition = player.getPosition();
+
+    // Translate everything in the opposite direction of the player and bound it
+    float translateX = -playerPosition[0];
+    float translateY = -playerPosition[1];
+    if(translateX > CAMERA_MAX_TRUCK || translateX < -CAMERA_MAX_TRUCK) {
+        translateX = (translateX > 0 ? CAMERA_MAX_TRUCK : -CAMERA_MAX_TRUCK);
+    }
+    if(translateY > CAMERA_MAX_PEDESTAL || translateY < -CAMERA_MAX_PEDESTAL) {
+        translateY = (translateY > 0 ? CAMERA_MAX_PEDESTAL : -CAMERA_MAX_PEDESTAL);
+    }
+    glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(translateX, translateY, 0.0F));
+
+    glUseProgram(worldShaderProgram);
+    glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(translatedViewMatrix));
+    glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+
+    // draw world
+    worldModel.draw(modelLocation, colorLocation);
+
+    glUseProgram(textShaderProgram);
+    std::string paused = "Paused";
+    std::stringstream score;
+    std::stringstream lives;
+    score << "Score " << world.getState().score;
+    lives << "Lives " << world.getState().lives;
+    renderText(score.str(), 45.0F, WINDOW_SIZE_HEIGHT - 33.0F, 1.0F, glm::vec3(0.2F, 1.0F, 1.0F));
+    renderText(lives.str(), WINDOW_SIZE_WIDTH - 200.0F, WINDOW_SIZE_HEIGHT - 33.0F, 1.0F, glm::vec3(1.0F, 1.0F, 1.0F));
+    renderText(paused, 250.0F, WINDOW_SIZE_HEIGHT - 310.0F, 2.0F, glm::vec3(1.0F, 1.0F, 1.0F));
+}
 
 void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color) {
     // Activate corresponding render state
@@ -126,20 +168,20 @@ void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat
     {
         Character ch = characters[*c];
 
-        GLfloat xpos = x + ch.bearing.x * scale;
-        GLfloat ypos = y - static_cast<float>(ch.size.y - ch.bearing.y) * scale;
+        GLfloat xPosition = x + ch.bearing.x * scale;
+        GLfloat yPosition = y - static_cast<float>(ch.size.y - ch.bearing.y) * scale;
 
         GLfloat w = ch.size.x * scale;
         GLfloat h = ch.size.y * scale;
         // Update VBO for each character
         std::array<std::array<GLfloat, 4>, 6> vertices = {{
-                { xpos,     ypos + h,   0.0, 0.0 },
-                { xpos,     ypos,       0.0, 1.0 },
-                { xpos + w, ypos,       1.0, 1.0 },
+                {xPosition, yPosition + h, 0.0, 0.0 },
+                {xPosition, yPosition, 0.0, 1.0 },
+                {xPosition + w, yPosition, 1.0, 1.0 },
 
-                { xpos,     ypos + h,   0.0, 0.0 },
-                { xpos + w, ypos,       1.0, 1.0 },
-                { xpos + w, ypos + h,   1.0, 0.0 }
+                {xPosition, yPosition + h, 0.0, 0.0 },
+                {xPosition + w, yPosition, 1.0, 1.0 },
+                {xPosition + w, yPosition + h, 1.0, 0.0 }
         }};
         // Render glyph texture over quad
         glBindTexture(GL_TEXTURE_2D, ch.textureId);
@@ -196,7 +238,7 @@ void Renderer::initializeText() {
         // Load character glyph
         if (FT_Load_Char(face, c, FT_LOAD_RENDER))
         {
-            std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+            std::cout << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
             continue;
         }
         // Generate texture

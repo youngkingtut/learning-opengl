@@ -27,6 +27,7 @@ include_directories("${EXTERNAL_LIBRARIES}/glfw/include")
 include_directories("${EXTERNAL_LIBRARIES}/glad/include")
 include_directories("${EXTERNAL_LIBRARIES}/glm")
 include_directories("${EXTERNAL_LIBRARIES}/freetype/include")
+include_directories("${EXTERNAL_LIBRARIES}/stb")
 
 ##############################################################
 # Build
@@ -35,7 +36,7 @@ add_executable(${PROJECT_NAME}
         src/main.cpp
         src/Game/Game.cpp
         src/Game/Game.h
-        src/Game/GameState.h
+        src/Game/WorldState.h
         src/Game/World.cpp
         src/Game/World.h
         src/Game/Objects/Player.cpp
@@ -46,8 +47,8 @@ add_executable(${PROJECT_NAME}
         src/Game/Objects/Bullet.h
         src/Game/Objects/ChaserEnemy.cpp
         src/Game/Objects/ChaserEnemy.h
-        src/Interface/ControlState.cpp
-        src/Interface/ControlState.h
+        src/Interface/GameControlState.cpp
+        src/Interface/GameControlState.h
         src/Interface/Window.cpp
         src/Interface/Window.h
         src/Renderer/Models/BaseModel.cpp
@@ -64,7 +65,16 @@ add_executable(${PROJECT_NAME}
         src/Renderer/Renderer.h
         src/ShaderCompiler/ShaderCompiler.cpp
         src/ShaderCompiler/ShaderCompiler.hpp
-        src/Utils/Constants.h src/Game/Objects/SimpleEnemy.cpp src/Game/Objects/SimpleEnemy.h src/Renderer/Models/SimpleEnemyModel.cpp src/Renderer/Models/SimpleEnemyModel.h src/Utils/Random.h src/Utils/Random.cpp)
+        src/Utils/Constants.h
+        src/Game/Objects/SimpleEnemy.cpp
+        src/Game/Objects/SimpleEnemy.h
+        src/Renderer/Models/SimpleEnemyModel.cpp
+        src/Renderer/Models/SimpleEnemyModel.h
+        src/Utils/Random.h
+        src/Utils/Random.cpp
+        src/Game/GameState.h
+        src/Interface/PausedControlState.cpp
+        src/Interface/PausedControlState.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

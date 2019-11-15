@@ -1,11 +1,12 @@
 #pragma once
 
-#include "../../Interface/ControlState.h"
-#include "../GameState.h"
+#include "../../Interface/GameControlState.h"
+#include "../WorldState.h"
 
 
 class WorldObject {
 public:
+    WorldObject();
     WorldObject(const glm::vec2 &position, const glm::vec2 &velocity, const glm::vec2 &direction);
     bool shouldRemove() const;
     float getAngle() const;
@@ -15,7 +16,7 @@ public:
     void zeroVelocity();
 
     virtual float getRadius() const = 0;
-    virtual void setNextPosition(const ControlState& controlState, const GameState& worldState, const double& deltaTime) = 0;
+    virtual void setNextPosition(const GameControlState& controlState, const WorldState& worldState, const double& deltaTime) = 0;
 
 protected:
     glm::vec2 position;

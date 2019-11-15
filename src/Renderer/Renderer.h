@@ -30,6 +30,7 @@ public:
     void initialize();
     void renderWorld(const World& world);
     void renderGameOverScreen(const World& world);
+    void renderGamePaused(const World& world);
 
 private:
     // models

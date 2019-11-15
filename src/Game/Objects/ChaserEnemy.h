@@ -8,6 +8,6 @@ class ChaserEnemy : public WorldObject {
 public:
     const static int value = 10;
     explicit ChaserEnemy(const glm::vec2 &position);
-    void setNextPosition(const ControlState& controlState, const GameState& worldState, const double& deltaTime) override;
+    void setNextPosition(const GameControlState& controlState, const WorldState& worldState, const double& deltaTime) override;
     float getRadius() const override;
 };
