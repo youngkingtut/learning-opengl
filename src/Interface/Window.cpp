@@ -181,7 +181,7 @@ bool Window::ShouldExit() {
 
 void Window::SwapBuffersAndPollEvents() {
     glFlush();
-    glfwSwapInterval(1);
+    glfwSwapInterval(0);
     glfwSwapBuffers(window);
     glfwPollEvents();
 }

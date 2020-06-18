@@ -11,6 +11,8 @@
 
 // Game Dimensions
 #define FOV 0.872665F // 50 degrees in radians
+#define CAMERA_TRUCK_SPEED 0.5F
+#define CAMERA_PEDESTAL_SPEED 0.5F
 #define CAMERA_MAX_TRUCK 40.0F
 #define CAMERA_MAX_PEDESTAL 35.0F
 #define WORLD_SIZE_WIDTH 120.0F

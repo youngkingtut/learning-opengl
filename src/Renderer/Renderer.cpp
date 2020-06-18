@@ -58,8 +58,8 @@ void Renderer::renderWorld(const World &world) {
     glm::vec2 playerPosition = player.getPosition();
 
     // Translate everything in the opposite direction of the player and bound it
-    float translateX = -playerPosition[0];
-    float translateY = -playerPosition[1];
+    float translateX = -playerPosition[0] * CAMERA_TRUCK_SPEED;
+    float translateY = -playerPosition[1] * CAMERA_PEDESTAL_SPEED;
     if(translateX > CAMERA_MAX_TRUCK || translateX < -CAMERA_MAX_TRUCK) {
         translateX = (translateX > 0 ? CAMERA_MAX_TRUCK : -CAMERA_MAX_TRUCK);
     }

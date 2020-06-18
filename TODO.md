@@ -1,11 +1,12 @@
 ## Renderer
 * ~~Camera bound to player~~
 * Camera stationary when player reaches edges
-    * Implemented a sudden stop when player gets near edge, the effect is a bit jarring. Should instead
-    slow to a stop.
+    * ~~Implemented a sudden stop when player gets near edge, the effect is a bit jarring. Should instead
+    slow to a stop.~~
 * ~~Colors for player~~
 * Draw instanced 
     * Pack direction and position information in separate buffer.
+* Render background star field
 
 ### Animation
 * Event queue
