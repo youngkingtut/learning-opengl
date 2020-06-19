@@ -67,6 +67,17 @@ void Window::initialize() {
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GLFW_FALSE);
 }
 
+void Window::ProcessGameOverState(GameOverControlState &controlState) {
+    if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+        glfwSetWindowShouldClose(window, true);
+        return;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+        controlState.setReset(true);
+    }
+}
+
 void Window::ProcessGamePausedState(PausedControlState &controlState) {
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);

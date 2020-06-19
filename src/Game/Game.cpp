@@ -1,8 +1,6 @@
 #include <iostream>
 #include "Game.h"
 
-#include "../Interface/Window.h"
-
 
 void Game::run() {
     World world = World();
@@ -15,6 +13,7 @@ void Game::run() {
     GameState gameState = GameState::GAME_RUNNING;
     GameControlState gameControlState;
     PausedControlState pausedControlState;
+    GameOverControlState gameOverControlState;
     std::vector<double> loopTime;
     double time = glfwGetTime();
 
@@ -31,7 +30,12 @@ void Game::run() {
                 renderer.renderWorld(world);
                 break;
             case GameState::GAME_OVER:
-                window.ProcessGameControlState(gameControlState);
+                window.ProcessGameOverState(gameOverControlState);
+                if(gameOverControlState.getReset()) {
+                    gameOverControlState.setReset(false);
+                    world.reset();
+                    gameState = GAME_RUNNING;
+                }
                 renderer.renderGameOverScreen(world);
                 break;
             case GameState::GAME_PAUSE:

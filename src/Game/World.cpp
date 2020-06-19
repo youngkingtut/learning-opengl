@@ -1,14 +1,13 @@
 #include "World.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include "../Utils/Random.h"
 
 
 World::World() :
-        bullets(),
-        moverEnemies(){
+    bullets(),
+    moverEnemies(){
     worldState.worldLowerX = -WORLD_SIZE_WIDTH;
     worldState.worldLowerY = -WORLD_SIZE_HEIGHT;
     worldState.worldUpperX = WORLD_SIZE_WIDTH;
@@ -219,4 +218,12 @@ void World::spawnEnemies(const GameControlState& controlState, const double &del
 
 glm::vec2 World::getRandomPoint() {
     return glm::vec2(Random::getRandomFloat(-WORLD_SIZE_WIDTH, WORLD_SIZE_WIDTH),Random::getRandomFloat(-WORLD_SIZE_HEIGHT, WORLD_SIZE_HEIGHT));
+}
+
+void World::reset() {
+    playerAlive = true;
+    worldState.score = 0;
+    worldState.multiplier = 1;
+    worldState.lives = 3;
+    player = Player(glm::vec2(0.0F, 0.0F), glm::vec2(0, 0), glm::vec2(0, 1));
 }

@@ -26,6 +26,7 @@
 * Shield.
 * Shield on spawn.
 * Mark enemy that killed player.
+* Enemies spawn in, can't kill player, don't move, play animation
 
 ### Enemy types
 * Random movement enemy.
@@ -41,7 +42,7 @@
 * ~~Pause during game~~
 * Dynamic resolution
 * Menu
-* Option to restart on death
+~~* Option to restart on death~~
 
 ## Bugs
 * Some buttons are not registering with movement and bullets when using the keyboard. 

@@ -32,7 +32,8 @@ include_directories("${EXTERNAL_LIBRARIES}/stb")
 ##############################################################
 # Build
 ##############################################################
-add_executable(${PROJECT_NAME}
+add_executable(
+        ${PROJECT_NAME}
         src/main.cpp
         src/Game/Game.cpp
         src/Game/Game.h
@@ -74,7 +75,10 @@ add_executable(${PROJECT_NAME}
         src/Utils/Random.cpp
         src/Game/GameState.h
         src/Interface/PausedControlState.cpp
-        src/Interface/PausedControlState.h)
+        src/Interface/PausedControlState.h
+        src/Interface/GameOverControlState.cpp
+        src/Interface/GameOverControlState.h
+)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

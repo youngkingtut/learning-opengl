@@ -23,6 +23,8 @@ public:
     std::vector<SimpleEnemy> getSimpleEnemies() const;
     WorldState getState() const;
 
+    void reset();
+
 private:
     WorldState worldState;
     Player player;
