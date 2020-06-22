@@ -3,9 +3,7 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
-
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include <stb_image.h>
 
 #include "../Utils/Constants.h"
 
@@ -196,4 +194,3 @@ void Window::SwapBuffersAndPollEvents() {
     glfwSwapBuffers(window);
     glfwPollEvents();
 }
-

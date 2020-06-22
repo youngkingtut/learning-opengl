@@ -9,6 +9,9 @@
 #define WINDOW_ASPECT_RATIO 1.33F
 #define JOYSTICK_DEAD_ZONE_LOWER 0.2
 
+// Render setting
+#define STAR_FIELD_SIZE 1000
+
 // Game Dimensions
 #define FOV 0.872665F // 50 degrees in radians
 #define CAMERA_TRUCK_SPEED 0.5F

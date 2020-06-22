@@ -78,7 +78,7 @@ add_executable(
         src/Interface/PausedControlState.h
         src/Interface/GameOverControlState.cpp
         src/Interface/GameOverControlState.h
-)
+        src/Renderer/Texture.cpp src/Renderer/Texture.h)
 target_link_libraries(${PROJECT_NAME} glfw ${GLFW_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glad)
 target_link_libraries(${PROJECT_NAME} freetype)

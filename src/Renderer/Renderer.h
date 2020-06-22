@@ -4,6 +4,7 @@
 
 #include <glad/glad.h>
 
+#include "../Utils/Random.h"
 #include "../Game/World.h"
 #include "Models/BaseModel.h"
 #include "Models/PlayerModel.h"
@@ -11,6 +12,7 @@
 #include "Models/WorldModel.h"
 #include "Models/BulletModel.h"
 #include "Models/SimpleEnemyModel.h"
+#include "Texture.h"
 
 
 // Text Rendering using this guide: https://learnopengl.com/In-Practice/Text-Rendering
@@ -43,16 +45,25 @@ private:
     // shaders
     GLuint worldShaderProgram{0};
     GLuint textShaderProgram{0};
+    GLuint starFieldProgram{0};
 
     // uniforms
-    GLint modelLocation{0};
-    GLint viewLocation{0};
-    GLint projectionLocation{0};
-    GLint colorLocation{0};
+    GLuint modelLocation{0};
+    GLuint viewLocation{0};
+    GLuint projectionLocation{0};
+    GLuint colorLocation{0};
+    GLuint uniformStarTime{0};
+    GLuint uniformStarProjectionMatrix{0};
+    GLuint uniformStarViewMatrix{0};
 
     // buffers
     GLuint textVAO{0};
     GLuint textVBO{0};
+    GLuint starVAO{0};
+    GLuint starBuffer{0};
+
+    // textures
+    Texture starTexture{};
 
     // stores
     glm::mat4 viewMatrix{};
@@ -60,6 +71,8 @@ private:
     std::map<GLchar, Character> characters{};
 
     void initializeText();
+    void initializeStarField();
     void renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color);
+    void renderStarField(const glm::mat4& translatedViewMatrix);
     static void clearScreen();
 };

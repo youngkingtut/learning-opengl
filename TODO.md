@@ -6,7 +6,7 @@
 * ~~Colors for player~~
 * Draw instanced 
     * Pack direction and position information in separate buffer.
-* Render background star field
+* ~~Render background star field~~
 
 ### Animation
 * Event queue

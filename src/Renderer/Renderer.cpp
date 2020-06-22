@@ -4,7 +4,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-
+#include <stb_image.h>
 #include <ft2build.h>
 #include <sstream>
 #include FT_FREETYPE_H
@@ -44,15 +44,19 @@ void Renderer::initialize() {
     colorLocation = glGetUniformLocation(worldShaderProgram, OBJECT_COLOR);
     viewMatrix = glm::lookAt(glm::vec3(0.0F, 0.0F, 150.0F), glm::vec3(0.0F, 0.0F, -1.0F), glm::vec3(0.0F, 1.0F, 0.0F));
     projectionLocation = glGetUniformLocation(worldShaderProgram, PROJECTION_MATRIX);
-    projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1F, 200.0F);
+    projectionMatrix = glm::perspective(FOV, WINDOW_ASPECT_RATIO, 0.1F, 1000.0F);
 
     // Initialize Text
     initializeText();
+
+    // Initialize Star Field Background
+    initializeStarField();
 }
 
 
 void Renderer::renderWorld(const World &world) {
     clearScreen();
+
 
     Player player = world.getPlayer();
     glm::vec2 playerPosition = player.getPosition();
@@ -67,8 +71,12 @@ void Renderer::renderWorld(const World &world) {
         translateY = (translateY > 0 ? CAMERA_MAX_PEDESTAL : -CAMERA_MAX_PEDESTAL);
     }
     glm::mat4 translatedViewMatrix = glm::translate(viewMatrix, glm::vec3(translateX, translateY, 0.0F));
+    renderStarField(translatedViewMatrix);
 
     glUseProgram(worldShaderProgram);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(translatedViewMatrix));
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
 
@@ -128,8 +136,8 @@ void Renderer::renderGamePaused(const World &world) {
     glm::vec2 playerPosition = player.getPosition();
 
     // Translate everything in the opposite direction of the player and bound it
-    float translateX = -playerPosition[0];
-    float translateY = -playerPosition[1];
+    float translateX = -playerPosition[0] * CAMERA_TRUCK_SPEED;
+    float translateY = -playerPosition[1] * CAMERA_PEDESTAL_SPEED;
     if(translateX > CAMERA_MAX_TRUCK || translateX < -CAMERA_MAX_TRUCK) {
         translateX = (translateX > 0 ? CAMERA_MAX_TRUCK : -CAMERA_MAX_TRUCK);
     }
@@ -156,11 +164,35 @@ void Renderer::renderGamePaused(const World &world) {
     renderText(paused, 250.0F, WINDOW_SIZE_HEIGHT - 310.0F, 2.0F, glm::vec3(1.0F, 1.0F, 1.0F));
 }
 
+
+void Renderer::renderStarField(const glm::mat4& translatedViewMatrix) {
+    glUseProgram(starFieldProgram);
+
+    glUniform1f(uniformStarTime, 1.0);
+    glUniformMatrix4fv(uniformStarProjectionMatrix, 1, GL_FALSE, glm::value_ptr(projectionMatrix));
+    glUniformMatrix4fv(uniformStarViewMatrix, 1, GL_FALSE, glm::value_ptr(translatedViewMatrix));
+
+    glBlendFunc(GL_ONE, GL_ONE);
+    glEnable(GL_PROGRAM_POINT_SIZE);
+
+    glBindVertexArray(starVAO);
+
+    starTexture.UseTexture();
+    glDrawArrays(GL_POINTS, 0, STAR_FIELD_SIZE);
+    glBindVertexArray(0);
+
+    glDisable(GL_PROGRAM_POINT_SIZE);
+}
+
+
 void Renderer::renderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, const glm::vec3& color) {
     // Activate corresponding render state
     glUniform3f(glGetUniformLocation(textShaderProgram, "textColor"), color.x, color.y, color.z);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(textVAO);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     // Iterate through all characters
     std::string::const_iterator c;
@@ -213,7 +245,6 @@ void Renderer::initializeText() {
 
     // FreeType
     FT_Library ft;
-    // All functions return a value different than 0 whenever an error occurred
     if (FT_Init_FreeType(&ft)) {
         std::cout << "ERROR::FREETYPE: Could not init FreeType Library" << std::endl;
         exit(-1);
@@ -286,4 +317,46 @@ void Renderer::initializeText() {
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), nullptr);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void Renderer::initializeStarField() {
+    starFieldProgram = LoadShaders("Resources/Shaders/star.vert", "Resources/Shaders/star.frag");
+
+    uniformStarTime = glGetUniformLocation(starFieldProgram, "time");
+    uniformStarProjectionMatrix = glGetUniformLocation(starFieldProgram, "proj_matrix");
+    uniformStarViewMatrix = glGetUniformLocation(starFieldProgram, "view_matrix");
+
+    starTexture = Texture("Resources/Textures/star.png");
+    starTexture.LoadTexture();
+
+    glGenVertexArrays(1, &starVAO);
+    glBindVertexArray(starVAO);
+
+    struct star_t
+    {
+        glm::vec3 position;
+        glm::vec3 color;
+    };
+
+    glGenBuffers(1, &starBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, starBuffer);
+    glBufferData(GL_ARRAY_BUFFER, STAR_FIELD_SIZE * sizeof(star_t), nullptr, GL_STATIC_DRAW);
+
+    star_t* star = (star_t*)glMapBufferRange(GL_ARRAY_BUFFER, 0, STAR_FIELD_SIZE * sizeof(star_t), GL_MAP_WRITE_BIT | GL_MAP_INVALIDATE_BUFFER_BIT);
+
+    for(auto i = 0; i < STAR_FIELD_SIZE; i++) {
+        star[i].position.x =  Random::getRandomFloat(-800, 800);
+        star[i].position.y =  Random::getRandomFloat(-800, 800);
+        star[i].position.z =  Random::getRandomFloat(-200, -800);
+        GLfloat color = Random::getRandomFloat(0.3, 0.8);
+        star[i].color.x = color;
+        star[i].color.y = color;
+        star[i].color.z = color;
+    }
+
+    glUnmapBuffer(GL_ARRAY_BUFFER);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(star_t), nullptr);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(star_t), (void*)sizeof(glm::vec3));
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
 }
