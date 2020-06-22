@@ -185,7 +185,7 @@ void Window::ProcessGameControlState(GameControlState& controlState) {
 }
 
 bool Window::ShouldExit() {
-    return !glfwWindowShouldClose(window);
+    return glfwWindowShouldClose(window);
 }
 
 void Window::SwapBuffersAndPollEvents() {

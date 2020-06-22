@@ -17,7 +17,7 @@ void Game::run() {
     std::vector<double> loopTime;
     double time = glfwGetTime();
 
-    while(window.ShouldExit()) {
+    while(!window.ShouldExit()) {
         double timeNow = glfwGetTime();
         double delta = timeNow - time;
         time = timeNow;
